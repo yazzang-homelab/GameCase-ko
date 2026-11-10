@@ -784,7 +784,7 @@ private struct ManageSourcesSheet: View {
                                     .frame(maxWidth: .infinity)
                             }
                         }
-                        .buttonStyle(.borderedProminent)
+                        .gcGlassProminentButtonStyle()
                         .disabled(manualSourceValue.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || isAddingManual)
                     }
                     .padding(.vertical, 4)

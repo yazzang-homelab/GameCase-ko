@@ -107,14 +107,14 @@ struct LCDataManagementView : View {
                             } label: {
                                 Text("Filza")
                             }
-                            .buttonStyle(.bordered)
+                            .gcGlassButtonStyle()
                         }
                         Button {
                             copy(text: path.path.path)
                         } label: {
                             Image(systemName: "doc.on.doc")
                         }
-                        .buttonStyle(.bordered)
+                        .gcGlassButtonStyle()
                     }
                 }
             }

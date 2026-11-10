@@ -108,6 +108,7 @@ struct LCTweakFolderView : View {
                                 set: { setTweakEnabled(tweakItem: tweakItem, enabled: $0) }
                             ))
                             .labelsHidden()
+                            .gcGlassToggleStyle()
                         }
                     }
                     .contextMenu {

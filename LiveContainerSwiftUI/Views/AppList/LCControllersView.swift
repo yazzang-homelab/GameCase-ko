@@ -159,7 +159,13 @@ struct LCControllersView: View {
                         Image(systemName: "xmark")
                             .font(.system(size: 15, weight: .semibold))
                             .frame(width: 44, height: 44)
-                            .background(Color.primary.opacity(0.08), in: Circle())
+                            .modifier { content in
+                                if #available(iOS 26.0, *), SharedModel.isLiquidGlassEnabled {
+                                    content.glassEffect(.regular.interactive(), in: .circle)
+                                } else {
+                                    content.background(Color.primary.opacity(0.08), in: Circle())
+                                }
+                            }
                             .contentShape(Circle())
                     }
                     .buttonStyle(.plain)
@@ -316,9 +322,18 @@ struct LCControllersView: View {
                 }
                 .padding(.horizontal, 16)
                 .padding(.vertical, 13)
-                .background(Self.surface, in: RoundedRectangle(cornerRadius: 16))
-                .overlay(RoundedRectangle(cornerRadius: 16).strokeBorder(Self.hairline))
-                .contentShape(RoundedRectangle(cornerRadius: 16))
+                .modifier { content in
+                    if #available(iOS 26.0, *), SharedModel.isLiquidGlassEnabled {
+                        content
+                            .glassEffect(.regular.interactive(), in: .rect(cornerRadius: 16))
+                            .contentShape(RoundedRectangle(cornerRadius: 16))
+                    } else {
+                        content
+                            .background(Self.surface, in: RoundedRectangle(cornerRadius: 16))
+                            .overlay(RoundedRectangle(cornerRadius: 16).strokeBorder(Self.hairline))
+                            .contentShape(RoundedRectangle(cornerRadius: 16))
+                    }
+                }
             }
             .buttonStyle(.plain)
         }
@@ -431,7 +446,13 @@ private struct LCControllerTestView: View {
                         Image(systemName: "chevron.left")
                             .font(.system(size: 14, weight: .semibold))
                             .frame(width: 44, height: 44)
-                            .background(.primary.opacity(0.08), in: Circle())
+                            .modifier { content in
+                                if #available(iOS 26.0, *), SharedModel.isLiquidGlassEnabled {
+                                    content.glassEffect(.regular.interactive(), in: .circle)
+                                } else {
+                                    content.background(.primary.opacity(0.08), in: Circle())
+                                }
+                            }
                             .contentShape(Circle())
                     }
                     .buttonStyle(.plain)
@@ -462,8 +483,18 @@ private struct LCControllerTestView: View {
                     .padding(.top, 4)
             }
             .frame(maxWidth: 620)
-            .background(Self.card, in: RoundedRectangle(cornerRadius: 26))
-            .overlay(RoundedRectangle(cornerRadius: 26).strokeBorder(.primary.opacity(0.10)))
+            .modifier { content in
+                if #available(iOS 26.0, *), SharedModel.isLiquidGlassEnabled {
+                    // 测试页主卡换玻璃面（描边保留，压在页面底色上仍有边界）
+                    content
+                        .glassEffect(.regular, in: .rect(cornerRadius: 26))
+                        .overlay(RoundedRectangle(cornerRadius: 26).strokeBorder(.primary.opacity(0.10)))
+                } else {
+                    content
+                        .background(Self.card, in: RoundedRectangle(cornerRadius: 26))
+                        .overlay(RoundedRectangle(cornerRadius: 26).strokeBorder(.primary.opacity(0.10)))
+                }
+            }
             .padding(16)
             .frame(maxWidth: .infinity)
         }
@@ -526,13 +557,24 @@ private struct LCControllerTestView: View {
         .frame(maxWidth: .infinity)
     }
 
+    /// 指示件底（肩键/中键片/面键/十字键/摇杆点共用口径）：按下态恒
+    /// 实色填充（亮起反馈优先，不玻璃化）；未按态在玻璃分支换玻璃，
+    /// 非玻璃保留原浅底。
     private func shoulderChip(label: String, pressed: Bool) -> some View {
         Text(label)
             .font(.system(size: 12, weight: .bold))
             .foregroundStyle(pressed ? .black : .primary.opacity(0.7))
             .padding(.horizontal, 16)
             .padding(.vertical, 7)
-            .background(pressed ? Self.cream : Color.primary.opacity(0.08), in: Capsule())
+            .background {
+                if pressed {
+                    Capsule().fill(Self.cream)
+                } else if #available(iOS 26.0, *), SharedModel.isLiquidGlassEnabled {
+                    Capsule().fill(.clear).glassEffect(.regular, in: .capsule)
+                } else {
+                    Capsule().fill(Color.primary.opacity(0.08))
+                }
+            }
     }
 
     private func stickView(point: CGPoint, pressed: Bool, label: String) -> some View {
@@ -541,10 +583,17 @@ private struct LCControllerTestView: View {
                 Circle()
                     .stroke(Color.primary.opacity(0.18), lineWidth: 1.5)
                     .frame(width: 56, height: 56)
-                Circle()
-                    .fill(pressed ? Self.cream : Color.primary.opacity(0.35))
-                    .frame(width: 14, height: 14)
-                    .offset(x: point.x * 18, y: point.y * 18)
+                Group {
+                    if pressed {
+                        Circle().fill(Self.cream)
+                    } else if #available(iOS 26.0, *), SharedModel.isLiquidGlassEnabled {
+                        Circle().fill(.clear).glassEffect(.regular, in: .circle)
+                    } else {
+                        Circle().fill(Color.primary.opacity(0.35))
+                    }
+                }
+                .frame(width: 14, height: 14)
+                .offset(x: point.x * 18, y: point.y * 18)
             }
             Text(label)
                 .font(.system(size: 10.5))
@@ -555,9 +604,20 @@ private struct LCControllerTestView: View {
     private func dpadView(_ s: Snapshot) -> some View {
         let cell: CGFloat = 17
         func piece(_ pressed: Bool) -> some View {
-            RoundedRectangle(cornerRadius: 3)
-                .fill(pressed ? Self.cream : Color.primary.opacity(0.14))
-                .frame(width: cell, height: cell)
+            ZStack {
+                if pressed {
+                    RoundedRectangle(cornerRadius: 3)
+                        .fill(Self.cream)
+                } else if #available(iOS 26.0, *), SharedModel.isLiquidGlassEnabled {
+                    RoundedRectangle(cornerRadius: 3)
+                        .fill(.clear)
+                        .glassEffect(.regular, in: .rect(cornerRadius: 3))
+                } else {
+                    RoundedRectangle(cornerRadius: 3)
+                        .fill(Color.primary.opacity(0.14))
+                }
+            }
+            .frame(width: cell, height: cell)
         }
         return VStack(spacing: 2) {
             HStack(spacing: 2) {
@@ -596,7 +656,15 @@ private struct LCControllerTestView: View {
             .foregroundStyle(pressed ? .black : .primary.opacity(0.6))
             .padding(.horizontal, 7)
             .padding(.vertical, 4)
-            .background(pressed ? Self.cream : Color.primary.opacity(0.08), in: Capsule())
+            .background {
+                if pressed {
+                    Capsule().fill(Self.cream)
+                } else if #available(iOS 26.0, *), SharedModel.isLiquidGlassEnabled {
+                    Capsule().fill(.clear).glassEffect(.regular, in: .capsule)
+                } else {
+                    Capsule().fill(Color.primary.opacity(0.08))
+                }
+            }
     }
 
     private func faceButtons(_ s: Snapshot) -> some View {
@@ -606,7 +674,15 @@ private struct LCControllerTestView: View {
                 .font(.system(size: 13, weight: .bold))
                 .foregroundStyle(pressed ? .black : color)
                 .frame(width: d, height: d)
-                .background(pressed ? color : Color.primary.opacity(0.07), in: Circle())
+                .background {
+                    if pressed {
+                        Circle().fill(color)
+                    } else if #available(iOS 26.0, *), SharedModel.isLiquidGlassEnabled {
+                        Circle().fill(.clear).glassEffect(.regular, in: .circle)
+                    } else {
+                        Circle().fill(Color.primary.opacity(0.07))
+                    }
+                }
                 .overlay(Circle().strokeBorder(color.opacity(0.55), lineWidth: 1))
         }
         let yellow = Color(red: 0.95, green: 0.78, blue: 0.25)
