@@ -96,6 +96,80 @@ extension View {
             }
         }
     }
+
+    /// 开关玻璃化（渐进增强）：iOS 26 且 Liquid Glass 可用时用
+    /// GCGlassSwitchToggleStyle（玻璃轨开关），否则逐字回退系统
+    /// .switch。toggleStyle 经环境向下传播：挂在 Form / 页面根上
+    /// 即对内全部 Toggle 生效，单行也可单独挂。
+    func gcGlassToggleStyle() -> some View {
+        self.modifier { content in
+            if #available(iOS 26.0, *), SharedModel.isLiquidGlassEnabled {
+                content.toggleStyle(GCGlassSwitchToggleStyle())
+            } else {
+                content.toggleStyle(SwitchToggleStyle())
+            }
+        }
+    }
+}
+
+/// 玻璃开关（仅在 iOS 26 + Liquid Glass 分支内被引用）：与系统开关
+/// 同尺寸（轨 51×31、滑块 27）。开态轨 = 系统绿玻璃 tint，关态轨 =
+/// 无色玻璃加一层 primary 浅 tint 保证浅底上可辨；滑块两态恒白
+/// （用户口径：浅色下打开/关闭滑块都用白色、开态背景沿用系统绿；
+/// 深色下系统开关本就是绿轨白块，观感一致）。点按切换、横拖过
+/// 阈值直接置位；禁用态随环境 isEnabled 变淡且不响应。
+@available(iOS 26.0, *)
+struct GCGlassSwitchToggleStyle: ToggleStyle {
+    @Environment(\.isEnabled) private var isEnabled
+
+    func makeBody(configuration: Configuration) -> some View {
+        HStack(spacing: 8) {
+            configuration.label
+            Spacer(minLength: 8)
+            switchControl(configuration)
+        }
+        .opacity(isEnabled ? 1 : 0.45)
+    }
+
+    private func switchControl(_ configuration: Configuration) -> some View {
+        ZStack(alignment: configuration.isOn ? .trailing : .leading) {
+            Capsule()
+                .fill(.clear)
+                .frame(width: 51, height: 31)
+                .glassEffect(
+                    configuration.isOn
+                        ? .regular.tint(Color(UIColor.systemGreen))
+                        : .regular.tint(Color.primary.opacity(0.10)),
+                    in: .capsule
+                )
+            Circle()
+                .fill(Color.white)
+                .shadow(color: Color.black.opacity(0.18), radius: 2.5, y: 1)
+                .padding(2)
+                .frame(width: 31, height: 31)
+        }
+        .frame(width: 51, height: 31)
+        .contentShape(Capsule())
+        .animation(.spring(response: 0.28, dampingFraction: 0.8), value: configuration.isOn)
+        .gesture(
+            DragGesture(minimumDistance: 0)
+                .onChanged { value in
+                    guard isEnabled else { return }
+                    if value.translation.width > 6, !configuration.isOn {
+                        configuration.$isOn.wrappedValue = true
+                    } else if value.translation.width < -6, configuration.isOn {
+                        configuration.$isOn.wrappedValue = false
+                    }
+                }
+                .onEnded { value in
+                    guard isEnabled else { return }
+                    if abs(value.translation.width) <= 6 {
+                        configuration.$isOn.wrappedValue.toggle()
+                    }
+                }
+        )
+        .accessibilityAddTraits(.isButton)
+    }
 }
 
 public struct DocModifier: ViewModifier {

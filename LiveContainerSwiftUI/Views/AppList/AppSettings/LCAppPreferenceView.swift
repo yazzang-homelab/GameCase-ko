@@ -159,6 +159,7 @@ struct PSToggleSwitch: View {
     
     var body: some View {
         Toggle(delegate.localize(title), isOn: $realValue)
+            .gcGlassToggleStyle()
             .onChange(of: realValue) { newValue in
                 delegate.set(key: key, val: newValue ? trueValue : falseValue)
             }

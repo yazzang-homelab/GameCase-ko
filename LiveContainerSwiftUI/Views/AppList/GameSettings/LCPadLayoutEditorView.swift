@@ -349,8 +349,15 @@ struct LCPadLayoutEditorView: View {
                         .foregroundColor(.white)
                         .padding(.horizontal, 22)
                         .padding(.vertical, 8)
-                        .background(Self.accentColor)
-                        .clipShape(Capsule())
+                        .modifier { content in
+                            if #available(iOS 26.0, *), SharedModel.isLiquidGlassEnabled {
+                                content.glassEffect(.regular.tint(Self.accentColor).interactive(), in: .capsule)
+                            } else {
+                                content
+                                    .background(Self.accentColor)
+                                    .clipShape(Capsule())
+                            }
+                        }
                 }
             }
 
@@ -399,7 +406,7 @@ struct LCPadLayoutEditorView: View {
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 11)
                 }
-                .buttonStyle(.bordered)
+                .gcGlassButtonStyle()
                 Button {
                     confirmResetAll = true
                 } label: {
@@ -407,7 +414,7 @@ struct LCPadLayoutEditorView: View {
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 11)
                 }
-                .buttonStyle(.bordered)
+                .gcGlassButtonStyle()
             }
 
             Text("lc.padEditor.footer %@ %@".localizeWithFormat(game.skinDisplayName(skinValue), game.storeKey))
@@ -429,9 +436,16 @@ struct LCPadLayoutEditorView: View {
                 .font(.body.bold())
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 12)
-                .background(Color.white.opacity(0.07))
-                .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-                .overlay(RoundedRectangle(cornerRadius: 10, style: .continuous).strokeBorder(Color.white.opacity(0.2), lineWidth: 1))
+                .modifier { content in
+                    if #available(iOS 26.0, *), SharedModel.isLiquidGlassEnabled {
+                        content.glassEffect(.regular.interactive(), in: .rect(cornerRadius: 10))
+                    } else {
+                        content
+                            .background(Color.white.opacity(0.07))
+                            .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+                            .overlay(RoundedRectangle(cornerRadius: 10, style: .continuous).strokeBorder(Color.white.opacity(0.2), lineWidth: 1))
+                    }
+                }
         }
         .buttonStyle(.plain)
         .foregroundColor(LCGameTheme.creamOnDark)
@@ -443,9 +457,16 @@ struct LCPadLayoutEditorView: View {
             Image(systemName: systemImage)
                 .font(.body.bold())
                 .frame(width: 52, height: 44)
-                .background(Color.white.opacity(0.07))
-                .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-                .overlay(RoundedRectangle(cornerRadius: 10, style: .continuous).strokeBorder(Color.white.opacity(0.2), lineWidth: 1))
+                .modifier { content in
+                    if #available(iOS 26.0, *), SharedModel.isLiquidGlassEnabled {
+                        content.glassEffect(.regular.interactive(), in: .rect(cornerRadius: 10))
+                    } else {
+                        content
+                            .background(Color.white.opacity(0.07))
+                            .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+                            .overlay(RoundedRectangle(cornerRadius: 10, style: .continuous).strokeBorder(Color.white.opacity(0.2), lineWidth: 1))
+                    }
+                }
         }
         .buttonStyle(.plain)
         .foregroundColor(LCGameTheme.creamOnDark)
