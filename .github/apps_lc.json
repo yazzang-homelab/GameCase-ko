@@ -1,0 +1,336 @@
+{
+  "name": "GameCase",
+  "identifier": "com.livecontainer.source",
+  "website": "https://github.com/Tiaoge-tou/GameCase",
+  "subtitle": "Import an IPA and its datapack - just play.",
+  "description": "This is the AltStore Source for GameCase.\n\nGameCase is a sideloading game container built for iOS game ports. Import a game IPA and its romfs datapack into the library, manage each game's own launcher settings in one place, and play - no jailbreak required.",
+  "tintColor": "#0784FC",
+  "iconURL": "https://raw.githubusercontent.com/Tiaoge-tou/GameCase/main/screenshots/AppIcon1024.png",
+  "headerURL": "https://raw.githubusercontent.com/Tiaoge-tou/GameCase/main/screenshots/header.png",
+  "apps": [
+    {
+      "beta": false,
+      "name": "GameCase",
+      "bundleIdentifier": "com.tiaoge.gamecase",
+      "developerName": "GameCase",
+      "subtitle": "Import an IPA and its datapack - just play.",
+      "version": "1.0.12",
+      "versionDate": "2026-11-09T04:57:34Z",
+      "versionDescription": "GameCase v1.0.12\n\n\u672c\u7248\u66f4\u65b0\n\n\u2022 \u5916\u89c2\u4e09\u6863\uff1a\u65b0\u589e\u5916\u89c2\u8bbe\u7f6e\uff0c\u53ef\u9009\u6df1\u8272\uff08\u9ed8\u8ba4\uff09/ \u8ddf\u968f\u7cfb\u7edf / \u6d45\u8272\uff0c\u6574\u4e2a\u754c\u9762\u968f\u6240\u9009\u5916\u89c2\u5207\u6362\u3002\n\u2022 Liquid Glass\uff1a\u66f4\u591a\u6309\u94ae\u6539\u7528 iOS 26 \u539f\u751f Liquid Glass \u73bb\u7483\u6548\u679c\uff08\u300c\u2039 \u6e38\u620f\u5e93\u300d\u80f6\u56ca\u3001\u4e3b\u9875\u56fe\u9762\u6309\u94ae\u3001\u72b6\u6001\u80f6\u56ca\u3001\u6570\u636e\u5305\u5bfc\u5165\u6309\u94ae\u3001\u5e95\u90e8\u300c\u5f00\u59cb\u300d\u6309\u94ae\u7b49\uff09\uff0c\u4f4e\u7248\u672c\u7cfb\u7edf\u81ea\u52a8\u56de\u9000\u539f\u6837\u5f0f\u3002\n\u2022 \u6df1\u6d45\u81ea\u9002\u5e94\u5168\u9762\u4fee\u590d\uff1a\u6d45\u8272\u6a21\u5f0f\u4e0b\u6e38\u620f\u540d\u3001\u8bbe\u7f6e\u9875\u5404\u5206\u7ec4\u5361\u7247\u4e0e\u6807\u9898\u3001\u5206\u6bb5\u9009\u4e2d\u5757\u3001\u5c01\u9762\u6807\u9898\u533a\u7b49\u5168\u9762\u9002\u914d\uff1b\u6e38\u620f\u8bbe\u7f6e\u9875\u9875\u5934\u72b6\u6001\u884c\u4e0e\u6807\u9898\u95f4\u8ddd\u7edf\u4e00\uff1b\u9009\u4e2d\u6001\u914d\u8272\u968f\u6df1\u6d45\u6a21\u5f0f\u81ea\u9002\u5e94\u53d8\u8272\u3002\n\u2022 \u6e90 JSON \u9632\u62a4\uff1a\u4fee\u590d\u6e90\u6587\u4ef6\u66f4\u65b0\u65f6\u53ef\u80fd\u751f\u6210\u7a7a\u9891\u9053\u5bfc\u81f4 SideStore \u5237\u65b0\u6e90\u89e3\u7801\u5931\u8d25\u7684\u95ee\u9898\u3002\n\n\u4e0b\u8f7d\u8bf4\u660e\n\n\u2022 GameCase.ipa\uff1a\u666e\u901a\u7248\u3002\u7528 LCSign / SideStore / AltStore \u7b49\u5de5\u5177\u7b7e\u540d\u5b89\u88c5\u3002\n\u2022 GameCase+SideStore.ipa\uff1a\u5185\u7f6e SideStore \u7248\uff0c\u88c5\u597d\u540e\u53ef\u5728 GameCase \u8bbe\u7f6e\u91cc\u6253\u5f00\u5185\u7f6e SideStore \u5bfc\u5165\u8bc1\u4e66\u3001\u7528\u514d JIT \u6a21\u5f0f\u3002\n",
+      "downloadURL": "https://github.com/Tiaoge-tou/GameCase/releases/download/v1.0.12/GameCase.ipa",
+      "localizedDescription": "GameCase is a sideloading game container built for iOS game ports. Import a game IPA and its romfs datapack into the library, manage each game's own launcher settings in one place, and play - no jailbreak required.",
+      "iconURL": "https://raw.githubusercontent.com/Tiaoge-tou/GameCase/main/screenshots/AppIcon1024.png",
+      "tintColor": "#0784FC",
+      "category": "utilities",
+      "size": 11402172,
+      "screenshotURLs": [
+        "https://raw.githubusercontent.com/Tiaoge-tou/GameCase/main/docs/media/library-landscape.jpg",
+        "https://raw.githubusercontent.com/Tiaoge-tou/GameCase/main/docs/media/library-portrait.jpg",
+        "https://raw.githubusercontent.com/Tiaoge-tou/GameCase/main/docs/media/game-settings.jpg"
+      ],
+      "appPermissions": {
+        "entitlements": [
+          "application-identifier",
+          "com.apple.security.application-groups",
+          "get-task-allow",
+          "keychain-access-groups",
+          "com.apple.developer.kernel.extended-virtual-addressing",
+          "com.apple.developer.kernel.increased-memory-limit",
+          "com.apple.developer.healthkit.background-delivery",
+          "com.apple.developer.healthkit",
+          "com.apple.developer.healthkit.access"
+        ],
+        "privacy": {
+          "LSRequiresIPhoneOS": "The guest app is requesting for this permission.",
+          "NFCReaderUsageDescription": "The guest app is requesting for this permission.",
+          "NSAppleMusicUsageDescription": "The guest app is requesting for this permission.",
+          "NSBluetoothAlwaysUsageDescription": "The guest app is requesting for this permission.",
+          "NSBluetoothPeripheralUsageDescription": "The guest app is requesting for this permission.",
+          "NSCalendarsFullAccessUsageDescription": "The guest app is requesting for this permission.",
+          "NSCalendarsWriteOnlyAccessUsageDescription": "The guest app is requesting for this permission.",
+          "NSCameraUsageDescription": "The guest app is requesting for this permission.",
+          "NSContactsUsageDescription": "The guest app is requesting for this permission.",
+          "NSFaceIDUsageDescription": "The guest app is requesting for this permission.",
+          "NSFallDetectionUsageDescription": "The guest app is requesting for this permission.",
+          "NSGKFriendListUsageDescription": "The guest app is requesting for this permission.",
+          "NSHealthClinicalHealthRecordsShareUsageDescription": "The guest app is requesting for this permission.",
+          "NSHealthRequiredReadAuthorizationTypeIdentifiers": "The guest app is requesting for this permission.",
+          "NSHomeKitUsageDescription": "The guest app is requesting for this permission.",
+          "NSIdentityUsageDescription": "The guest app is requesting for this permission.",
+          "NSLocalNetworkUsageDescription": "The guest app is requesting for this permission.",
+          "NSLocationDefaultAccuracyReduced": "The guest app is requesting for this permission.",
+          "NSLocationTemporaryUsageDescriptionDictionary": "The guest app is requesting for this permission.",
+          "NSLocationUsageDescription": "The guest app is requesting for this permission.",
+          "NSLocationWhenInUseUsageDescription": "The guest app is requesting for this permission.",
+          "NSMicrophoneUsageDescription": "The guest app is requesting for this permission.",
+          "NSMotionUsageDescription": "The guest app is requesting for this permission.",
+          "NSNearbyInteractionAllowOnceUsageDescription": "The guest app is requesting for this permission.",
+          "NSNearbyInteractionUsageDescription": "The guest app is requesting for this permission.",
+          "NSPhotoLibraryAddUsageDescription": "The guest app is requesting for this permission.",
+          "NSPhotoLibraryUsageDescription": "The guest app is requesting for this permission.",
+          "NSRemindersFullAccessUsageDescription": "The guest app is requesting for this permission.",
+          "NSSensorKitUsageDescription": "The guest app is requesting for this permission.",
+          "NSSiriUsageDescription": "The guest app is requesting for this permission.",
+          "NSSpeechRecognitionUsageDescription": "The guest app is requesting for this permission.",
+          "NSUserTrackingUsageDescription": "The guest app is requesting for this permission.",
+          "SBAppUsesLocalNotifications": "The guest app is requesting for this permission.",
+          "UIApplicationSceneManifest": "The guest app is requesting for this permission.",
+          "NSHealthUpdateUsageDescription": "The guest app is requesting for this permission.",
+          "NSHealthShareUsageDescription": "The guest app is requesting for this permission.",
+          "NSLocationAlwaysAndWhenInUseUsageDescription": "The guest app is requesting for this permission."
+        }
+      },
+      "versions": [
+        {
+          "version": "1.0.12",
+          "date": "2026-11-09T04:57:34Z",
+          "localizedDescription": "GameCase v1.0.12\n\n\u672c\u7248\u66f4\u65b0\n\n\u2022 \u5916\u89c2\u4e09\u6863\uff1a\u65b0\u589e\u5916\u89c2\u8bbe\u7f6e\uff0c\u53ef\u9009\u6df1\u8272\uff08\u9ed8\u8ba4\uff09/ \u8ddf\u968f\u7cfb\u7edf / \u6d45\u8272\uff0c\u6574\u4e2a\u754c\u9762\u968f\u6240\u9009\u5916\u89c2\u5207\u6362\u3002\n\u2022 Liquid Glass\uff1a\u66f4\u591a\u6309\u94ae\u6539\u7528 iOS 26 \u539f\u751f Liquid Glass \u73bb\u7483\u6548\u679c\uff08\u300c\u2039 \u6e38\u620f\u5e93\u300d\u80f6\u56ca\u3001\u4e3b\u9875\u56fe\u9762\u6309\u94ae\u3001\u72b6\u6001\u80f6\u56ca\u3001\u6570\u636e\u5305\u5bfc\u5165\u6309\u94ae\u3001\u5e95\u90e8\u300c\u5f00\u59cb\u300d\u6309\u94ae\u7b49\uff09\uff0c\u4f4e\u7248\u672c\u7cfb\u7edf\u81ea\u52a8\u56de\u9000\u539f\u6837\u5f0f\u3002\n\u2022 \u6df1\u6d45\u81ea\u9002\u5e94\u5168\u9762\u4fee\u590d\uff1a\u6d45\u8272\u6a21\u5f0f\u4e0b\u6e38\u620f\u540d\u3001\u8bbe\u7f6e\u9875\u5404\u5206\u7ec4\u5361\u7247\u4e0e\u6807\u9898\u3001\u5206\u6bb5\u9009\u4e2d\u5757\u3001\u5c01\u9762\u6807\u9898\u533a\u7b49\u5168\u9762\u9002\u914d\uff1b\u6e38\u620f\u8bbe\u7f6e\u9875\u9875\u5934\u72b6\u6001\u884c\u4e0e\u6807\u9898\u95f4\u8ddd\u7edf\u4e00\uff1b\u9009\u4e2d\u6001\u914d\u8272\u968f\u6df1\u6d45\u6a21\u5f0f\u81ea\u9002\u5e94\u53d8\u8272\u3002\n\u2022 \u6e90 JSON \u9632\u62a4\uff1a\u4fee\u590d\u6e90\u6587\u4ef6\u66f4\u65b0\u65f6\u53ef\u80fd\u751f\u6210\u7a7a\u9891\u9053\u5bfc\u81f4 SideStore \u5237\u65b0\u6e90\u89e3\u7801\u5931\u8d25\u7684\u95ee\u9898\u3002\n\n\u4e0b\u8f7d\u8bf4\u660e\n\n\u2022 GameCase.ipa\uff1a\u666e\u901a\u7248\u3002\u7528 LCSign / SideStore / AltStore \u7b49\u5de5\u5177\u7b7e\u540d\u5b89\u88c5\u3002\n\u2022 GameCase+SideStore.ipa\uff1a\u5185\u7f6e SideStore \u7248\uff0c\u88c5\u597d\u540e\u53ef\u5728 GameCase \u8bbe\u7f6e\u91cc\u6253\u5f00\u5185\u7f6e SideStore \u5bfc\u5165\u8bc1\u4e66\u3001\u7528\u514d JIT \u6a21\u5f0f\u3002\n",
+          "downloadURL": "https://github.com/Tiaoge-tou/GameCase/releases/download/v1.0.12/GameCase.ipa",
+          "size": 11402172
+        },
+        {
+          "version": "1.0.11",
+          "date": "2026-11-08T13:00:50Z",
+          "localizedDescription": "v1.0.11\n\n\u2022 \u4fee\u590d\u300c\u4ece SideStore \u5bfc\u5165\u8bc1\u4e66\u300d\u4e0d\u663e\u793a\uff1a\u8be5\u5165\u53e3\u6b64\u524d\u88ab\u4e0a\u6e38\u7684\u5546\u5e97\u6765\u6e90\u68c0\u6d4b\u6321\u4f4f\uff0c\u7ecf LCSign/\u8bc1\u4e66\u5b89\u88c5\u7684 GameCase \u91cc\u6c38\u8fdc\u4e0d\u51fa\u73b0\uff0cREADME \u5199\u7684\u5bfc\u8bc1\u4e66\u6d41\u7a0b\u5b9e\u9645\u65ad\u88c2\u3002\u672c\u7248\u53ea\u8981\u5185\u7f6e SideStore \u5b58\u5728\u5c31\u663e\u793a\uff0c\u70b9\u5b83\u76f4\u63a5\u8bfb\u53d6\u5185\u7f6e SideStore \u5df2\u751f\u6210\u7684\u8bc1\u4e66\uff08PR 55\uff09\u3002\n\u2022 \u5185\u7f6e SideStore \u4e2d\u6587\u5316\u7b2c\u4e8c\u6279\uff1a\u8bbe\u7f6e\u9875\u4e8c\u7ea7\u53ca\u66f4\u6df1\u9875\u9762\u65b0\u589e 548 \u6761\u7b80\u4e2d\u8bd1\u6587\uff0c\u8986\u76d6 Anisette \u670d\u52a1\u5668\u3001\u914d\u5bf9\u6587\u4ef6\u7ba1\u7406\u3001\u65e0\u7ebf\u914d\u5bf9\u3001\u8bc1\u4e66\u4e0e\u63cf\u8ff0\u6587\u4ef6\u3001\u8fde\u63a5\u914d\u7f6e\u3001\u5065\u5eb7\u68c0\u67e5\u7b49\u2014\u2014\u4eca\u665a\u73a9\u5bb6\u8d70\u7684\u90a3\u6574\u6761\u767b\u5f55\u94fe\u8def\u5168\u90e8\u4e2d\u6587\uff08PR 54\uff09\u3002\n\u2022 README \u540c\u6b65\uff1aSideStore \u9996\u6b21\u8bbe\u7f6e\u8865\u65e0\u7ebf\u914d\u5bf9\u4e00\u6b65\uff1b\u65b0\u589e\u767b\u5f55 -80045 \u7684\u4e94\u6b65\u89e3\u6cd5\uff1b\u65b0\u589e\u514d JIT \u8bc1\u4e66\u524d\u63d0\u8bf4\u660e\uff08\u53ea\u8ba4\u5f00\u53d1\u8bc1\u4e66\u3001\u5bfc\u5165\u8bc1\u4e66\u987b\u4e0e\u672c\u4f53\u540c\u56e2\u961f\uff0c\u5206\u53d1\u8bc1\u4e66\u7b7e\u7684\u672c\u4f53\u65e0\u6cd5\u514d JIT\uff09\uff08PR 52\u300157\u300158\uff09\u3002\n",
+          "downloadURL": "https://github.com/Tiaoge-tou/GameCase/releases/download/v1.0.11/GameCase.ipa",
+          "size": 11375806
+        },
+        {
+          "version": "1.0.10",
+          "date": "2026-11-08T10:55:35Z",
+          "localizedDescription": "\u672c\u6b21\u66f4\u65b0\n\n\u2022 \u7ad6\u5c4f\u6e38\u620f\u5e93\u56fe\u6807\u663e\u793a\u4f18\u5316\uff1a\u6ca1\u6709\u6a2a\u7248\u5c01\u9762\u3001\u53ea\u80fd\u7528\u5e94\u7528\u56fe\u6807\u515c\u5e95\u7684\u6e38\u620f\uff0c\u5728\u7ad6\u5c4f\u7f51\u683c\u5361\u4e0e\u300c\u6700\u8fd1\u6e38\u73a9\u300d\u91cc\u6539\u4e3a\u4e0e\u6a2a\u5c4f\u4e00\u81f4\u7684\u5904\u7406\u2014\u2014\u56fe\u6807\u7cca\u5316\u538b\u6697\u4f5c\u5e95\u3001\u6e05\u6670\u56fe\u6807\u5c45\u4e2d\u663e\u793a\uff0c\u4e0d\u518d\u628a\u5c0f\u56fe\u6807\u62c9\u6ee1\u6574\u5f20\u5361\u3002\u6709\u6a2a\u7248\u5c01\u9762\u7684\u6e38\u620f\u4e0d\u53d7\u5f71\u54cd\u3002\n\n\u89c9\u5f97\u597d\u7528\u6b22\u8fce\u70b9\u4e2a \u2b50",
+          "downloadURL": "https://github.com/Tiaoge-tou/GameCase/releases/download/v1.0.10/GameCase.ipa",
+          "size": 11375783
+        },
+        {
+          "version": "1.0.9",
+          "date": "2026-11-08T08:38:59Z",
+          "localizedDescription": "Nightly build from [939c11a](https://github.com/Tiaoge-tou/GameCase/commit/939c11afa04d326c45b5646fd1128a0dccb060c8): \u7248\u672c\u53f7 1.0.9 (#49)",
+          "downloadURL": "https://github.com/Tiaoge-tou/GameCase/releases/download/v1.0.9/GameCase.ipa",
+          "size": 11375755
+        },
+        {
+          "version": "1.0.8",
+          "date": "2026-11-08T06:03:55Z",
+          "localizedDescription": "Nightly build from [495aff4](https://github.com/Tiaoge-tou/GameCase/commit/495aff4): Merge pull request #45 from Tiaoge-tou/fix/source-json-gc-branding",
+          "downloadURL": "https://github.com/Tiaoge-tou/GameCase/releases/download/v1.0.8/GameCase.ipa",
+          "size": 11375353
+        },
+        {
+          "version": "1.0.7",
+          "date": "2026-11-08T01:37:47Z",
+          "localizedDescription": "Nightly build from [7b604a1](https://github.com/Tiaoge-tou/GameCase/commit/7b604a1): Merge pull request #38 from Tiaoge-tou/chore/version-1.0.7",
+          "downloadURL": "https://github.com/Tiaoge-tou/GameCase/releases/download/v1.0.7/GameCase.ipa",
+          "size": 11374867
+        },
+        {
+          "version": "1.0.6",
+          "date": "2026-11-07T01:32:42Z",
+          "localizedDescription": "Nightly build from [60256b3](https://github.com/Tiaoge-tou/GameCase/commit/60256b3): Merge pull request #27 from Tiaoge-tou/chore/version-1.0.6",
+          "downloadURL": "https://github.com/Tiaoge-tou/GameCase/releases/download/v1.0.6/GameCase.ipa",
+          "size": 11342472
+        },
+        {
+          "version": "1.0.5",
+          "date": "2026-11-07T00:28:09Z",
+          "localizedDescription": "Nightly build from [772ecb8](https://github.com/Tiaoge-tou/GameCase/commit/772ecb8): Merge pull request #25 from Tiaoge-tou/chore/version-1.0.5",
+          "downloadURL": "https://github.com/Tiaoge-tou/GameCase/releases/download/v1.0.5/GameCase.ipa",
+          "size": 11338222
+        },
+        {
+          "version": "1.0.4",
+          "date": "2026-11-06T09:27:57Z",
+          "localizedDescription": "GameCase v1.0.4\n\n- Mod \u652f\u6301\uff1a\u6e38\u620f\u8bbe\u7f6e\u9875\u65b0\u589e Mod \u7ec4\uff0c\u53ef\u5bfc\u5165\u3001\u542f\u7528/\u505c\u7528\u3001\u6392\u5e8f\u4e0e\u5220\u9664 mod\uff1b\u542f\u52a8\u65f6\u81ea\u52a8\u7ef4\u62a4\u5ba2\u4f53 env.txt \u7684\u8986\u76d6\u5c42\u914d\u7f6e\uff0cmod \u5373\u65f6\u751f\u6548\u3002\n- \u91d1\u624b\u6307\u652f\u6301\uff1a\u6e38\u620f\u8bbe\u7f6e\u9875\u65b0\u589e\u300c\u91d1\u624b\u6307\u300d\u7ec4\uff0c\u53ef\u5bfc\u5165\u4e0e\u5ba2\u4f53 build ID \u5bf9\u5e94\u7684\u91d1\u624b\u6307\u6587\u4ef6\u5e76\u9010\u6761\u5f00\u5173\uff08\u5f15\u64ce\u4fa7\u4ec5\u6570\u636e\u578b\u6761\u76ee\u53ef\u751f\u6548\uff0c\u4ee3\u7801\u8865\u4e01\u578b\u4f1a\u88ab\u81ea\u52a8\u5173\u505c\u5e76\u5728\u65e5\u5fd7\u4e2d\u7559\u56e0\uff09\u3002\n- \u5bb9\u5668\u4f53\u9a8c\u5b8c\u5584\uff1a\u6e38\u620f\u8bbe\u7f6e\u9875\u53ef\u76f4\u63a5\u67e5\u770b\u5ba2\u4f53\u8fd0\u884c\u65e5\u5fd7\uff08log.txt\uff09\uff1b\u6e38\u620f\u72b6\u6001\u5224\u5b9a\u66f4\u51c6\u786e\uff1b\u6e38\u620f\u5e93\u652f\u6301\u6392\u5e8f\u4e0e\u5206\u7ec4\u3002\n- \u9ed8\u8ba4\u5f00\u542f\u7cfb\u7edf\u6e38\u620f\u6a21\u5f0f\uff1a\u4e3b App \u58f0\u660e GCSupportsGameMode / LSSupportsGameMode\uff0c\u5bb9\u5668\u8fdb\u7a0b\u9ed8\u8ba4\u83b7\u5f97\u66f4\u9ad8\u5185\u5b58\u6863\u4f4d\uff0c\u7b7e\u540d\u65f6\u65e0\u9700\u518d\u624b\u52a8\u6253\u5f00\u300c\u6e38\u620f\u6a21\u5f0f\u300d\u3002\n- \u5feb\u6377\u680f\u6296\u52a8\u4fee\u590d\u4e0e\u6536\u7a84\uff1a\u91cd\u6392\u8def\u5f84\u8865\u9f50\u62d6\u52a8\u5b88\u536b\u3001\u62d6\u52a8\u6539\u7edd\u5bf9\u951a\u5b9a\u3001\u7ad6\u76f4\u65b9\u5411\u9489\u6b7b\uff0c\u62d6\u52a8\u4e0d\u518d\u56de\u5f39\u4e0e\u7ec6\u98a4\uff1b\u5438\u9644\u820c 76\u219260pt\uff0c\u5c55\u5f00\u680f 183\u2192143pt \u5e76\u53bb\u6389\u88c5\u9970\u63e1\u628a\uff0c\u6536\u8d77\u94ae\u547d\u4e2d\u57df\u6269\u81f3 44\u00d746\u3002\n- \u5305\u5185\u7248\u672c\u53f7\u4e0e\u53d1\u5e03\u53f7\u5bf9\u9f50\uff1aCFBundleShortVersionString / CFBundleVersion \u6539\u4e3a 1.0.4\u3002",
+          "downloadURL": "https://github.com/Tiaoge-tou/GameCase/releases/download/v1.0.4/GameCase.ipa",
+          "size": 11338167
+        },
+        {
+          "version": "1.0.3",
+          "date": "2026-11-06T03:33:01Z",
+          "localizedDescription": "GameCase v1.0.3\n\n- \u6570\u636e\u5305\u5bfc\u5165\u652f\u6301\u6587\u4ef6\u5939\uff1a\u53ef\u76f4\u63a5\u9009\u88c5\u6709 romfs.img \u4e0e aoc/ \u7684\u6587\u4ef6\u5939\u6574\u5939\u5bfc\u5165\uff1b\u6e38\u620f\u8bbe\u7f6e\u9875\u65b0\u589e\u300c\u5b58\u6863\u300d\u7ec4\uff0c\u53ef\u5bfc\u51fa\u5b58\u6863\u4e3a zip \u5206\u4eab\uff0c\u4e5f\u53ef\u5bfc\u5165\u5b58\u6863\uff08\u5355\u6587\u4ef6/zip/\u6587\u4ef6\u5939\uff09\uff0c\u5bfc\u5165\u524d\u81ea\u52a8\u5907\u4efd\u5f53\u524d\u5b58\u6863\u5230 Documents/save-backups/\u3002\n- \u4fee\u590d\u6570\u636e\u5305\u72b6\u6001\u4e0d\u5237\u65b0\uff1a\u7ecf\u7cfb\u7edf\u300c\u6587\u4ef6\u300d\u624b\u52a8\u653e\u5165\u6216\u5220\u9664\u6570\u636e\u5305\u540e\uff0c\u5207\u56de GameCase \u65f6\u6e38\u620f\u5e93\u72b6\u6001\u5373\u65f6\u6309\u78c1\u76d8\u91cd\u7b97\uff0c\u4e0d\u518d\u51fa\u73b0\u300c\u6e38\u620f\u80fd\u73a9\u5374\u62a5\u7f3a\u5c11\u6570\u636e\u5305\u300d\u3002\n- \u5b64\u513f\u5bb9\u5668\u76ee\u5f55\u6e05\u626b\uff1a\u542f\u52a8\u5bf9\u8d26\u4e0e\u5378\u8f7d\u540e\u81ea\u52a8\u6e05\u7406\u4e0d\u88ab\u4efb\u4f55\u8bb0\u5f55\u5f15\u7528\u3001\u4e14\u4ec5\u4e3a\u7a7a\u58f3\u7684\u5b64\u513f\u5bb9\u5668\u76ee\u5f55\uff08\u6709 romfs\u3001\u5b58\u6863\u7b49\u771f\u5b9e\u5185\u5bb9\u7684\u76ee\u5f55\u4e00\u5f8b\u4e0d\u78b0\uff09\uff1b\u65e7\u5f62\u6001\u8bb0\u5f55\u7684\u9ed8\u8ba4\u5bb9\u5668\u6536\u655b\u4e3a\u6e38\u620f\u540d\u76ee\u5f55\uff0c\u4e0d\u518d\u4ea7\u751f\u53cc\u76ee\u5f55\u3002\n- \u5305\u5185\u7248\u672c\u53f7\u4e0e\u53d1\u5e03\u53f7\u5bf9\u9f50\uff1aCFBundleShortVersionString / CFBundleVersion \u6539\u4e3a 1.0.3\u3002",
+          "downloadURL": "https://github.com/Tiaoge-tou/GameCase/releases/download/v1.0.3/GameCase.ipa",
+          "size": 11194094
+        },
+        {
+          "version": "1.0.2",
+          "date": "2026-11-05T17:31:30Z",
+          "localizedDescription": "GameCase v1.0.2\n\n- \u5305\u5185\u7248\u672c\u53f7\u6539\u4e3a\u4e0e\u53d1\u5e03\u53f7\u4e00\u81f4\uff1aCFBundleShortVersionString / CFBundleVersion \u7531\u7ee7\u627f\u81ea LiveContainer \u7684 3.8.11 \u6539\u4e3a 1.0.2\uff0c\u5173\u4e8e\u9875\u4e0e\u5404\u6e90\u663e\u793a\u7684\u7248\u672c\u4ece\u6b64\u4e0e\u6b63\u5f0f\u53d1\u5e03\u53f7\u5bf9\u9f50\u3002\n- \u5c01\u9762\u6293\u53d6\u65b0\u589e\u300c\u6309\u6e38\u620f\u540d\u641c\u5546\u5e97\u300d\u515c\u5e95\uff1a\u5f53\u6e38\u620f\u7684\u6807\u9898 ID \u5728\u4efb\u5929\u5802\u5546\u5e97\u65e0\u6761\u76ee\u3001\u6216\u5ba2\u4f53 bundle ID \u4e2d\u63d0\u4e0d\u5230\u6807\u9898 ID \u65f6\uff0c\u6539\u6309\u6e38\u620f\u663e\u793a\u540d\u641c\u7d22\u5546\u5e97\u5339\u914d\u5c01\u9762\uff08\u540d\u79f0\u987b\u7cbe\u786e\u5168\u7b49\u624d\u91c7\u7528\uff0c\u5b81\u7f3a\u6bcb\u9519\uff09\u3002",
+          "downloadURL": "https://github.com/Tiaoge-tou/GameCase/releases/download/v1.0.2/GameCase.ipa",
+          "size": 11123569
+        }
+      ],
+      "releaseChannels": [
+        {
+          "track": "nightly",
+          "releases": [
+            {
+              "version": "1.0.9",
+              "date": "2026-11-08T08:38:59Z",
+              "localizedDescription": "Nightly build from [939c11a](https://github.com/Tiaoge-tou/GameCase/commit/939c11afa04d326c45b5646fd1128a0dccb060c8): \u7248\u672c\u53f7 1.0.9 (#49)",
+              "downloadURL": "https://github.com/Tiaoge-tou/GameCase/releases/download/v1.0.9/GameCase.ipa",
+              "size": 11375755
+            },
+            {
+              "version": "1.0.8",
+              "date": "2026-11-08T06:22:43Z",
+              "localizedDescription": "Nightly build from [f9390be](https://github.com/Tiaoge-tou/GameCase/commit/f9390be): Merge pull request #46 from Tiaoge-tou/fix/no-quickbar-in-sidestore\n    ",
+              "downloadURL": "https://github.com/Tiaoge-tou/GameCase/releases/download/nightly/GameCase%2BSideStore.ipa",
+              "size": 30330194
+            }
+          ]
+        },
+        {
+          "track": "stable",
+          "releases": [
+            {
+              "version": "1.0.12",
+              "date": "2026-11-09T04:57:34Z",
+              "localizedDescription": "GameCase v1.0.12\n\n\u672c\u7248\u66f4\u65b0\n\n\u2022 \u5916\u89c2\u4e09\u6863\uff1a\u65b0\u589e\u5916\u89c2\u8bbe\u7f6e\uff0c\u53ef\u9009\u6df1\u8272\uff08\u9ed8\u8ba4\uff09/ \u8ddf\u968f\u7cfb\u7edf / \u6d45\u8272\uff0c\u6574\u4e2a\u754c\u9762\u968f\u6240\u9009\u5916\u89c2\u5207\u6362\u3002\n\u2022 Liquid Glass\uff1a\u66f4\u591a\u6309\u94ae\u6539\u7528 iOS 26 \u539f\u751f Liquid Glass \u73bb\u7483\u6548\u679c\uff08\u300c\u2039 \u6e38\u620f\u5e93\u300d\u80f6\u56ca\u3001\u4e3b\u9875\u56fe\u9762\u6309\u94ae\u3001\u72b6\u6001\u80f6\u56ca\u3001\u6570\u636e\u5305\u5bfc\u5165\u6309\u94ae\u3001\u5e95\u90e8\u300c\u5f00\u59cb\u300d\u6309\u94ae\u7b49\uff09\uff0c\u4f4e\u7248\u672c\u7cfb\u7edf\u81ea\u52a8\u56de\u9000\u539f\u6837\u5f0f\u3002\n\u2022 \u6df1\u6d45\u81ea\u9002\u5e94\u5168\u9762\u4fee\u590d\uff1a\u6d45\u8272\u6a21\u5f0f\u4e0b\u6e38\u620f\u540d\u3001\u8bbe\u7f6e\u9875\u5404\u5206\u7ec4\u5361\u7247\u4e0e\u6807\u9898\u3001\u5206\u6bb5\u9009\u4e2d\u5757\u3001\u5c01\u9762\u6807\u9898\u533a\u7b49\u5168\u9762\u9002\u914d\uff1b\u6e38\u620f\u8bbe\u7f6e\u9875\u9875\u5934\u72b6\u6001\u884c\u4e0e\u6807\u9898\u95f4\u8ddd\u7edf\u4e00\uff1b\u9009\u4e2d\u6001\u914d\u8272\u968f\u6df1\u6d45\u6a21\u5f0f\u81ea\u9002\u5e94\u53d8\u8272\u3002\n\u2022 \u6e90 JSON \u9632\u62a4\uff1a\u4fee\u590d\u6e90\u6587\u4ef6\u66f4\u65b0\u65f6\u53ef\u80fd\u751f\u6210\u7a7a\u9891\u9053\u5bfc\u81f4 SideStore \u5237\u65b0\u6e90\u89e3\u7801\u5931\u8d25\u7684\u95ee\u9898\u3002\n\n\u4e0b\u8f7d\u8bf4\u660e\n\n\u2022 GameCase.ipa\uff1a\u666e\u901a\u7248\u3002\u7528 LCSign / SideStore / AltStore \u7b49\u5de5\u5177\u7b7e\u540d\u5b89\u88c5\u3002\n\u2022 GameCase+SideStore.ipa\uff1a\u5185\u7f6e SideStore \u7248\uff0c\u88c5\u597d\u540e\u53ef\u5728 GameCase \u8bbe\u7f6e\u91cc\u6253\u5f00\u5185\u7f6e SideStore \u5bfc\u5165\u8bc1\u4e66\u3001\u7528\u514d JIT \u6a21\u5f0f\u3002\n",
+              "downloadURL": "https://github.com/Tiaoge-tou/GameCase/releases/download/v1.0.12/GameCase.ipa",
+              "size": 11402172
+            },
+            {
+              "version": "1.0.11",
+              "date": "2026-11-08T13:00:50Z",
+              "localizedDescription": "v1.0.11\n\n\u2022 \u4fee\u590d\u300c\u4ece SideStore \u5bfc\u5165\u8bc1\u4e66\u300d\u4e0d\u663e\u793a\uff1a\u8be5\u5165\u53e3\u6b64\u524d\u88ab\u4e0a\u6e38\u7684\u5546\u5e97\u6765\u6e90\u68c0\u6d4b\u6321\u4f4f\uff0c\u7ecf LCSign/\u8bc1\u4e66\u5b89\u88c5\u7684 GameCase \u91cc\u6c38\u8fdc\u4e0d\u51fa\u73b0\uff0cREADME \u5199\u7684\u5bfc\u8bc1\u4e66\u6d41\u7a0b\u5b9e\u9645\u65ad\u88c2\u3002\u672c\u7248\u53ea\u8981\u5185\u7f6e SideStore \u5b58\u5728\u5c31\u663e\u793a\uff0c\u70b9\u5b83\u76f4\u63a5\u8bfb\u53d6\u5185\u7f6e SideStore \u5df2\u751f\u6210\u7684\u8bc1\u4e66\uff08PR 55\uff09\u3002\n\u2022 \u5185\u7f6e SideStore \u4e2d\u6587\u5316\u7b2c\u4e8c\u6279\uff1a\u8bbe\u7f6e\u9875\u4e8c\u7ea7\u53ca\u66f4\u6df1\u9875\u9762\u65b0\u589e 548 \u6761\u7b80\u4e2d\u8bd1\u6587\uff0c\u8986\u76d6 Anisette \u670d\u52a1\u5668\u3001\u914d\u5bf9\u6587\u4ef6\u7ba1\u7406\u3001\u65e0\u7ebf\u914d\u5bf9\u3001\u8bc1\u4e66\u4e0e\u63cf\u8ff0\u6587\u4ef6\u3001\u8fde\u63a5\u914d\u7f6e\u3001\u5065\u5eb7\u68c0\u67e5\u7b49\u2014\u2014\u4eca\u665a\u73a9\u5bb6\u8d70\u7684\u90a3\u6574\u6761\u767b\u5f55\u94fe\u8def\u5168\u90e8\u4e2d\u6587\uff08PR 54\uff09\u3002\n\u2022 README \u540c\u6b65\uff1aSideStore \u9996\u6b21\u8bbe\u7f6e\u8865\u65e0\u7ebf\u914d\u5bf9\u4e00\u6b65\uff1b\u65b0\u589e\u767b\u5f55 -80045 \u7684\u4e94\u6b65\u89e3\u6cd5\uff1b\u65b0\u589e\u514d JIT \u8bc1\u4e66\u524d\u63d0\u8bf4\u660e\uff08\u53ea\u8ba4\u5f00\u53d1\u8bc1\u4e66\u3001\u5bfc\u5165\u8bc1\u4e66\u987b\u4e0e\u672c\u4f53\u540c\u56e2\u961f\uff0c\u5206\u53d1\u8bc1\u4e66\u7b7e\u7684\u672c\u4f53\u65e0\u6cd5\u514d JIT\uff09\uff08PR 52\u300157\u300158\uff09\u3002\n",
+              "downloadURL": "https://github.com/Tiaoge-tou/GameCase/releases/download/v1.0.11/GameCase.ipa",
+              "size": 11375806
+            },
+            {
+              "version": "1.0.10",
+              "date": "2026-11-08T10:55:35Z",
+              "localizedDescription": "\u672c\u6b21\u66f4\u65b0\n\n\u2022 \u7ad6\u5c4f\u6e38\u620f\u5e93\u56fe\u6807\u663e\u793a\u4f18\u5316\uff1a\u6ca1\u6709\u6a2a\u7248\u5c01\u9762\u3001\u53ea\u80fd\u7528\u5e94\u7528\u56fe\u6807\u515c\u5e95\u7684\u6e38\u620f\uff0c\u5728\u7ad6\u5c4f\u7f51\u683c\u5361\u4e0e\u300c\u6700\u8fd1\u6e38\u73a9\u300d\u91cc\u6539\u4e3a\u4e0e\u6a2a\u5c4f\u4e00\u81f4\u7684\u5904\u7406\u2014\u2014\u56fe\u6807\u7cca\u5316\u538b\u6697\u4f5c\u5e95\u3001\u6e05\u6670\u56fe\u6807\u5c45\u4e2d\u663e\u793a\uff0c\u4e0d\u518d\u628a\u5c0f\u56fe\u6807\u62c9\u6ee1\u6574\u5f20\u5361\u3002\u6709\u6a2a\u7248\u5c01\u9762\u7684\u6e38\u620f\u4e0d\u53d7\u5f71\u54cd\u3002\n\n\u89c9\u5f97\u597d\u7528\u6b22\u8fce\u70b9\u4e2a \u2b50",
+              "downloadURL": "https://github.com/Tiaoge-tou/GameCase/releases/download/v1.0.10/GameCase.ipa",
+              "size": 11375783
+            },
+            {
+              "version": "1.0.9",
+              "date": "2026-11-08T08:38:59Z",
+              "localizedDescription": "Nightly build from [939c11a](https://github.com/Tiaoge-tou/GameCase/commit/939c11afa04d326c45b5646fd1128a0dccb060c8): \u7248\u672c\u53f7 1.0.9 (#49)",
+              "downloadURL": "https://github.com/Tiaoge-tou/GameCase/releases/download/v1.0.9/GameCase.ipa",
+              "size": 11375755
+            },
+            {
+              "version": "1.0.8",
+              "date": "2026-11-08T06:03:55Z",
+              "localizedDescription": "Nightly build from [495aff4](https://github.com/Tiaoge-tou/GameCase/commit/495aff4): Merge pull request #45 from Tiaoge-tou/fix/source-json-gc-branding\n    ",
+              "downloadURL": "https://github.com/Tiaoge-tou/GameCase/releases/download/v1.0.8/GameCase%2BSideStore.ipa",
+              "size": 30330196
+            },
+            {
+              "version": "1.0.7",
+              "date": "2026-11-08T01:37:47Z",
+              "localizedDescription": "Nightly build from [7b604a1](https://github.com/Tiaoge-tou/GameCase/commit/7b604a1): Merge pull request #38 from Tiaoge-tou/chore/version-1.0.7\n    ",
+              "downloadURL": "https://github.com/Tiaoge-tou/GameCase/releases/download/v1.0.7/GameCase%2BSideStore.ipa",
+              "size": 30329710
+            },
+            {
+              "version": "1.0.6",
+              "date": "2026-11-07T01:32:42Z",
+              "localizedDescription": "Nightly build from [60256b3](https://github.com/Tiaoge-tou/GameCase/commit/60256b3): Merge pull request #27 from Tiaoge-tou/chore/version-1.0.6\n    ",
+              "downloadURL": "https://github.com/Tiaoge-tou/GameCase/releases/download/v1.0.6/GameCase%2BSideStore.ipa",
+              "size": 30752803
+            },
+            {
+              "version": "1.0.5",
+              "date": "2026-11-07T00:28:09Z",
+              "localizedDescription": "Nightly build from [772ecb8](https://github.com/Tiaoge-tou/GameCase/commit/772ecb8): Merge pull request #25 from Tiaoge-tou/chore/version-1.0.5\n    ",
+              "downloadURL": "https://github.com/Tiaoge-tou/GameCase/releases/download/v1.0.5/GameCase%2BSideStore.ipa",
+              "size": 30748557
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "news": [
+    {
+      "appID": "com.tiaoge.gamecase",
+      "caption": "Update of GameCase just got released!",
+      "date": "2026-11-07T00:28:09Z",
+      "identifier": "release-1.0.5",
+      "imageURL": "https://raw.githubusercontent.com/Tiaoge-tou/GameCase/main/screenshots/release-gc-v1.png",
+      "notify": true,
+      "tintColor": "#0784FC",
+      "title": "1.0.5 - GameCase  07/11/26",
+      "url": "https://github.com/Tiaoge-tou/GameCase/releases/tag/v1.0.5"
+    },
+    {
+      "appID": "com.tiaoge.gamecase",
+      "caption": "Update of GameCase just got released!",
+      "date": "2026-11-07T01:32:42Z",
+      "identifier": "release-1.0.6",
+      "imageURL": "https://raw.githubusercontent.com/Tiaoge-tou/GameCase/main/screenshots/release-gc-v1.png",
+      "notify": true,
+      "tintColor": "#0784FC",
+      "title": "1.0.6 - GameCase  07/11/26",
+      "url": "https://github.com/Tiaoge-tou/GameCase/releases/tag/v1.0.6"
+    },
+    {
+      "appID": "com.tiaoge.gamecase",
+      "caption": "Update of GameCase just got released!",
+      "date": "2026-11-08T01:37:47Z",
+      "identifier": "release-1.0.7",
+      "imageURL": "https://raw.githubusercontent.com/Tiaoge-tou/GameCase/main/screenshots/release-gc-v1.png",
+      "notify": true,
+      "tintColor": "#0784FC",
+      "title": "1.0.7 - GameCase  08/11/26",
+      "url": "https://github.com/Tiaoge-tou/GameCase/releases/tag/v1.0.7"
+    },
+    {
+      "appID": "com.tiaoge.gamecase",
+      "caption": "Update of GameCase just got released!",
+      "date": "2026-11-08T06:03:55Z",
+      "identifier": "release-1.0.8",
+      "imageURL": "https://raw.githubusercontent.com/Tiaoge-tou/GameCase/main/screenshots/release-gc-v1.png",
+      "notify": true,
+      "tintColor": "#0784FC",
+      "title": "1.0.8 - GameCase  08/11/26",
+      "url": "https://github.com/Tiaoge-tou/GameCase/releases/tag/v1.0.8"
+    },
+    {
+      "appID": "com.tiaoge.gamecase",
+      "caption": "Update of GameCase just got released!",
+      "date": "2026-11-08T08:38:59Z",
+      "identifier": "release-1.0.9",
+      "imageURL": "https://raw.githubusercontent.com/Tiaoge-tou/GameCase/main/screenshots/release-gc-v1.png",
+      "notify": true,
+      "tintColor": "#0784FC",
+      "title": "1.0.9 - GameCase  08/11/26",
+      "url": "https://github.com/Tiaoge-tou/GameCase/releases/tag/v1.0.9"
+    },
+    {
+      "appID": "com.tiaoge.gamecase",
+      "caption": "Update of GameCase just got released!",
+      "date": "2026-11-08T10:55:35Z",
+      "identifier": "release-1.0.10",
+      "imageURL": "https://raw.githubusercontent.com/Tiaoge-tou/GameCase/main/screenshots/release-gc-v1.png",
+      "notify": true,
+      "tintColor": "#0784FC",
+      "title": "1.0.10 - GameCase  08/11/26",
+      "url": "https://github.com/Tiaoge-tou/GameCase/releases/tag/v1.0.10"
+    },
+    {
+      "appID": "com.tiaoge.gamecase",
+      "caption": "Update of GameCase just got released!",
+      "date": "2026-11-08T13:00:50Z",
+      "identifier": "release-1.0.11",
+      "imageURL": "https://raw.githubusercontent.com/Tiaoge-tou/GameCase/main/screenshots/release-gc-v1.png",
+      "notify": true,
+      "tintColor": "#0784FC",
+      "title": "1.0.11 - GameCase  08/11/26",
+      "url": "https://github.com/Tiaoge-tou/GameCase/releases/tag/v1.0.11"
+    },
+    {
+      "appID": "com.tiaoge.gamecase",
+      "caption": "Update of GameCase just got released!",
+      "date": "2026-11-09T04:57:34Z",
+      "identifier": "release-1.0.12",
+      "imageURL": "https://raw.githubusercontent.com/Tiaoge-tou/GameCase/main/screenshots/release-gc-v1.png",
+      "notify": true,
+      "tintColor": "#0784FC",
+      "title": "1.0.12 - GameCase  09/11/26",
+      "url": "https://github.com/Tiaoge-tou/GameCase/releases/tag/v1.0.12"
+    }
+  ]
+}

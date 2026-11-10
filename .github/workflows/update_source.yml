@@ -86,6 +86,7 @@ jobs:
         }
         upload_one .github/apps.json
         upload_one .github/apps_ss_lc.json
+        upload_one .github/apps_lc.json
 
     - name: Calculate job duration
       id: duration

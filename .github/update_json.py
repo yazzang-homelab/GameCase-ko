@@ -82,14 +82,14 @@ def strip_empty_channels(data):
             app["releaseChannels"] = [c for c in channels if c.get("releases")]
 
 
-def update_json_file_release(repo_url, json_file, latest_release):
+def update_json_file_release(repo_url, json_file, latest_release, source_name="apps.json"):
     if isinstance(latest_release, list) and latest_release:
         latest_release = latest_release[0]
     else:
         print("Error getting latest release")
         return
 
-    data = load_source_data(repo_url, "apps.json")
+    data = load_source_data(repo_url, source_name)
 
     app = data["apps"][0]
 
@@ -375,6 +375,7 @@ def main():
         else:
             json_file = "./.github/apps.json"
             update_json_file_release(repo_url, json_file, fetched_data_latest)
+            update_json_file_release(repo_url, "./.github/apps_lc.json", fetched_data_latest, source_name="apps_lc.json")
             update_json_file_release_ss_lc(repo_url, "./.github/apps_ss_lc.json", fetched_data_latest, False)
     except Exception as e:
         print(f"An error occurred: {e}")
