@@ -104,7 +104,7 @@ struct LCSettingsView: View {
                     // 工具栏不直接挂到巨型 Form 表达式上（PR #4 试过、类型检查超时），
                     // 故 Form 先收进独立计算属性 settingsForm，工具栏只挂 body 的小表达式。
                     ToolbarItem(placement: .cancellationAction) {
-                        Button("关闭") {
+                        Button("lc.common.close".loc) {
                             if let onClose {
                                 onClose()
                             } else {
@@ -390,7 +390,7 @@ struct LCSettingsView: View {
                 Text("lc.settings.about".loc)
             } footer: {
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("GameCase 基于开源项目 LiveContainer 构建，遵循 GNU AGPL-3.0 协议。原作者 Duy Tran，主要维护者 hugeBlack。")
+                    Text("lc.settings.aboutGameCase".loc)
                     Text("lc.settings.warning".loc)
                 }
             }

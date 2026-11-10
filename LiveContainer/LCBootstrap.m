@@ -284,6 +284,15 @@ static const CGFloat LCQBBarHeight = 46;
 static const CGFloat LCQBBarGap = 12;
 static const NSTimeInterval LCQBAutoCollapseDelay = 3;
 
+// 快捷栏「游戏库」文案：本代码跑在客体进程内，mainBundle 可能已指向客体，
+// 不能走 NSLocalizedString；按系统首选语言直接挑文案（zh / pt / 其余英文）。
+static NSString *LCQBLibraryTitle(void) {
+    NSString *lang = NSLocale.preferredLanguages.firstObject.lowercaseString ?: @"en";
+    if ([lang hasPrefix:@"zh"]) return @"游戏库";
+    if ([lang hasPrefix:@"pt"]) return @"Biblioteca";
+    return @"Library";
+}
+
 #pragma mark - 状态文件
 
 static NSString *LCQBStatePath(void) {
@@ -902,7 +911,7 @@ static void *LCQBWindowBoundsContext = &LCQBWindowBoundsContext;
     _barTouch = barTouch;
 
     UIFont *labelFont = [UIFont systemFontOfSize:15 weight:UIFontWeightBold];
-    CGFloat textWidth = ceil([@"游戏库" sizeWithAttributes:@{NSFontAttributeName: labelFont}].width);
+    CGFloat textWidth = ceil([LCQBLibraryTitle() sizeWithAttributes:@{NSFontAttributeName: labelFont}].width);
     CGFloat pillWidth = 9 + 17 + 6 + textWidth + 10;
     UIButton *pill = [UIButton buttonWithType:UIButtonTypeCustom];
     pill.frame = CGRectMake(7, (LCQBBarHeight - 32) / 2, pillWidth, 32);
@@ -916,7 +925,7 @@ static void *LCQBWindowBoundsContext = &LCQBWindowBoundsContext;
     house.frame = CGRectMake(9, (32 - 17) / 2, 17, 17);
     [pill addSubview:house];
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(9 + 17 + 6, 0, textWidth + 2, 32)];
-    label.text = @"游戏库";
+    label.text = LCQBLibraryTitle();
     label.font = labelFont;
     label.textColor = UIColor.whiteColor;
     [pill addSubview:label];
@@ -1265,7 +1274,7 @@ static void *LCQBWindowBoundsContext = &LCQBWindowBoundsContext;
     house.frame = CGRectMake((bounds.size.width - 38) / 2, (bounds.size.height - 38) / 2 - 14, 38, 38);
     [vc.view addSubview:house];
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(house.frame) + 8, bounds.size.width, 18)];
-    label.text = @"游戏库";
+    label.text = LCQBLibraryTitle();
     label.font = [UIFont systemFontOfSize:13 weight:UIFontWeightMedium];
     label.textColor = [UIColor colorWithWhite:1 alpha:0.75];
     label.textAlignment = NSTextAlignmentCenter;

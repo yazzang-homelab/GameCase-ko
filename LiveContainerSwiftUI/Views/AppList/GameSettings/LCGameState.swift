@@ -37,9 +37,9 @@ enum LCGameState: Equatable {
     /// 状态短名（主页状态行 / 帮助卡标题）
     var title: String {
         switch self {
-        case .playable: return "随时可玩"
-        case .needsDatapack: return "缺数据包"
-        case .broken: return "已损坏"
+        case .playable: return "lc.gameState.playable".loc
+        case .needsDatapack: return "lc.gameState.needsDatapack".loc
+        case .broken: return "lc.gameState.broken".loc
         }
     }
 
@@ -49,7 +49,7 @@ enum LCGameState: Equatable {
         case .playable:
             return ""
         case .needsDatapack:
-            return "游戏本体已经装好，还差数据包，导入后就能玩。"
+            return "lc.gameState.needsDatapackExplanation".loc
         case .broken(let reason, _, _):
             return reason
         }
@@ -63,7 +63,7 @@ enum LCGameState: Equatable {
         case .playable:
             return ""
         case .needsDatapack:
-            return "点「导入数据包…」，选这款游戏的数据包文件 romfs.img，或选装着数据包的文件夹。数据包要和游戏版本配套，导错版本启动时会报错，原因会写在日志里。"
+            return "lc.gameState.needsDatapackFix".loc
         case .broken(_, let detail, _):
             return detail
         }
@@ -108,9 +108,9 @@ extension LCGameLibraryInfo {
             }
             if let entry = probe.imageEntry {
                 return .broken(
-                    reason: "数据包位置被文件夹占用",
-                    detail: "容器里 romfs.img 本该是个文件，现在却是个文件夹，多半是解压或拷贝时放错了。先到「文件」里把这个文件夹删掉，再重新导入数据包。",
-                    technical: "路径：\(entry.path)\n当前是文件夹，不是文件")
+                    reason: "lc.gameState.folderOccupiesReason".loc,
+                    detail: "lc.gameState.folderOccupiesDetail".loc,
+                    technical: "lc.gameState.folderOccupiesTechnical %@".localizeWithFormat(entry.path))
             }
             return .needsDatapack
         }
@@ -118,21 +118,21 @@ extension LCGameLibraryInfo {
         guard let attrs = try? fm.attributesOfItem(atPath: romfsURL.path),
               let size = (attrs[.size] as? NSNumber)?.int64Value else {
             return .broken(
-                reason: "数据包读不出来",
-                detail: "数据包文件在容器里，但系统读不到它的信息。重新导入一次数据包覆盖它；还是不行，把日志发给开发者看。",
-                technical: "路径：\(romfsURL.path)\n文件信息读取失败")
+                reason: "lc.gameState.unreadableReason".loc,
+                detail: "lc.gameState.unreadableDetail".loc,
+                technical: "lc.gameState.unreadableTechnical %@".localizeWithFormat(romfsURL.path))
         }
         if size == 0 {
             return .broken(
-                reason: "数据包不完整",
-                detail: "容器里的数据包只有 0 字节，应该是没传完或拷贝中断过。重新导入一次完整的数据包，覆盖掉它就好。",
-                technical: "romfs.img 大小：0 字节\n路径：\(romfsURL.path)")
+                reason: "lc.gameState.emptyReason".loc,
+                detail: "lc.gameState.emptyDetail".loc,
+                technical: "lc.gameState.emptyTechnical %@".localizeWithFormat(romfsURL.path))
         }
         if let want = expectedRomfsSize(for: app.appInfo), want != size {
             return .broken(
-                reason: "数据包与游戏版本不匹配",
-                detail: "现在这份数据包不是这款游戏当前版本配套的那一份，大小对不上。重新导入配套的数据包；刚更新过游戏的话，旧数据包一般也要跟着换新版。",
-                technical: "romfs.id 记录大小：\(want) 字节\n实际大小：\(size) 字节")
+                reason: "lc.gameState.mismatchReason".loc,
+                detail: "lc.gameState.mismatchDetail".loc,
+                technical: "lc.gameState.mismatchTechnical %lld %lld".localizeWithFormat(want, size))
         }
         return .playable
     }

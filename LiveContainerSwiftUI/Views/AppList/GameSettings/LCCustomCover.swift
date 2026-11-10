@@ -187,7 +187,7 @@ struct LCCoverCropView: View {
             .onAppear { viewSize = geo.size }
             .onChange(of: geo.size) { viewSize = $0 }
         }
-        .navigationTitle("裁剪封面")
+        .navigationTitle("lc.gameSettings.cropCover".loc)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
@@ -195,7 +195,7 @@ struct LCCoverCropView: View {
             }
             ToolbarItem(placement: .confirmationAction) {
                 Button { confirm() } label: {
-                    Text("使用这张").bold()
+                    Text("lc.gameSettings.useThis".loc).bold()
                 }
             }
         }

@@ -1155,23 +1155,23 @@ struct LCGameHomeView: View {
     private func playedText(for date: Date) -> String {
         let calendar = Calendar.current
         if calendar.isDateInToday(date) {
-            return "今天玩过"
+            return "lc.gameHome.playedToday".loc
         }
         if calendar.isDateInYesterday(date) {
-            return "昨天玩过"
+            return "lc.gameHome.playedYesterday".loc
         }
         let days = calendar.dateComponents([.day], from: calendar.startOfDay(for: date), to: calendar.startOfDay(for: Date())).day ?? 0
         if days > 1 && days <= 7 {
-            return "\(days) 天前玩过"
+            return "lc.gameHome.playedDaysAgo %lld".localizeWithFormat(days)
         }
         let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "zh_CN")
+        formatter.locale = Locale.current
         formatter.setLocalizedDateFormatFromTemplate("Md")
-        return "\(formatter.string(from: date))玩过"
+        return "lc.gameHome.playedOnDate %@".localizeWithFormat(formatter.string(from: date))
     }
 
     private func metaText(for app: LCAppModel) -> String {
-        var text = "版本 \(app.version)"
+        var text = "lc.gameHome.version %@".localizeWithFormat(app.version)
         if let lastLaunched = app.appInfo.lastLaunched {
             text += " · \(playedText(for: lastLaunched))"
         }
@@ -1404,19 +1404,19 @@ struct LCGameHomeView: View {
             Button {
                 onImportIPA()
             } label: {
-                Label("导入 IPA", systemImage: "doc.badge.plus")
+                Label("lc.gameHome.importIpa".loc, systemImage: "doc.badge.plus")
             }
             Button {
                 onImportDatapackGeneric()
             } label: {
-                Label("导入数据包", systemImage: "square.and.arrow.down")
+                Label("lc.gameHome.importDataPack".loc, systemImage: "square.and.arrow.down")
             }
             if hiddenAppsCount > 0 {
                 Divider()
                 Button {
                     onOpenHiddenApps()
                 } label: {
-                    Label("隐藏的游戏（\(hiddenAppsCount)）", systemImage: "eye.slash")
+                    Label("lc.gameHome.hiddenGamesCount %lld".localizeWithFormat(hiddenAppsCount), systemImage: "eye.slash")
                 }
             }
         } label: {
@@ -1461,13 +1461,13 @@ struct LCGameHomeView: View {
         Button {
             onSettings(app)
         } label: {
-            Label("游戏设置", systemImage: "gear")
+            Label("lc.gameHome.gameSettings".loc, systemImage: "gear")
         }
         if !app.uiIsShared {
             Button {
                 onImportDatapack(app)
             } label: {
-                Label("导入数据包", systemImage: "square.and.arrow.down")
+                Label("lc.gameHome.importDataPack".loc, systemImage: "square.and.arrow.down")
             }
         }
         if !app.uiIsShared {
@@ -1483,7 +1483,7 @@ struct LCGameHomeView: View {
         VStack {
             HStack(spacing: 8) {
                 ProgressView()
-                Text("正在安装 \(Int(installProgress * 100))%")
+                Text("lc.gameHome.installingPercent %lld".localizeWithFormat(Int(installProgress * 100)))
                     .font(.footnote.bold())
             }
             .padding(.horizontal, 14)
@@ -1527,7 +1527,7 @@ struct LCGameHomeView: View {
                 Image(systemName: "gamecontroller")
                     .font(.system(size: 54))
                     .foregroundColor(.gray)
-                Text("还没有导入游戏")
+                Text("lc.gameHome.noGamesYet".loc)
                     .font(.system(.title3, design: .rounded).bold())
                     .foregroundColor(LCGameTheme.creamColor)
                 if multiLCStatus == 2 {
@@ -1540,7 +1540,7 @@ struct LCGameHomeView: View {
                         Button {
                             onImportIPA()
                         } label: {
-                            Text("＋ 导入 IPA")
+                            Text("lc.gameHome.importIpaPlus".loc)
                                 .font(.headline)
                                 .foregroundColor(.black)
                                 .frame(width: 240, height: 50)
@@ -1551,7 +1551,7 @@ struct LCGameHomeView: View {
                         Button {
                             onImportDatapackGeneric()
                         } label: {
-                            Text("＋ 导入数据包")
+                            Text("lc.gameHome.importDataPackPlus".loc)
                                 .font(.headline)
                                 .foregroundColor(LCGameTheme.chipIcon)
                                 .frame(width: 240, height: 50)
@@ -1562,7 +1562,7 @@ struct LCGameHomeView: View {
                             Button {
                                 onOpenHiddenApps()
                             } label: {
-                                Text("隐藏的游戏（\(hiddenAppsCount)）")
+                                Text("lc.gameHome.hiddenGamesCount %lld".localizeWithFormat(hiddenAppsCount))
                                     .font(.footnote)
                                     .foregroundColor(.gray)
                             }
@@ -1791,7 +1791,7 @@ struct LCGameHomeView: View {
         let columnWidth = (width - m * 2 - spacing) / 2
         return VStack(alignment: .leading, spacing: 0) {
             HStack {
-                Text("你的游戏")
+                Text("lc.gameHome.yourGames".loc)
                     .font(.system(size: 14))
                     .foregroundColor(LCGameTheme.sectionText)
                 Spacer()
@@ -1853,7 +1853,7 @@ struct LCGameHomeView: View {
     private func portraitRecent(margin m: CGFloat, width: CGFloat) -> some View {
         let rows = Array(recentApps.prefix(6))
         return VStack(alignment: .leading, spacing: 0) {
-            Text("最近游玩")
+            Text("lc.gameHome.recentlyPlayed".loc)
                 .font(.system(size: 14))
                 .foregroundColor(LCGameTheme.sectionText)
                 .padding(.horizontal, m)
@@ -1942,7 +1942,7 @@ struct LCGameHomeView: View {
                 .font(.system(size: 13))
                 .foregroundColor(LCGameTheme.mutedText)
         } else {
-            Text("版本 \(app.version)")
+            Text("lc.gameHome.version %@".localizeWithFormat(app.version))
                 .font(.system(size: 13))
                 .foregroundColor(LCGameTheme.mutedText)
         }
@@ -1974,7 +1974,7 @@ struct LCGameHomeView: View {
                             } else {
                                 Image(systemName: "play.fill")
                                     .font(.system(size: 17))
-                                Text("开始")
+                                Text("lc.gameHome.start".loc)
                                     .font(.system(size: 19, weight: .bold))
                             }
                         }
@@ -2092,10 +2092,10 @@ struct LCGameHomeView: View {
                         // 浅色值；浅色改语义色（sectionText /
                         // mutedText，与竖屏浅色同口径）——原固定
                         // 值压在浅色晕染上几乎看不见（用户实测）。
-                        Text("你的游戏")
+                        Text("lc.gameHome.yourGames".loc)
                             .font(.system(size: 14))
                             .foregroundColor(colorScheme == .light ? LCGameTheme.sectionText : Color(red: 206 / 255, green: 200 / 255, blue: 194 / 255))
-                        Text("第 \(focusIdx + 1) 个，共 \(list.count)")
+                        Text("lc.gameHome.focusPosition %lld %lld".localizeWithFormat(focusIdx + 1, list.count))
                             .font(.system(size: 14))
                             .foregroundColor(colorScheme == .light ? LCGameTheme.mutedText : Color(red: 172 / 255, green: 164 / 255, blue: 158 / 255))
                     }
@@ -2213,7 +2213,7 @@ struct LCGameHomeView: View {
                 } label: {
                     HStack(spacing: 7) {
                         statusDot(color: state.themeColor, radius: 4)
-                        Text(state.isPlayable ? "随时可玩 · 数据包已就绪" : state.title)
+                        Text(state.isPlayable ? "lc.gameHome.readyToPlay".loc : state.title)
                             .font(.system(size: 12))
                             .foregroundColor(stateTextColor(state))
                     }
@@ -3199,11 +3199,11 @@ struct LCHiddenAppsView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 12) {
-                Text("这些游戏被隐藏，不出现在游戏库里。长按一行可启动、打开设置或卸载；点「取消隐藏」即恢复显示。")
+                Text("lc.gameHome.hiddenGamesDesc".loc)
                     .font(.footnote)
                     .foregroundColor(.gray)
                 if apps.isEmpty {
-                    Text("没有隐藏的游戏")
+                    Text("lc.gameHome.noHiddenGames".loc)
                         .foregroundColor(.gray)
                         .padding(.top, 24)
                 }
@@ -3217,7 +3217,7 @@ struct LCHiddenAppsView: View {
                                 .font(.system(size: 15, weight: .semibold))
                                 .foregroundColor(LCGameTheme.sectionText)
                                 .lineLimit(1)
-                            Text("版本 \(app.version)")
+                            Text("lc.gameHome.version %@".localizeWithFormat(app.version))
                                 .font(.system(size: 12.5))
                                 .foregroundColor(.gray)
                         }
@@ -3225,7 +3225,7 @@ struct LCHiddenAppsView: View {
                         Button {
                             onUnhide(app)
                         } label: {
-                            Text("取消隐藏")
+                            Text("lc.gameHome.unhide".loc)
                                 .font(.system(size: 13, weight: .semibold))
                                 .foregroundColor(LCGameTheme.creamColor)
                                 .padding(.horizontal, 12)
@@ -3242,12 +3242,12 @@ struct LCHiddenAppsView: View {
                         Button {
                             onRun(app)
                         } label: {
-                            Label("启动", systemImage: "play.fill")
+                            Label("lc.gameHome.launch".loc, systemImage: "play.fill")
                         }
                         Button {
                             onSettings(app)
                         } label: {
-                            Label("游戏设置", systemImage: "gear")
+                            Label("lc.gameHome.gameSettings".loc, systemImage: "gear")
                         }
                         if !app.uiIsShared, app.uiSelectedContainer != nil {
                             Button {
@@ -3260,7 +3260,7 @@ struct LCHiddenAppsView: View {
                             Button {
                                 onImportDatapack(app)
                             } label: {
-                                Label("导入数据包", systemImage: "square.and.arrow.down")
+                                Label("lc.gameHome.importDataPack".loc, systemImage: "square.and.arrow.down")
                             }
                             Button(role: .destructive) {
                                 onUninstall(app)
@@ -3274,7 +3274,7 @@ struct LCHiddenAppsView: View {
             .padding()
         }
         .background(LCGameTheme.pageBackground.ignoresSafeArea())
-        .navigationTitle("隐藏的游戏")
+        .navigationTitle("lc.gameHome.hiddenGames".loc)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             // 本页以 sheet 呈现（列表层包 NavigationView）：右上给显式关闭钮，
@@ -3282,7 +3282,7 @@ struct LCHiddenAppsView: View {
             // 「取消」的 cancellationAction 正好成对，同为素 Button 无自加样式，
             // 新系统渲染成与标题同行的圆角胶囊钮。
             ToolbarItem(placement: .confirmationAction) {
-                Button("关闭") {
+                Button("lc.common.close".loc) {
                     dismiss()
                 }
             }

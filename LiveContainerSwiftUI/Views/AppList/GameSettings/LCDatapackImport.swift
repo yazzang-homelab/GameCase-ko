@@ -152,7 +152,7 @@ struct LCDatapackImportView: View {
                     gamePickerBody
                 }
             }
-            .navigationTitle("导入数据包")
+            .navigationTitle("lc.datapack.importTitle".loc)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -221,8 +221,8 @@ struct LCDatapackImportView: View {
         } message: {
             Text("lc.datapack.folderOverwriteMessage".loc.localizeWithFormat(Self.sizeText(existingDatapackSize)))
         }
-        .confirmationDialog("已有数据包", isPresented: $confirmOverwrite, titleVisibility: .visible) {
-            Button("覆盖现有数据包", role: .destructive) {
+        .confirmationDialog("lc.datapack.folderOverwriteTitle".loc, isPresented: $confirmOverwrite, titleVisibility: .visible) {
+            Button("lc.datapack.overwriteButton".loc, role: .destructive) {
                 if let source = pickedSource {
                     startCopy(source: source)
                 }
@@ -231,7 +231,7 @@ struct LCDatapackImportView: View {
                 pickedSource = nil
             }
         } message: {
-            Text("这个游戏已经导入过数据包（\(Self.sizeText(existingDatapackSize))），覆盖它吗？")
+            Text("lc.datapack.overwriteMessage %@".localizeWithFormat(Self.sizeText(existingDatapackSize)))
         }
     }
 
@@ -272,7 +272,7 @@ struct LCDatapackImportView: View {
                             VStack(alignment: .leading, spacing: 2) {
                                 Text(app.displayName)
                                     .foregroundColor(.primary)
-                                Text("版本 \(app.version)")
+                                Text("lc.datapack.versionN %@".localizeWithFormat(app.version))
                                     .font(.footnote)
                                     .foregroundColor(.gray)
                             }
@@ -282,7 +282,7 @@ struct LCDatapackImportView: View {
                     }
                 }
             } header: {
-                Text("数据包要导入哪个游戏？")
+                Text("lc.datapack.pickGameHeader".loc)
             }
         }
         .modifier(LCDatapackPickerHeightModifier(height: pickerListHeight))
@@ -305,7 +305,7 @@ struct LCDatapackImportView: View {
                     VStack(alignment: .leading, spacing: 2) {
                         Text(app.displayName)
                             .font(.headline)
-                        Text("版本 \(app.version)")
+                        Text("lc.datapack.versionN %@".localizeWithFormat(app.version))
                             .font(.footnote)
                             .foregroundColor(.gray)
                     }
@@ -316,7 +316,7 @@ struct LCDatapackImportView: View {
 
                 switch stage {
                 case .ready:
-                    Text("数据包会写入这个游戏的数据容器（Documents/romfs.img），下次启动游戏时生效。")
+                    Text("lc.datapack.writeHint".loc)
                         .font(.footnote)
                         .foregroundColor(.gray)
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -324,7 +324,7 @@ struct LCDatapackImportView: View {
                     Button {
                         pickingFile = true
                     } label: {
-                        Text("选择 romfs.img 文件")
+                        Text("lc.datapack.chooseFile".loc)
                             .font(.headline)
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 14)
@@ -349,7 +349,7 @@ struct LCDatapackImportView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal)
                     if request.app == nil {
-                        Button("换一款游戏") {
+                        Button("lc.datapack.changeGame".loc) {
                             target = nil
                             pickedSource = nil
                         }
@@ -358,10 +358,10 @@ struct LCDatapackImportView: View {
                 case .copying:
                     VStack(spacing: 10) {
                         ProgressView(value: progress)
-                        Text("正在拷贝 \(Self.sizeText(copiedBytes)) / \(Self.sizeText(totalBytes))")
+                        Text("lc.datapack.copying %@ %@".localizeWithFormat(Self.sizeText(copiedBytes), Self.sizeText(totalBytes)))
                             .font(.footnote)
                             .foregroundColor(.gray)
-                        Button("取消拷贝") {
+                        Button("lc.datapack.cancelCopy".loc) {
                             cancelBox.cancelled = true
                         }
                         .foregroundColor(.red)
@@ -372,13 +372,13 @@ struct LCDatapackImportView: View {
                         Image(systemName: "checkmark.circle.fill")
                             .font(.system(size: 44))
                             .foregroundColor(.green)
-                        Text("数据包已导入（\(Self.sizeText(resultSize))）")
+                        Text("lc.datapack.imported %@".localizeWithFormat(Self.sizeText(resultSize)))
                             .font(.headline)
                         Button {
                             presentationMode.wrappedValue.dismiss()
                             onFinished()
                         } label: {
-                            Text("完成")
+                            Text("lc.common.done".loc)
                                 .font(.headline)
                                 .frame(maxWidth: .infinity)
                                 .padding(.vertical, 14)
@@ -396,7 +396,7 @@ struct LCDatapackImportView: View {
                             .font(.footnote)
                             .foregroundColor(.gray)
                             .multilineTextAlignment(.center)
-                        Button("重新选择文件") {
+                        Button("lc.datapack.chooseAgain".loc) {
                             stage = .ready
                             pickingFile = true
                         }
@@ -425,7 +425,7 @@ struct LCDatapackImportView: View {
 
     private func pickedFile(_ url: URL) {
         guard url.pathExtension.lowercased() == "img" else {
-            stage = .failed("所选文件不是 .img 数据包：\(url.lastPathComponent)")
+            stage = .failed("lc.datapack.notImgFile %@".localizeWithFormat(url.lastPathComponent))
             return
         }
         pickedSource = url
@@ -438,7 +438,7 @@ struct LCDatapackImportView: View {
 
     private func startCopy(source: URL) {
         guard let target, let container = LCGameLibraryInfo.defaultContainer(for: target) else {
-            stage = .failed("这个游戏尚无数据容器，请先启动一次游戏生成容器后再导入。")
+            stage = .failed("lc.datapack.noContainer".loc)
             return
         }
         let documents = container.containerURL.appendingPathComponent("Documents")
@@ -487,7 +487,7 @@ struct LCDatapackImportView: View {
             } catch {
                 try? FileManager.default.removeItem(at: tmp)
                 await MainActor.run {
-                    stage = .failed("拷贝失败：\(error.localizedDescription)")
+                    stage = .failed("lc.datapack.copyFailed %@".localizeWithFormat(error.localizedDescription))
                 }
             }
         }
@@ -663,7 +663,7 @@ struct LCDatapackImportView: View {
     /// 现有数据包与 aoc 原样不动。进度/取消/分块与单文件导入共用一套。
     private func startFolderImport(plan: FolderPlan) {
         guard let target, let container = LCGameLibraryInfo.defaultContainer(for: target) else {
-            stage = .failed("这个游戏尚无数据容器，请先启动一次游戏生成容器后再导入。")
+            stage = .failed("lc.datapack.noContainer".loc)
             return
         }
         let documents = container.containerURL.appendingPathComponent("Documents")
@@ -757,7 +757,7 @@ struct LCDatapackImportView: View {
             } catch {
                 try? FileManager.default.removeItem(at: staging)
                 await MainActor.run {
-                    stage = .failed("lc.datapack.folderFailed".loc.localizeWithFormat(error.localizedDescription))
+                    stage = .failed("lc.datapack.folderFailed %@".localizeWithFormat(error.localizedDescription))
                 }
             }
         }
@@ -788,7 +788,7 @@ struct LCDatapackImportView: View {
             Circle()
                 .fill(ready ? Color.green : Color.gray)
                 .frame(width: 8, height: 8)
-            Text(ready ? "数据包已就绪" : "未导入数据包")
+            Text(ready ? "lc.datapack.statusReady".loc : "lc.datapack.statusMissing".loc)
                 .font(.footnote)
                 .foregroundColor(.gray)
         }

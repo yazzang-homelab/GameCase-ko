@@ -161,7 +161,7 @@ struct LCAppListView : View, LCAppBannerDelegate, LCAppModelDelegate {
     }
 
     var uninstallDialogTitle: String {
-        return "卸载 \(appPendingUninstall?.displayName ?? "")？"
+        return "lc.appList.uninstallTitle %@".localizeWithFormat(appPendingUninstall?.displayName ?? "")
     }
 
     var uninstallDialogPresented: Binding<Bool> {
@@ -276,7 +276,7 @@ struct LCAppListView : View, LCAppBannerDelegate, LCAppModelDelegate {
                         VStack(spacing: 8) {
                             Image(systemName: "house")
                                 .font(.system(size: 38, weight: .light))
-                            Text("游戏库")
+                            Text("lc.appList.library".loc)
                                 .font(.system(size: 13, weight: .medium))
                                 .foregroundColor(Color(white: 0.75))
                         }
@@ -384,13 +384,13 @@ struct LCAppListView : View, LCAppBannerDelegate, LCAppModelDelegate {
             item.view
         }
         .confirmationDialog(uninstallDialogTitle, isPresented: uninstallDialogPresented, titleVisibility: .visible) {
-            Button("卸载（保留数据）", role: .destructive) {
+            Button("lc.appList.uninstallKeepData".loc, role: .destructive) {
                 if let app = appPendingUninstall {
                     performUninstall(app: app, removeData: false)
                 }
                 appPendingUninstall = nil
             }
-            Button("卸载并删除数据", role: .destructive) {
+            Button("lc.appList.uninstallDeleteData".loc, role: .destructive) {
                 if let app = appPendingUninstall {
                     performUninstall(app: app, removeData: true)
                 }
@@ -1568,11 +1568,11 @@ enum LCGameLibraryInfo {
 
         var displayName: String {
             switch self {
-            case .custom: return "自定义"
-            case .guest: return "游戏自带"
-            case .bundled: return "内置原画"
-            case .fetched: return "联网获取"
-            case .icon: return "应用图标"
+            case .custom: return "lc.appList.coverSourceCustom".loc
+            case .guest: return "lc.appList.coverSourceGuest".loc
+            case .bundled: return "lc.appList.coverSourceBundled".loc
+            case .fetched: return "lc.appList.coverSourceFetched".loc
+            case .icon: return "lc.appList.coverSourceIcon".loc
             }
         }
     }
@@ -1710,13 +1710,13 @@ enum LCGameLibraryInfo {
             return nil
         }
         if let raw = dict["launcher.DM_SILK_SKIN"] as? String, let idx = Int(raw) {
-            let names = ["玻璃皮肤", "荆棘皮肤", "角标皮肤", "黑铁皮肤"]
+            let names = ["lc.appList.skinGlass".loc, "lc.appList.skinThorn".loc, "lc.appList.skinBadge".loc, "lc.appList.skinIron".loc]
             if names.indices.contains(idx) {
                 return names[idx]
             }
         }
         if let raw = dict["launcher.DM_HADES_SKIN"] as? String, let idx = Int(raw) {
-            let names = ["玻璃皮肤", "月亮皮肤", "月亮角标"]
+            let names = ["lc.appList.skinGlass".loc, "lc.appList.skinMoon".loc, "lc.appList.skinMoonBadge".loc]
             if names.indices.contains(idx) {
                 return names[idx]
             }

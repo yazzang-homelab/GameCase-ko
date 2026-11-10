@@ -29,8 +29,8 @@ enum LCKnownGame: String {
 
     var shortName: String {
         switch self {
-        case .silksong: return "丝之歌"
-        case .hades2: return "哈迪斯 II"
+        case .silksong: return "lc.gameSettings.gameSilksong".loc
+        case .hades2: return "lc.gameSettings.gameHades2".loc
         }
     }
 

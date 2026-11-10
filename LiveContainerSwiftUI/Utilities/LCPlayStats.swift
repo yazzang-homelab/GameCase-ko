@@ -163,17 +163,17 @@ enum LCPlayStats {
     static func formatDuration(_ seconds: TimeInterval) -> String {
         let totalMinutes = max(1, Int((seconds + 30) / 60))
         if totalMinutes < 60 {
-            return "\(totalMinutes) 分钟"
+            return "lc.playStats.minutes %lld".localizeWithFormat(totalMinutes)
         }
-        return "\(totalMinutes / 60) 小时 \(totalMinutes % 60) 分钟"
+        return "lc.playStats.hoursMinutes %lld %lld".localizeWithFormat(totalMinutes / 60, totalMinutes % 60)
     }
 
     /// 「最近游玩」行时长文案：累计 +（≥2 局且有上次记录时）上次。无记录返回 nil 不显示。
     static func summaryText(for entry: Entry?) -> String? {
         guard let entry, entry.totalSeconds > 0 else { return nil }
-        var text = "累计 \(formatDuration(entry.totalSeconds))"
+        var text = "lc.playStats.total %@".localizeWithFormat(formatDuration(entry.totalSeconds))
         if entry.sessionCount >= 2, entry.lastSessionSeconds > 0 {
-            text += " · 上次 \(formatDuration(entry.lastSessionSeconds))"
+            text += " · " + "lc.playStats.last %@".localizeWithFormat(formatDuration(entry.lastSessionSeconds))
         }
         return text
     }

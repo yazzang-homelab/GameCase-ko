@@ -72,7 +72,7 @@ struct LCControllersView: View {
             let battery = Self.battery(of: controller)
             return RowInfo(
                 id: ObjectIdentifier(controller),
-                name: controller.vendorName ?? "游戏手柄",
+                name: controller.vendorName ?? "lc.controllers.defaultName".loc,
                 player: index + 1,
                 batteryPercent: battery.percent,
                 charging: battery.charging
@@ -143,7 +143,7 @@ struct LCControllersView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 30) {
                 HStack(alignment: .center) {
-                    Text("手柄")
+                    Text("lc.controllers.title".loc)
                         .font(.system(size: 26, weight: .heavy))
                         .tracking(-0.6)
                         .lineLimit(1)
@@ -163,7 +163,7 @@ struct LCControllersView: View {
                             .contentShape(Circle())
                     }
                     .buttonStyle(.plain)
-                    .accessibilityLabel("关闭手柄页")
+                    .accessibilityLabel("lc.controllers.closeA11y".loc)
                 }
                 if rows.isEmpty {
                     emptyCard
@@ -185,9 +185,9 @@ struct LCControllersView: View {
                 .font(.system(size: 30, weight: .light))
                 .foregroundStyle(Self.cream)
                 .padding(.bottom, 4)
-            Text("未连接手柄")
+            Text("lc.controllers.noneConnected".loc)
                 .font(.system(size: 19, weight: .bold))
-            Text("在蓝牙设置里连接手柄。游戏库里随时可以用触控操作。")
+            Text("lc.controllers.noneConnectedDesc".loc)
                 .font(.system(size: 14.5))
                 .foregroundStyle(.primary.opacity(0.6))
                 .fixedSize(horizontal: false, vertical: true)
@@ -224,7 +224,7 @@ struct LCControllersView: View {
                 .background(.primary.opacity(0.07), in: Circle())
                 .foregroundStyle(.primary.opacity(0.9))
             VStack(alignment: .leading, spacing: 4) {
-                Text("玩家 \(row.player)")
+                Text("lc.controllers.playerN %lld".localizeWithFormat(row.player))
                     .font(.system(size: 10.5, weight: .bold))
                     .tracking(1.4)
                     .foregroundStyle(Self.cream.opacity(0.8))
@@ -251,16 +251,16 @@ struct LCControllersView: View {
                 if row.charging {
                     Image(systemName: "bolt.fill")
                         .font(.system(size: 10))
-                        .accessibilityLabel("充电中")
+                        .accessibilityLabel("lc.controllers.charging".loc)
                 }
             } else if row.charging {
                 // 百分比没拿到就不编数字；但「在充电」是 state 能确定
                 // 的事实，照实显示（与有百分比时的闪电标同语义）
                 Image(systemName: "bolt.fill")
                     .font(.system(size: 10))
-                Text("充电中")
+                Text("lc.controllers.charging".loc)
             } else {
-                Text("无电量信息")
+                Text("lc.controllers.noBatteryInfo".loc)
             }
         }
         .lineLimit(1)
@@ -293,7 +293,7 @@ struct LCControllersView: View {
 
     private var buttonsSection: some View {
         VStack(alignment: .leading, spacing: 14) {
-            Text("按钮")
+            Text("lc.controllers.buttonsSection".loc)
                 .font(.system(size: 11.5, weight: .semibold))
                 .tracking(1.6)
                 .foregroundStyle(.primary.opacity(0.55))
@@ -302,10 +302,10 @@ struct LCControllersView: View {
             } label: {
                 HStack(spacing: 12) {
                     VStack(alignment: .leading, spacing: 3) {
-                        Text("按键测试")
+                        Text("lc.controllers.buttonTest".loc)
                             .font(.system(size: 15.5, weight: .semibold))
                             .foregroundStyle(.primary)
-                        Text("按下按键，对应的按键会亮起。")
+                        Text("lc.controllers.buttonTestDesc".loc)
                             .font(.system(size: 13))
                             .foregroundStyle(.primary.opacity(0.55))
                     }
@@ -418,7 +418,7 @@ private struct LCControllerTestView: View {
             VStack(alignment: .leading, spacing: 0) {
                 HStack(alignment: .center, spacing: 12) {
                     VStack(alignment: .leading, spacing: 2) {
-                        Text("按键测试")
+                        Text("lc.controllers.buttonTest".loc)
                             .font(.system(size: 20, weight: .bold))
                             .lineLimit(1)
                         Text(headerName)
@@ -435,7 +435,7 @@ private struct LCControllerTestView: View {
                             .contentShape(Circle())
                     }
                     .buttonStyle(.plain)
-                    .accessibilityLabel("返回手柄页")
+                    .accessibilityLabel("lc.controllers.backA11y".loc)
                 }
                 .padding(.horizontal, 20)
                 .padding(.top, 14)
@@ -454,7 +454,7 @@ private struct LCControllerTestView: View {
                     .frame(maxWidth: .infinity, minHeight: 40)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 20)
-                Text("摇杆推动、扳机按压都会实时跟随")
+                Text("lc.controllers.testHint".loc)
                     .font(.system(size: 13, weight: .medium))
                     .foregroundStyle(.primary.opacity(0.6))
                     .frame(maxWidth: .infinity)
@@ -480,7 +480,7 @@ private struct LCControllerTestView: View {
         if let name = snapshot?.name, !name.isEmpty {
             return name
         }
-        return "在手柄上按任意按键"
+        return "lc.controllers.pressAnyButton".loc
     }
 
     // MARK: 简图（面键菱形 + 十字键 + 双摇杆 + 肩键/扳机条）
@@ -498,11 +498,11 @@ private struct LCControllerTestView: View {
                 shoulderChip(label: "R1", pressed: s.r1)
             }
             HStack(alignment: .center, spacing: 10) {
-                stickView(point: s.ls, pressed: s.l3, label: "左摇杆")
+                stickView(point: s.ls, pressed: s.l3, label: "lc.controllers.leftStick".loc)
                 dpadView(s)
                 centerChips(s)
                 faceButtons(s)
-                stickView(point: s.rs, pressed: s.r3, label: "右摇杆")
+                stickView(point: s.rs, pressed: s.r3, label: "lc.controllers.rightStick".loc)
             }
         }
     }
@@ -581,11 +581,11 @@ private struct LCControllerTestView: View {
     private func centerChips(_ s: Snapshot) -> some View {
         VStack(spacing: 8) {
             HStack(spacing: 8) {
-                miniChip(label: "菜单", pressed: s.menu)
-                miniChip(label: "选项", pressed: s.options)
+                miniChip(label: "lc.controllers.menu".loc, pressed: s.menu)
+                miniChip(label: "lc.controllers.options".loc, pressed: s.options)
             }
             HStack(spacing: 8) {
-                miniChip(label: "主页", pressed: s.home)
+                miniChip(label: "lc.controllers.home".loc, pressed: s.home)
             }
         }
     }
@@ -627,29 +627,29 @@ private struct LCControllerTestView: View {
 
     private var pressedText: String {
         guard let s = snapshot else {
-            return "未按任何按键"
+            return "lc.controllers.nothingPressed".loc
         }
         var names: [String] = []
         if s.y { names.append("Y") }
         if s.x { names.append("X") }
         if s.b { names.append("B") }
         if s.a { names.append("A") }
-        if s.up { names.append("十字键上") }
-        if s.down { names.append("十字键下") }
-        if s.left { names.append("十字键左") }
-        if s.right { names.append("十字键右") }
+        if s.up { names.append("lc.controllers.dpadUp".loc) }
+        if s.down { names.append("lc.controllers.dpadDown".loc) }
+        if s.left { names.append("lc.controllers.dpadLeft".loc) }
+        if s.right { names.append("lc.controllers.dpadRight".loc) }
         if s.l1 { names.append("L1") }
         if s.r1 { names.append("R1") }
         if s.l2 > 0.02 { names.append("L2") }
         if s.r2 > 0.02 { names.append("R2") }
-        if s.l3 { names.append("左摇杆按下") }
-        if s.r3 { names.append("右摇杆按下") }
-        if hypot(s.ls.x, s.ls.y) > 0.35 { names.append("左摇杆") }
-        if hypot(s.rs.x, s.rs.y) > 0.35 { names.append("右摇杆") }
-        if s.menu { names.append("菜单") }
-        if s.options { names.append("选项") }
-        if s.home { names.append("主页") }
-        return names.isEmpty ? "未按任何按键" : names.joined(separator: " + ")
+        if s.l3 { names.append("lc.controllers.leftStickPress".loc) }
+        if s.r3 { names.append("lc.controllers.rightStickPress".loc) }
+        if hypot(s.ls.x, s.ls.y) > 0.35 { names.append("lc.controllers.leftStick".loc) }
+        if hypot(s.rs.x, s.rs.y) > 0.35 { names.append("lc.controllers.rightStick".loc) }
+        if s.menu { names.append("lc.controllers.menu".loc) }
+        if s.options { names.append("lc.controllers.options".loc) }
+        if s.home { names.append("lc.controllers.home".loc) }
+        return names.isEmpty ? "lc.controllers.nothingPressed".loc : names.joined(separator: " + ")
     }
 
     private func refresh() {

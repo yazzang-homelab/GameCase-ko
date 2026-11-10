@@ -374,7 +374,7 @@ struct LCSaveDataSectionView: View {
                 shareItem = LCShareItem(url: url)
             } catch {
                 resultTitle = "lc.save.export".loc
-                resultMessage = "lc.save.failed".loc.localizeWithFormat(error.localizedDescription)
+                resultMessage = "lc.save.failed %@".localizeWithFormat(error.localizedDescription)
             }
             busy = false
         }
@@ -393,7 +393,7 @@ struct LCSaveDataSectionView: View {
                 resultMessage = "lc.save.invalidContent".loc
             } catch {
                 resultTitle = "lc.save.import".loc
-                resultMessage = "lc.save.failed".loc.localizeWithFormat(error.localizedDescription)
+                resultMessage = "lc.save.failed %@".localizeWithFormat(error.localizedDescription)
             }
             busy = false
         }

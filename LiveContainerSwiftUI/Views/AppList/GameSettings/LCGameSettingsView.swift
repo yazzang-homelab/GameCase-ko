@@ -256,7 +256,7 @@ private struct LCChoiceRow: View {
                 .font(.system(size: 15, weight: .medium))
                 .foregroundColor(.primary)
             if locked || !setting.note.isEmpty {
-                Text(locked ? "由 env 文件固定，在这里改不了" : setting.note)
+                Text(locked ? "lc.gameSettings.lockedByEnv".loc : setting.note)
                     .font(.system(size: 12.5))
                     .foregroundColor(.primary.opacity(0.5))
             }
@@ -445,15 +445,15 @@ struct LCGameSettingsView: View {
                             profileSections
                         }
                         gameInfoSection
-                            .confirmationDialog("封面图", isPresented: $coverMenuPresented, titleVisibility: .visible) {
-                                Button("从相册选择") { photoPickerPresented = true }
-                                Button("从文件选择") { filePickerPresented = true }
+                            .confirmationDialog("lc.gameSettings.cover".loc, isPresented: $coverMenuPresented, titleVisibility: .visible) {
+                                Button("lc.gameSettings.chooseFromPhotos".loc) { photoPickerPresented = true }
+                                Button("lc.gameSettings.chooseFromFiles".loc) { filePickerPresented = true }
                                 if coverHasCustom || coverHasFetched {
-                                    Button("恢复默认", role: .destructive) { removeCustomCover() }
+                                    Button("lc.gameSettings.restoreDefault".loc, role: .destructive) { removeCustomCover() }
                                 }
                                 Button("lc.common.cancel".loc, role: .cancel) {}
                             } message: {
-                                Text("自定义封面只替换游戏库里的显示图，存在本机，不影响游戏本体。")
+                                Text("lc.gameSettings.customCoverNote".loc)
                             }
                             .sheet(isPresented: $photoPickerPresented) {
                                 LCPhotoImagePicker(
@@ -474,10 +474,10 @@ struct LCGameSettingsView: View {
                             .fileImporter(isPresented: $filePickerPresented, allowedContentTypes: [.image], allowsMultipleSelection: false) { result in
                                 handleCoverFileImport(result)
                             }
-                            .alert("无法使用这张图片", isPresented: $coverErrorPresented) {
-                                Button("好", role: .cancel) {}
+                            .alert("lc.gameSettings.coverErrorTitle".loc, isPresented: $coverErrorPresented) {
+                                Button("lc.common.ok".loc, role: .cancel) {}
                             } message: {
-                                Text("所选内容不是有效的图片，或保存失败，请换一张再试。")
+                                Text("lc.gameSettings.coverErrorMessage".loc)
                             }
                         // 存档导入/导出组：存档目录（Documents/save）不存在时
                         // 子视图自隐（判据与依据见 LCSaveDataTransfer.swift 文件头）
@@ -512,7 +512,7 @@ struct LCGameSettingsView: View {
                     dismiss()
                 }
             } label: {
-                Label("游戏库", systemImage: "chevron.left")
+                Label("lc.gameSettings.library".loc, systemImage: "chevron.left")
             }
             .buttonStyle(LCNXChipButtonStyle())
             .padding(.leading, 16)
@@ -556,13 +556,13 @@ struct LCGameSettingsView: View {
         .sheet(isPresented: $logPresented) {
             LCGameLogView(app: app)
         }
-        .confirmationDialog("恢复默认设置？", isPresented: $confirmReset, titleVisibility: .visible) {
-            Button("恢复默认", role: .destructive) {
+        .confirmationDialog("lc.gameSettings.resetConfirmTitle".loc, isPresented: $confirmReset, titleVisibility: .visible) {
+            Button("lc.gameSettings.restoreDefault".loc, role: .destructive) {
                 resetAll()
             }
             Button("lc.common.cancel".loc, role: .cancel) {}
         } message: {
-            Text("清掉这个游戏在库里保存的全部启动器选择，回到打包时的默认值。按键布局不受影响。")
+            Text("lc.gameSettings.resetDescription".loc)
         }
     }
 
@@ -777,13 +777,13 @@ struct LCGameSettingsView: View {
                     .lineLimit(2)
             }
             HStack(spacing: 8) {
-                Text("游戏设置")
+                Text("lc.gameSettings.title".loc)
                     .font(.system(size: 11.5, weight: .semibold))
                     .tracking(1.6)
                     .foregroundColor(LCNXColor.creamOnDark.opacity(0.72))
                     .lineLimit(1)
                     .fixedSize(horizontal: true, vertical: false)
-                Text("版本 \(app.version)")
+                Text("lc.gameSettings.versionN %@".localizeWithFormat(app.version))
                     .font(.system(size: 12.5))
                     .foregroundColor(.white.opacity(0.5))
             }
@@ -822,7 +822,7 @@ struct LCGameSettingsView: View {
     /// 不加开始游戏（用户早前已把启动撤出设置页）。
     private var detailLead: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("设置写入游戏容器，下次启动生效")
+            Text("lc.gameSettings.appliesNextLaunch".loc)
                 .font(.system(size: 14))
                 .foregroundColor(.primary.opacity(0.72))
             if !gameState.isPlayable {
@@ -894,8 +894,8 @@ struct LCGameSettingsView: View {
     /// broken 形态直接显示短原因（全文在帮助卡里，头部限一行）
     private var stateHeadline: String {
         switch gameState {
-        case .playable: return "随时可玩"
-        case .needsDatapack: return "需要导入数据包"
+        case .playable: return "lc.gameSettings.readyToPlay".loc
+        case .needsDatapack: return "lc.gameSettings.needsDatapack".loc
         case .broken(let reason, _, _): return reason
         }
     }
@@ -903,9 +903,9 @@ struct LCGameSettingsView: View {
     /// 数据包行右侧值（文字 + 色，与状态三态对应）
     private var datapackRowValue: (text: String, color: Color) {
         switch gameState {
-        case .playable: return ("已就绪", LCNXColor.ready)
-        case .needsDatapack: return ("未导入", LCNXColor.attention)
-        case .broken: return ("已损坏", LCNXColor.broken)
+        case .playable: return ("lc.gameSettings.datapackReady".loc, LCNXColor.ready)
+        case .needsDatapack: return ("lc.gameSettings.datapackMissing".loc, LCNXColor.attention)
+        case .broken: return ("lc.gameSettings.datapackBroken".loc, LCNXColor.broken)
         }
     }
 
@@ -913,17 +913,17 @@ struct LCGameSettingsView: View {
     private var logRowValue: String {
         // Phase 29：大小读缓存（与状态同挂 statusRefresh 重算）
         guard let size = logSizeCache else {
-            return "暂无"
+            return "lc.gameSettings.noLog".loc
         }
         return ByteCountFormatter.string(fromByteCount: size, countStyle: .file)
     }
 
     private var gameInfoSection: some View {
-        sectionCard(title: "游戏") {
+        sectionCard(title: "lc.gameSettings.gameSection".loc) {
             Button {
                 datapackRequest = LCDatapackRequest(app: app)
             } label: {
-                navRow(label: "数据包 romfs.img") {
+                navRow(label: "lc.gameSettings.datapackRow".loc) {
                     HStack(spacing: 7) {
                         Circle()
                             .fill(datapackRowValue.color)
@@ -939,7 +939,7 @@ struct LCGameSettingsView: View {
             Button {
                 coverMenuPresented = true
             } label: {
-                navRow(label: "封面图") {
+                navRow(label: "lc.gameSettings.cover".loc) {
                     coverRowThumbnail
                     Text(coverResolution.source.displayName)
                         .font(.system(size: 14.5, weight: .semibold))
@@ -951,8 +951,8 @@ struct LCGameSettingsView: View {
             Button {
                 onOpenDataFolder()
             } label: {
-                navRow(label: "存档") {
-                    Text("在本机")
+                navRow(label: "lc.gameSettings.saves".loc) {
+                    Text("lc.gameSettings.onDevice".loc)
                         .font(.system(size: 12.5))
                         .foregroundColor(.primary.opacity(0.5))
                 }
@@ -962,7 +962,7 @@ struct LCGameSettingsView: View {
             Button {
                 logPresented = true
             } label: {
-                navRow(label: "日志") {
+                navRow(label: "lc.gameSettings.log".loc) {
                     Text(logRowValue)
                         .font(.system(size: 12.5))
                         .foregroundColor(.primary.opacity(0.5))
@@ -1070,7 +1070,7 @@ struct LCGameSettingsView: View {
     /// 档案分组 → 预览分组：Game 显示 / Controls 按键 / Performance 性能；
     /// 按键组内皮肤行排最前，其余行保持档案顺序；needs 不满足的行隐藏
     private func groupedSettings() -> [(title: String, rows: [LCLauncherSetting])] {
-        let titles: [(String, String)] = [("Game", "显示"), ("Controls", "按键"), ("Performance", "性能")]
+        let titles: [(String, String)] = [("Game", "lc.gameSettings.groupDisplay".loc), ("Controls", "lc.gameSettings.groupControls".loc), ("Performance", "lc.gameSettings.groupPerformance".loc)]
         var result: [(title: String, rows: [LCLauncherSetting])] = []
         for (rawSection, title) in titles {
             var rows = settings.filter { $0.section == rawSection && isVisible($0) }
@@ -1112,7 +1112,7 @@ struct LCGameSettingsView: View {
                 .font(.system(size: 15, weight: .medium))
                 .foregroundColor(.primary)
             if locked || !setting.note.isEmpty {
-                Text(locked ? "由 env 文件固定，在这里改不了" : setting.note)
+                Text(locked ? "lc.gameSettings.lockedByEnv".loc : setting.note)
                     .font(.system(size: 12.5))
                     .foregroundColor(.primary.opacity(0.5))
             }
@@ -1208,10 +1208,10 @@ struct LCGameSettingsView: View {
             Button {
                 confirmReset = true
             } label: {
-                Text("恢复默认设置")
+                Text("lc.gameSettings.resetDefaults".loc)
             }
             .buttonStyle(LCNXShellButtonStyle())
-            Text("清掉这个游戏在库里保存的全部启动器选择，回到打包时的默认值。按键布局不受影响。")
+            Text("lc.gameSettings.resetDescription".loc)
                 .font(.system(size: 12.5))
                 .foregroundColor(.primary.opacity(0.45))
         }
@@ -1220,11 +1220,11 @@ struct LCGameSettingsView: View {
     // MARK: 高级与提示（LC 独有，按 NX 行/文语言适配）
 
     private var advancedSection: some View {
-        sectionCard(title: "高级") {
+        sectionCard(title: "lc.gameSettings.advanced".loc) {
             NavigationLink {
                 LCAppSettingsView(model: app)
             } label: {
-                navRow(label: "容器与高级设置") {
+                navRow(label: "lc.gameSettings.containerAdvanced".loc) {
                     Text("GameCase")
                         .font(.system(size: 14.5, weight: .semibold))
                         .foregroundColor(LCNXColor.cream)
@@ -1236,10 +1236,10 @@ struct LCGameSettingsView: View {
             // 为删行，下次启动恢复显示启动页。值存 LauncherGate。
             HStack(alignment: .center, spacing: 16) {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("显示游戏启动页")
+                    Text("lc.gameSettings.showGuestLauncher".loc)
                         .font(.system(size: 15, weight: .medium))
                         .foregroundColor(.primary)
-                    Text("开启后，下次启动先显示游戏自带启动页；关闭则直接进入游戏。")
+                    Text("lc.gameSettings.showGuestLauncherNote".loc)
                         .font(.system(size: 12.5))
                         .foregroundColor(.primary.opacity(0.5))
                 }
@@ -1255,8 +1255,8 @@ struct LCGameSettingsView: View {
     }
 
     private var noProfileHint: some View {
-        sectionCard(title: "游戏设置") {
-            Text("该游戏暂无内置档案，请进游戏内启动器调整。")
+        sectionCard(title: "lc.gameSettings.title".loc) {
+            Text("lc.gameSettings.noProfileHint".loc)
                 .font(.system(size: 14))
                 .foregroundColor(.primary.opacity(0.72))
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -1264,8 +1264,8 @@ struct LCGameSettingsView: View {
     }
 
     private var noContainerHint: some View {
-        sectionCard(title: "游戏设置") {
-            Text("这个游戏还没有数据容器：先启动一次游戏，容器生成后回到这里即可调整设置。")
+        sectionCard(title: "lc.gameSettings.title".loc) {
+            Text("lc.gameSettings.noContainerHint".loc)
                 .font(.system(size: 14))
                 .foregroundColor(.primary.opacity(0.72))
                 .frame(maxWidth: .infinity, alignment: .leading)

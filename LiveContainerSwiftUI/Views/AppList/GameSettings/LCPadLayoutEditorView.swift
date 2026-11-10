@@ -93,14 +93,14 @@ struct LCPadLayoutEditorView: View {
         }
         .hideTabBarOnPush()
         .navigationBarHidden(true)
-        .confirmationDialog("全部重置？", isPresented: $confirmResetAll, titleVisibility: .visible) {
-            Button("全部重置", role: .destructive) {
+        .confirmationDialog("lc.padEditor.resetAllConfirmTitle".loc, isPresented: $confirmResetAll, titleVisibility: .visible) {
+            Button("lc.padEditor.resetAll".loc, role: .destructive) {
                 custom.resetAll()
                 save()
             }
             Button("lc.common.cancel".loc, role: .cancel) {}
         } message: {
-            Text("所有按键回到打包时的位置与大小。")
+            Text("lc.padEditor.resetAllMessage".loc)
         }
     }
 
@@ -130,7 +130,7 @@ struct LCPadLayoutEditorView: View {
                 HStack(spacing: 4) {
                     Image(systemName: "chevron.left")
                         .font(.footnote.bold())
-                    Text("游戏设置")
+                    Text("lc.padEditor.backToGameSettings".loc)
                 }
                 .foregroundColor(LCGameTheme.creamOnDark)
                 .padding(.horizontal, 16)
@@ -139,7 +139,7 @@ struct LCPadLayoutEditorView: View {
                 .clipShape(Capsule())
                 .overlay(Capsule().strokeBorder(Color.white.opacity(0.25), lineWidth: 1))
             }
-            Text("\(game.displayName) · 按键布局（仅战斗页）")
+            Text("lc.padEditor.headerTitle %@".localizeWithFormat(game.displayName))
                 .font(.headline)
                 .foregroundColor(LCGameTheme.creamOnDark)
             Spacer()
@@ -337,14 +337,14 @@ struct LCPadLayoutEditorView: View {
     private var panel: some View {
         VStack(alignment: .leading, spacing: 18) {
             HStack {
-                Text("按键布局")
+                Text("lc.padEditor.title".loc)
                     .font(.title3.bold())
                     .foregroundColor(LCGameTheme.creamOnDark)
                 Spacer()
                 Button {
                     presentationMode.wrappedValue.dismiss()
                 } label: {
-                    Text("完成")
+                    Text("lc.common.done".loc)
                         .font(.headline)
                         .foregroundColor(.white)
                         .padding(.horizontal, 22)
@@ -355,7 +355,7 @@ struct LCPadLayoutEditorView: View {
             }
 
             VStack(alignment: .leading, spacing: 4) {
-                Text("选中按键")
+                Text("lc.padEditor.selectedKey".loc)
                     .font(.footnote)
                     .foregroundColor(.gray)
                 Text(selectedLabel)
@@ -364,7 +364,7 @@ struct LCPadLayoutEditorView: View {
             }
 
             VStack(alignment: .leading, spacing: 8) {
-                Text("位置（点一下移动 1%）")
+                Text("lc.padEditor.positionHint".loc)
                     .font(.footnote)
                     .foregroundColor(.gray)
                 HStack(spacing: 8) {
@@ -376,7 +376,7 @@ struct LCPadLayoutEditorView: View {
             }
 
             VStack(alignment: .leading, spacing: 8) {
-                Text("大小")
+                Text("lc.padEditor.size".loc)
                     .font(.footnote)
                     .foregroundColor(.gray)
                 HStack(spacing: 14) {
@@ -395,7 +395,7 @@ struct LCPadLayoutEditorView: View {
                         save()
                     }
                 } label: {
-                    Text("单键重置")
+                    Text("lc.padEditor.resetKey".loc)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 11)
                 }
@@ -403,14 +403,14 @@ struct LCPadLayoutEditorView: View {
                 Button {
                     confirmResetAll = true
                 } label: {
-                    Text("全部重置")
+                    Text("lc.padEditor.resetAll".loc)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 11)
                 }
                 .buttonStyle(.bordered)
             }
 
-            Text("演示按键跟随皮肤设置（当前：\(game.skinDisplayName(skinValue))）。与游戏内编辑器共用 \(game.storeKey)，改完下次启动游戏生效。")
+            Text("lc.padEditor.footer %@ %@".localizeWithFormat(game.skinDisplayName(skinValue), game.storeKey))
                 .font(.caption)
                 .foregroundColor(.gray)
             Spacer()
@@ -455,8 +455,8 @@ struct LCPadLayoutEditorView: View {
     // MARK: 编辑动作
 
     private var selectedLabel: String {
-        guard let selected else { return "（点选一个按键）" }
-        if selected == "stick" { return "摇杆" }
+        guard let selected else { return "lc.padEditor.noSelection".loc }
+        if selected == "stick" { return "lc.padEditor.stick".loc }
         return game.keys.first { $0.name == selected }?.label ?? selected
     }
 

@@ -72,7 +72,7 @@ struct LCGameLogView: View {
                 VStack(alignment: .leading, spacing: 12) {
                     if hasText, let loaded {
                         if loaded.truncated {
-                            Text("只显示日志的末尾部分")
+                            Text("lc.gameSettings.logTruncated".loc)
                                 .font(.footnote)
                                 .foregroundColor(.secondary)
                         }
@@ -80,7 +80,7 @@ struct LCGameLogView: View {
                             .font(.system(size: 12, design: .monospaced))
                             .textSelection(.enabled)
                     } else {
-                        Text("暂无日志。游戏运行过之后，日志会生成在这里；启动失败或闪退时，这里能看到原因。")
+                        Text("lc.gameSettings.logEmpty".loc)
                             .font(.system(size: 14.5))
                             .foregroundColor(.secondary)
                     }
@@ -92,7 +92,7 @@ struct LCGameLogView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("完成") { dismiss() }
+                    Button("lc.common.done".loc) { dismiss() }
                 }
             }
         }
@@ -202,7 +202,7 @@ struct LCGameStateHelpContent: View {
             }
             if case .broken(_, _, let technical) = state, !technical.isEmpty {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("详情")
+                    Text("lc.gameSettings.details".loc)
                         .font(.system(size: 11.5, weight: .semibold))
                         .foregroundColor(.primary.opacity(0.5))
                     Text(verbatim: technical)
@@ -219,15 +219,15 @@ struct LCGameStateHelpContent: View {
                 Button {
                     onImportDatapack()
                 } label: {
-                    Label("导入数据包…", systemImage: "folder")
+                    Label("lc.gameSettings.importDatapack".loc, systemImage: "folder")
                 }
                 .buttonStyle(LCStatePillStyle())
                 .padding(.top, 4)
             case .broken:
                 VStack(spacing: 10) {
-                    Button("查看日志") { onShowLog() }
+                    Button("lc.gameSettings.viewLog".loc) { onShowLog() }
                         .buttonStyle(LCStateShellButtonStyle())
-                    Button("重新导入数据包…") { onImportDatapack() }
+                    Button("lc.gameSettings.reimportDatapack".loc) { onImportDatapack() }
                         .buttonStyle(LCStateShellButtonStyle())
                 }
                 .padding(.top, 4)
@@ -285,7 +285,7 @@ struct LCGameStateHelpSheet: View {
             Button {
                 dismiss()
             } label: {
-                Text("完成")
+                Text("lc.common.done".loc)
             }
             .buttonStyle(LCStatePillStyle(expands: true))
             .padding(.top, 8)

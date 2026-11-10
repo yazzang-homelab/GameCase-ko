@@ -22,7 +22,7 @@ enum LCPadLayoutGame {
 
     var storeKey: String { self == .silksong ? "DmPadCustom" : "DmPadCustomHades" }
     var skinEnv: String { self == .silksong ? "DM_SILK_SKIN" : "DM_HADES_SKIN" }
-    var displayName: String { self == .silksong ? "丝之歌" : "哈迪斯 II" }
+    var displayName: String { self == .silksong ? "lc.padLayout.gameSilksong".loc : "lc.padLayout.gameHades2".loc }
 
     static let sizeStep: CGFloat = 0.05
     static let sizeRange: ClosedRange<CGFloat> = 0.6...1.6
@@ -46,21 +46,21 @@ enum LCPadLayoutGame {
     var keys: [Key] {
         switch self {
         case .silksong: return [
-            Key(name: "attack", label: "攻击", glyph: "Y", x: 0.7859, y: 0.770, r: 0.0374, shape: .action, badged: true),
-            Key(name: "jump", label: "跳跃", glyph: "B", x: 0.898, y: 0.770, r: 0.0480, shape: .action, badged: true),
-            Key(name: "dash", label: "冲刺", glyph: "ZR", x: 0.8188, y: 0.5983, r: 0.0374, shape: .action, badged: true),
-            Key(name: "tool", label: "工具", glyph: "R", x: 0.7103, y: 0.770, r: 0.0254, shape: .action, badged: true),
-            Key(name: "needolin", label: "弦针", glyph: "X", x: 0.6468, y: 0.770, r: 0.0254, shape: .action, badged: true),
-            Key(name: "bind", label: "缚丝", glyph: "A", x: 0.898, y: 0.5271, r: 0.0374, shape: .action, badged: true),
-            Key(name: "clawline", label: "钩索", glyph: "ZL", x: 0.898, y: 0.3631, r: 0.0254, shape: .action, badged: true),
-            Key(name: "eye", label: "眼睛", glyph: nil, x: 0.670, y: 0.082, r: 0.0224, shape: .top, badged: true),
-            Key(name: "map", label: "地图", glyph: "L", x: 0.746, y: 0.082, r: 0.0224, shape: .top, badged: true),
-            Key(name: "bag", label: "背包", glyph: nil, x: 0.822, y: 0.082, r: 0.0224, shape: .top, badged: true),
-            Key(name: "pause", label: "暂停", glyph: nil, x: 0.898, y: 0.082, r: 0.0224, shape: .top, badged: true),
+            Key(name: "attack", label: "lc.padLayout.keyAttack".loc, glyph: "Y", x: 0.7859, y: 0.770, r: 0.0374, shape: .action, badged: true),
+            Key(name: "jump", label: "lc.padLayout.keyJump".loc, glyph: "B", x: 0.898, y: 0.770, r: 0.0480, shape: .action, badged: true),
+            Key(name: "dash", label: "lc.padLayout.keyDash".loc, glyph: "ZR", x: 0.8188, y: 0.5983, r: 0.0374, shape: .action, badged: true),
+            Key(name: "tool", label: "lc.padLayout.keyTool".loc, glyph: "R", x: 0.7103, y: 0.770, r: 0.0254, shape: .action, badged: true),
+            Key(name: "needolin", label: "lc.padLayout.keyNeedolin".loc, glyph: "X", x: 0.6468, y: 0.770, r: 0.0254, shape: .action, badged: true),
+            Key(name: "bind", label: "lc.padLayout.keyBind".loc, glyph: "A", x: 0.898, y: 0.5271, r: 0.0374, shape: .action, badged: true),
+            Key(name: "clawline", label: "lc.padLayout.keyClawline".loc, glyph: "ZL", x: 0.898, y: 0.3631, r: 0.0254, shape: .action, badged: true),
+            Key(name: "eye", label: "lc.padLayout.keyEye".loc, glyph: nil, x: 0.670, y: 0.082, r: 0.0224, shape: .top, badged: true),
+            Key(name: "map", label: "lc.padLayout.keyMap".loc, glyph: "L", x: 0.746, y: 0.082, r: 0.0224, shape: .top, badged: true),
+            Key(name: "bag", label: "lc.padLayout.keyBag".loc, glyph: nil, x: 0.822, y: 0.082, r: 0.0224, shape: .top, badged: true),
+            Key(name: "pause", label: "lc.padLayout.keyPause".loc, glyph: nil, x: 0.898, y: 0.082, r: 0.0224, shape: .top, badged: true),
         ]
         case .hades2: return [
-            Key(name: "minus", label: "减号", glyph: "−", x: 0.691, y: 0.086, r: 0.020, shape: .top, badged: true),
-            Key(name: "plus", label: "加号", glyph: "+", x: 0.754, y: 0.086, r: 0.020, shape: .top, badged: true),
+            Key(name: "minus", label: "lc.padLayout.keyMinus".loc, glyph: "−", x: 0.691, y: 0.086, r: 0.020, shape: .top, badged: true),
+            Key(name: "plus", label: "lc.padLayout.keyPlus".loc, glyph: "+", x: 0.754, y: 0.086, r: 0.020, shape: .top, badged: true),
             Key(name: "l", label: "L", glyph: "L", x: 0.817, y: 0.086, r: 0.020, shape: .top, badged: true),
             Key(name: "zl", label: "ZL", glyph: "ZL", x: 0.880, y: 0.086, r: 0.020, shape: .top, badged: true),
             Key(name: "zr", label: "ZR", glyph: "ZR", x: 0.943, y: 0.086, r: 0.020, shape: .top, badged: true),
@@ -69,10 +69,10 @@ enum LCPadLayoutGame {
             Key(name: "x", label: "X", glyph: "X", x: 0.7773, y: -0.0726, r: 0.031, shape: .fan, badged: true),
             Key(name: "b", label: "B", glyph: "B", x: 0.758, y: 0.0, r: 0.031, shape: .fan, badged: true),
             Key(name: "y", label: "Y", glyph: "Y", x: 0.903, y: 0.715, r: 0.038, shape: .plain, badged: true),
-            Key(name: "left", label: "左", glyph: nil, x: 0.645, y: 0.896, r: 0.019, shape: .plain, badged: false),
-            Key(name: "up", label: "上", glyph: nil, x: 0.701, y: 0.896, r: 0.019, shape: .plain, badged: false),
-            Key(name: "down", label: "下", glyph: nil, x: 0.753, y: 0.896, r: 0.019, shape: .plain, badged: false),
-            Key(name: "right", label: "右", glyph: nil, x: 0.807, y: 0.896, r: 0.019, shape: .plain, badged: false),
+            Key(name: "left", label: "lc.padLayout.keyLeft".loc, glyph: nil, x: 0.645, y: 0.896, r: 0.019, shape: .plain, badged: false),
+            Key(name: "up", label: "lc.padLayout.keyUp".loc, glyph: nil, x: 0.701, y: 0.896, r: 0.019, shape: .plain, badged: false),
+            Key(name: "down", label: "lc.padLayout.keyDown".loc, glyph: nil, x: 0.753, y: 0.896, r: 0.019, shape: .plain, badged: false),
+            Key(name: "right", label: "lc.padLayout.keyRight".loc, glyph: nil, x: 0.807, y: 0.896, r: 0.019, shape: .plain, badged: false),
         ]
         }
     }
@@ -110,8 +110,8 @@ enum LCPadLayoutGame {
 
     func skinDisplayName(_ skin: Int) -> String {
         switch self {
-        case .silksong: return ["玻璃", "荆棘", "角标", "黑铁"][min(max(skin, 0), 3)]
-        case .hades2: return ["玻璃", "月亮", "月亮角标"][min(max(skin, 0), 2)]
+        case .silksong: return ["lc.padLayout.skinGlass".loc, "lc.padLayout.skinThorns".loc, "lc.padLayout.skinBadge".loc, "lc.padLayout.skinIron".loc][min(max(skin, 0), 3)]
+        case .hades2: return ["lc.padLayout.skinGlass".loc, "lc.padLayout.skinMoon".loc, "lc.padLayout.skinMoonBadge".loc][min(max(skin, 0), 2)]
         }
     }
 
