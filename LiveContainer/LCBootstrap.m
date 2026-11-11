@@ -1912,9 +1912,24 @@ static void LCLaunchCoverTeardownFirstFrameHook(void) {
 static void *LCLaunchCoverSceneGeometryContext = &LCLaunchCoverSceneGeometryContext;
 static void *LCLaunchCoverWindowBoundsContext = &LCLaunchCoverWindowBoundsContext;
 
+// 窗口几何摘要（打点/定案用）：frame 是派生值（bounds+center+transform 的
+// 包围盒），三件套分开记才能看出几何到底由谁托管。
+static NSString *LCLaunchCoverTransformDesc(CGAffineTransform t) {
+    if (CGAffineTransformIsIdentity(t)) return @"identity";
+    return [NSString stringWithFormat:@"[%.2f %.2f %.2f %.2f %.1f %.1f]", t.a, t.b, t.c, t.d, t.tx, t.ty];
+}
+
+static NSString *LCLaunchCoverWindowDesc(UIWindow *w) {
+    if (!w) return @"无";
+    return [NSString stringWithFormat:@"frame=%@ center={%.1f,%.1f} bounds=%@ transform=%@",
+            NSStringFromCGRect(w.frame), w.center.x, w.center.y,
+            NSStringFromCGRect(w.bounds), LCLaunchCoverTransformDesc(w.transform)];
+}
+
 @implementation LCLaunchCoverHandler {
     UIWindowScene *_scene;
     UIWindow *_window;
+    UIWindow *_guestWindow; // 最近一次对齐所跟随的客体主窗（仅记账，每次对齐重选）
     LCLaunchCoverView *_rootView;
     UIImage *_coverImage;
     BOOL _attached;
@@ -2013,7 +2028,10 @@ static void *LCLaunchCoverWindowBoundsContext = &LCLaunchCoverWindowBoundsContex
 
     UIWindow *window = [[UIWindow alloc] initWithWindowScene:scene];
     window.windowLevel = UIWindowLevelAlert + 50;
-    window.frame = scene.coordinateSpace.bounds;
+    // 此处不写 frame：在 rootViewController 赋值/亮窗之前写场景 bounds 会被
+    // UIKit 按 effectiveGeometry 落定覆盖（定案见「几何跟随」段），几何改在
+    // rootVC 赋值后、亮窗前由 alignCoverToGuestWindow 一次对齐（与快捷栏
+    // 「rootVC 后写帧、亮窗前复核」的顺序同款）。
     window.backgroundColor = [UIColor colorWithRed:7/255.0 green:7/255.0 blue:12/255.0 alpha:1];
     LCLaunchCoverView *rootView = [[LCLaunchCoverView alloc] init];
     rootView.titleLabel.text = self.title;
@@ -2025,6 +2043,8 @@ static void *LCLaunchCoverWindowBoundsContext = &LCLaunchCoverWindowBoundsContex
     window.rootViewController = rootVC;
     _rootView = rootView;
     _window = window;
+    // 亮窗前把几何对齐到客体主窗（同源几何，见「几何跟随」段定案）
+    [self alignCoverToGuestWindowWithReason:@"attach" checkpoint:YES];
     window.hidden = NO;
     // 几何跟随的信号从上盖起就装好：场景旋转/落定多发生在上盖后头一两秒内
     [self installGeometryObservers];
@@ -2073,8 +2093,8 @@ static void *LCLaunchCoverWindowBoundsContext = &LCLaunchCoverWindowBoundsContex
     LCLaunchCoverLog(@"首帧信号送达 handler（attached=%d dismissed=%d 距上盖 %+lldms）",
                      _attached, _dismissed,
                      _attached ? (long long)llround((CACurrentMediaTime() - _attachTime) * 1000.0) : -1);
-    // 兜底检查点：淡出排定前强制按场景 bounds 对一次帧，防几何错位被带进淡出
-    [self syncGeometryToSceneWithReason:@"first-frame" checkpoint:YES];
+    // 兜底检查点：撤盖判定前强制与客体主窗对一次几何，防错位被带进淡出
+    [self alignCoverToGuestWindowWithReason:@"first-frame" checkpoint:YES];
     [self evaluateDismissCondition];
 }
 
@@ -2150,26 +2170,46 @@ static void *LCLaunchCoverWindowBoundsContext = &LCLaunchCoverWindowBoundsContex
     [self geometryMayHaveChanged];
 }
 
-#pragma mark 几何跟随（场景旋转/落定重排）
+#pragma mark 几何跟随（与客体主窗同源对齐）
 
-// 定案（竖屏网格启动哈迪斯 II 盖层错位：封面按横屏几何成上方一条横带、
-// 下半截裸黑屏）：原重排链两环都不可靠——
-//   1) LCLaunchCoverView.layoutSubviews 按 self.bounds 现算本身没错，但根
-//      视图 bounds 由窗口/根 VC 的旋转机制驱动；自建窗口的根 VC 在客体把
-//      场景转横屏时收不到 viewWillTransitionToSize，窗口被旋转变换整体搬
-//      走、内部布局没人重跑（与本文件快捷栏「旋转重排」段已定案并修好的
-//      失效形态同型），bounds 停在上盖时刻，layoutSubviews 永远按旧几何
-//      算——是「信号没到」型，不是算错。
-//   2) 原 orientationDidChange 只监听 UIApplicationDidChangeStatusBar
-//      OrientationNotification 一路：那是快捷栏三路信号里最弱的兜底，场
-//      景几何更新驱动的旋转不保证送达；即使送达也只改 _window.frame，不
-//      按场景 bounds 强制根视图重排，也没有落定后的二次核对——错位一旦
-//      形成（上盖早于场景转横落定）就保持到撤盖。
-// 修法与快捷栏同款：与 VC 回调无关的三路信号任一触发都走 syncGeometry，
-// 一律读 _scene.coordinateSpace.bounds 现算（不读窗口自身旧帧）、改窗帧
-// 并强制根视图按新 bounds 重排，信号后补 0.3s 延迟复核接住落定滞后；另
-// 在首帧信号送达（guestFirstFrameDidRender）与撤盖开始前（dismissWith
-// Reason）各强制对一次帧作兜底检查点。
+// 定案（以撒竖屏启动 log-90 打点逐条对应，2026-11-11）：
+//   14:51:40.164 attach 读 scene.coordinateSpace.bounds = 420×912——场景
+//     初始方向 = 点开瞬间机身方向（竖屏），旋转尚未落定，这是未落定值；
+//   14:51:40.166 attach 的 window.frame = scene.coordinateSpace.bounds 写
+//     入的明明是这份 420×912，「attach 已上盖」回读却是 912×420。写入与
+//     回读之间只隔 rootViewController 赋值与 hidden=NO 两步，二者都会触
+//     发 UIKit 按场景 effectiveGeometry 落定窗口几何：客体已把方向落到
+//     横屏、有效几何为 912×420，刚写入的竖屏帧被托管几何覆盖。故错不在
+//     表达式取值，在于场景托管窗口不能拿未落定的 coordinateSpace.bounds
+//     当目标值、在托管落定前写帧；
+//   14:51:40.171 自愈把 frame 改写成 420×912，呈现终局仍是 912×420 横带
+//     （#108/#109 两轮录屏一致）：自愈在上盖后 5ms 落地，盖层内容最早
+//     +250ms 才入场——若 420×912 真主导过任何一帧呈现，按根视图 bounds
+//     布局出的应是竖屏满幅封面，录屏从未出现。即 frame 是 bounds+center
+//     +transform 的派生包围盒，直写 frame 不触及托管的有效几何，后续任
+//     一次几何应用即恢复托管值。#109 的 syncGeometry 与自愈同病（同一错
+//     误目标），且额外把 rootView 帧直写成竖屏值，使内容布局方向与窗口
+//     局部坐标（横屏）互相打架。
+// 客体主窗为什么对（dm 前端源码核实：nxnative dm/ios/Sources/main.m 的
+// SceneDelegate 与 front_ios.m）：建窗只有 initWithWindowScene +
+// rootViewController + makeKeyAndVisible，全程零 frame/center/transform
+// 手写、前端无任何旋转变换代码——其几何百分百由同一套场景托管决定
+// （局部 bounds 落为横屏值、经场景呈现满屏）。盖层要与撤盖后露出的客
+// 体画面同框同位，唯一同源做法是复制客体主窗当下实测的 bounds+center+
+// transform 并跟随其变化，而不是再从场景推导任何数值。
+// 修法：
+//   1) attach 在 rootVC 赋值后、亮窗前对齐一次（顺序与快捷栏「rootVC 后
+//      写帧、亮窗前复核」同款）；每次对齐重选客体主窗候选并复制三件套，
+//      根视图帧 = 盖层窗口 bounds（局部坐标），内容由 LCLaunchCoverView
+//      .layoutSubviews 按 bounds 现算，不改；
+//   2) 跟随触发沿用：场景 effectiveGeometry KVO、场景内窗口 bounds/
+//      center/frame KVO、状态栏方向通知（信号后 0.3s 复核），另加
+//      UIWindowDidBecomeKeyNotification 接住上盖后才成为 key 的客体主
+//      窗；但所有触发只做「重新对齐客体主窗」，不再把 scene bounds 直写
+//      盖层窗口帧；
+//   3) 客体主窗尚不存在时以场景 effectiveGeometry 占位（读有效几何而非
+//      coordinateSpace 的未落定值），客体窗一出现即改对齐；
+//   4) 首帧送达与撤盖开始前的检查点沿用，目标同为客体主窗对齐。
 - (void)installGeometryObservers {
     if (@available(iOS 16.0, *)) {
         if (!_geometryObserving) {
@@ -2178,6 +2218,13 @@ static void *LCLaunchCoverWindowBoundsContext = &LCLaunchCoverWindowBoundsContex
         }
     }
     [self observeSceneWindows];
+    // 客体主窗在上盖之后才成为 key（makeKeyAndVisible 晚于场景激活）时，
+    // 靠这一路接住「对齐目标出现了」（与快捷栏 windowDidBecomeKey 几何审
+    // 计同款信号）；attach 只装一次，撤盖时随 removeObserver:self 摘除。
+    [NSNotificationCenter.defaultCenter addObserver:self
+                                           selector:@selector(geometryMayHaveChanged)
+                                               name:UIWindowDidBecomeKeyNotification
+                                             object:nil];
 }
 
 - (void)observeSceneWindows {
@@ -2185,7 +2232,12 @@ static void *LCLaunchCoverWindowBoundsContext = &LCLaunchCoverWindowBoundsContex
     for (UIWindow *w in _scene.windows) {
         if (w == _window || [_observedWindows containsObject:w]) continue;
         [_observedWindows addObject:w];
+        // 跟随目标是客体主窗的 bounds/center/transform 三件套：frame 为派
+        // 生值，四者任一变化都触发重对齐（重对齐时现读三件套全值，单个
+        // keyPath 漏报也会被其余变化顺带接住）
         [w addObserver:self forKeyPath:@"bounds" options:0 context:LCLaunchCoverWindowBoundsContext];
+        [w addObserver:self forKeyPath:@"center" options:0 context:LCLaunchCoverWindowBoundsContext];
+        [w addObserver:self forKeyPath:@"frame" options:0 context:LCLaunchCoverWindowBoundsContext];
     }
 }
 
@@ -2196,6 +2248,8 @@ static void *LCLaunchCoverWindowBoundsContext = &LCLaunchCoverWindowBoundsContex
     }
     for (UIWindow *w in _observedWindows) {
         [w removeObserver:self forKeyPath:@"bounds" context:LCLaunchCoverWindowBoundsContext];
+        [w removeObserver:self forKeyPath:@"center" context:LCLaunchCoverWindowBoundsContext];
+        [w removeObserver:self forKeyPath:@"frame" context:LCLaunchCoverWindowBoundsContext];
     }
     [_observedWindows removeAllObjects];
 }
@@ -2210,35 +2264,79 @@ static void *LCLaunchCoverWindowBoundsContext = &LCLaunchCoverWindowBoundsContex
 
 - (void)geometryMayHaveChanged {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self syncGeometryToSceneWithReason:@"signal" checkpoint:NO];
-        // 场景坐标空间可能滞后于窗口 bounds 变化，0.3s 后再核对一次兜住落定
+        [self alignCoverToGuestWindowWithReason:@"signal" checkpoint:NO];
+        // 客体主窗几何可能滞后于触发信号（旋转落定分步走），0.3s 后再核对一次
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [self syncGeometryToSceneWithReason:@"signal-settle" checkpoint:NO];
+            [self alignCoverToGuestWindowWithReason:@"signal-settle" checkpoint:NO];
         });
     });
 }
 
-// 按场景当前 bounds 对齐盖层：窗口帧 = 场景 bounds，根视图按同一 bounds
-// 直写帧并 layoutIfNeeded，让 layoutSubviews 按新 bounds 现算封面（aspect
-// -fill）/底部罩/标题/光带。每次实际重排都打点（场景 bounds + 窗口帧 +
-// 根视图 bounds + 场景方向）；checkpoint=YES 的强制对帧（首帧/撤盖前）
-// 即使本已对齐也打点，信号路径未错位时静默，避免刷屏。
-- (BOOL)syncGeometryToSceneWithReason:(NSString *)reason checkpoint:(BOOL)checkpoint {
+// 客体主窗候选：场景内 Normal 层级、可见、非盖层自身的窗口——宿主浮层
+// （快捷栏 Alert+100、回库 veil Alert+200、盖层自身 Alert+50）全在
+// Normal 之上，层级一条即排除。key 窗优先（客体主窗 makeKeyAndVisible
+// 后即 key 窗），无 key 窗时取面积最大者；每次对齐重选，迟建/换窗跟得上。
+- (UIWindow *)guestMainWindowCandidate {
+    UIWindow *key = nil;
+    UIWindow *largest = nil;
+    CGFloat largestArea = 0;
+    for (UIWindow *w in _scene.windows) {
+        if (w == _window || w.windowScene != _scene) continue;
+        if (w.windowLevel != UIWindowLevelNormal || w.hidden || w.alpha <= 0.01) continue;
+        if (w.isKeyWindow) key = w;
+        CGFloat area = w.bounds.size.width * w.bounds.size.height;
+        if (area > largestArea) { largestArea = area; largest = w; }
+    }
+    return key ?: largest;
+}
+
+// 与客体主窗对齐盖层几何：复制其 bounds+center+transform 三件套（frame
+// 是派生值，只读不写），根视图帧取盖层窗口的局部 bounds、内容随之按
+// bounds 重排（LCLaunchCoverView.layoutSubviews 现算）。客体主窗尚不存
+// 在时以场景 effectiveGeometry 占位。每次实际修正、或 checkpoint 强制
+// 核对时打点：客体主窗摘要 + 盖层最终采用值——下一轮若仍错位，日志能直
+// 接区分「没跟上」与「跟上了但呈现仍偏」，不必再靠录屏猜。
+- (BOOL)alignCoverToGuestWindowWithReason:(NSString *)reason checkpoint:(BOOL)checkpoint {
     if (!_window || !_scene || _dismissed) return NO;
     [self observeSceneWindows]; // 顺带补上旋转后/迟建的客体窗口
-    CGRect b = _scene.coordinateSpace.bounds;
-    if (b.size.width <= 0 || b.size.height <= 0) return NO;
-    BOOL mismatch = !CGRectEqualToRect(_window.frame, b) || !CGRectEqualToRect(_rootView.frame, b);
+    UIWindow *guest = [self guestMainWindowCandidate];
+    _guestWindow = guest;
+    CGRect targetBounds;
+    CGPoint targetCenter;
+    CGAffineTransform targetTransform;
+    NSString *source;
+    if (guest) {
+        targetBounds = guest.bounds;
+        targetCenter = guest.center;
+        targetTransform = guest.transform;
+        source = @"客体主窗";
+    } else {
+        CGRect b = _scene.coordinateSpace.bounds;
+        if (@available(iOS 16.0, *)) {
+            b = _scene.effectiveGeometry.coordinateSpace.bounds;
+        }
+        if (b.size.width <= 0 || b.size.height <= 0) return NO;
+        targetBounds = b;
+        targetCenter = CGPointMake(CGRectGetMidX(b), CGRectGetMidY(b));
+        targetTransform = CGAffineTransformIdentity;
+        source = @"场景有效几何(占位)";
+    }
+    BOOL mismatch = !CGRectEqualToRect(_window.bounds, targetBounds) ||
+                    !CGPointEqualToPoint(_window.center, targetCenter) ||
+                    !CGAffineTransformEqualToTransform(_window.transform, targetTransform) ||
+                    !CGRectEqualToRect(_rootView.frame, targetBounds);
     if (!mismatch && !checkpoint) return NO;
     if (mismatch) {
-        _window.frame = b;
-        _rootView.frame = b;
+        _window.bounds = targetBounds;
+        _window.center = targetCenter;
+        _window.transform = targetTransform;
+        _rootView.frame = targetBounds;
         [_rootView setNeedsLayout];
         [_rootView layoutIfNeeded];
     }
-    LCLaunchCoverLog(@"几何重排[%@]：scene bounds=%@ window frame=%@ rootView bounds=%@ 方向=%ld%@",
-                     reason, NSStringFromCGRect(b), NSStringFromCGRect(_window.frame),
-                     NSStringFromCGRect(_rootView.bounds), (long)_scene.interfaceOrientation,
+    LCLaunchCoverLog(@"几何对齐[%@]：来源=%@ 客体主窗[%@] 盖层采用[%@]%@",
+                     reason, source, LCLaunchCoverWindowDesc(guest),
+                     LCLaunchCoverWindowDesc(_window),
                      mismatch ? @"（已修正）" : @"（本已对齐）");
     return mismatch;
 }
@@ -2253,9 +2351,9 @@ static void *LCLaunchCoverWindowBoundsContext = &LCLaunchCoverWindowBoundsContex
         return;
     }
     [self stopDismissWatchdog]; // 任一来源撤盖都先停表，在途链自检自停
-    // 兜底检查点：开始淡出前强制按场景 bounds 对一次帧，错位不许带进淡出
-    // （须在 _dismissed 置位前调，sync 以未撤盖为前提）
-    [self syncGeometryToSceneWithReason:@"pre-dismiss" checkpoint:YES];
+    // 兜底检查点：开始淡出前强制与客体主窗对一次几何，错位不许带进淡出
+    // （须在 _dismissed 置位前调，对齐以未撤盖为前提）
+    [self alignCoverToGuestWindowWithReason:@"pre-dismiss" checkpoint:YES];
     _dismissed = YES;
     LCLaunchCoverTeardownFirstFrameHook();
     // 触发来源三值：formula=看门狗判定公式满足 / tap=点按跳过 / fallback-30s=30s 兜底
