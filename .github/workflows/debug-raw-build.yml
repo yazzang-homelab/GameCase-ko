@@ -1,6 +1,7 @@
 name: Debug Build (temporary)
 on:
-  workflow_dispatch:
+  push:
+    branches: [feat/launch-pre-cover]
 jobs:
   debug:
     runs-on: macos-latest
