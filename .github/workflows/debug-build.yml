@@ -1,0 +1,19 @@
+name: Debug Build (temporary)
+on:
+  push:
+    branches: [feat/launch-animations]
+  workflow_dispatch:
+jobs:
+  debug:
+    runs-on: macos-latest
+    steps:
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '26.2'
+      - uses: actions/checkout@v6
+        with:
+          submodules: recursive
+      - name: Compile LiveContainerShared only (raw log)
+        run: |
+          xcodebuild build -project LiveContainer.xcodeproj -target LiveContainerShared -sdk iphoneos -arch arm64 -configuration Release 2>&1 | grep -E "error:|warning:|LCBootstrap" | head -80
+          exit ${PIPESTATUS[0]}
