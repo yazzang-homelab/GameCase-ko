@@ -24,7 +24,7 @@ extension LCGameState {
     /// LCNXColor 同值映射，两处色值一致）
     var themeColor: Color {
         switch self {
-        case .playable: return LCGameTheme.readyGreen
+        case .playable, .notRequired: return LCGameTheme.readyGreen
         case .needsDatapack: return LCGameTheme.missingAmber
         case .broken: return LCGameTheme.brokenRed
         }
@@ -213,7 +213,7 @@ struct LCGameStateHelpContent: View {
                 }
             }
             switch state {
-            case .playable:
+            case .playable, .notRequired:
                 EmptyView()
             case .needsDatapack:
                 Button {

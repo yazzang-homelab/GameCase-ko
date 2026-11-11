@@ -126,6 +126,10 @@ struct LCDatapackImportView: View {
     @State private var copiedBytes: Int64 = 0
     @State private var totalBytes: Int64 = 0
     @State private var resultSize: Int64 = 0
+    /// 「无需数据包」开关的刷新计数：开关值存 UserDefaults
+    /// （LCGameDatapackNeed），翻动时 bump 一次让本页头部状态与
+    /// 开关行按存储现值重算
+    @State private var notRequiredTick = 0
 
     private enum Stage: Equatable {
         case ready
@@ -292,6 +296,7 @@ struct LCDatapackImportView: View {
 
     @ViewBuilder
     private func targetBody(_ app: LCAppModel) -> some View {
+        let _ = notRequiredTick // 「无需数据包」开关的依赖声明（翻动后整页按存储现值重算）
         // 外层 VStack 只管「被测内容 + 填充位」：内层是游戏行与阶段内容
         // （原 spacing 20 与各元素逐字不变），背景量其真实高度供 detent
         // 定高；Spacer(minLength: 0) 只为全高回退（iOS 15）把内容顶到
@@ -348,6 +353,9 @@ struct LCDatapackImportView: View {
                         .foregroundColor(.gray)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal)
+                    Divider()
+                        .padding(.horizontal)
+                    notRequiredToggleRow(app)
                     if request.app == nil {
                         Button("lc.datapack.changeGame".loc) {
                             target = nil
@@ -781,14 +789,42 @@ struct LCDatapackImportView: View {
         .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
     }
 
+    /// 「无需数据包」开关行（系统原生 Toggle，#102 口径）：一体包 /
+    /// 非移植类游戏没有外置数据包，打开后状态解析改判 .notRequired，
+    /// 库与设置页不再挂「未导入」提示（见 LCGameState）。开关只写宿
+    /// 主 UserDefaults，不拦导入：本页选文件 / 文件夹的流程照常，真
+    /// 导入后探针结果优先、按已导入显示。
+    private func notRequiredToggleRow(_ app: LCAppModel) -> some View {
+        let binding = Binding<Bool>(
+            get: { LCGameDatapackNeed.isNotRequired(forBundleIdentifier: app.bundleIdentifier) },
+            set: { newValue in
+                LCGameDatapackNeed.setNotRequired(newValue, forBundleIdentifier: app.bundleIdentifier)
+                notRequiredTick += 1
+            }
+        )
+        return VStack(alignment: .leading, spacing: 6) {
+            Toggle(isOn: binding) {
+                Text("lc.datapack.notRequiredTitle".loc)
+                    .font(.system(size: 15, weight: .medium))
+            }
+            Text("lc.datapack.notRequiredDetail".loc)
+                .font(.footnote)
+                .foregroundColor(.gray)
+                .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .padding(.horizontal)
+    }
+
     private func datapackStatusText(for app: LCAppModel) -> some View {
-        // 走共用求值入口（先对齐快照再解析容器），与库主页同一口径
+        // 走共用求值入口（先对齐快照再解析容器），与库主页同一口径；
+        // 没探到包但玩家已声明「无需数据包」时显示中性状态，不再报缺失
         let ready = LCGameLibraryInfo.datapackReady(for: app)
+        let notRequired = !ready && LCGameDatapackNeed.isNotRequired(forBundleIdentifier: app.bundleIdentifier)
         return HStack(spacing: 6) {
             Circle()
                 .fill(ready ? Color.green : Color.gray)
                 .frame(width: 8, height: 8)
-            Text(ready ? "lc.datapack.statusReady".loc : "lc.datapack.statusMissing".loc)
+            Text(ready ? "lc.datapack.statusReady".loc : (notRequired ? "lc.datapack.statusNotRequired".loc : "lc.datapack.statusMissing".loc))
                 .font(.footnote)
                 .foregroundColor(.gray)
         }

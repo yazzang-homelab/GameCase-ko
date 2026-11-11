@@ -35128,6 +35128,29 @@
         }
       }
     },
+    "lc.gameSettings.datapackNotRequired": {
+      "extractionState": "manual",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无需"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not needed"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Desnecessário"
+          }
+        }
+      }
+    },
     "lc.gameSettings.datapackBroken": {
       "extractionState": "manual",
       "localizations": {
@@ -35584,6 +35607,52 @@
           "stringUnit": {
             "state": "translated",
             "value": "Recortar capa"
+          }
+        }
+      }
+    },
+    "lc.gameSettings.cropHint": {
+      "extractionState": "manual",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "拖动调整位置 · 双指缩放填满画框"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Drag to adjust position · Pinch to zoom to fill the frame"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Arraste para ajustar a posição · Use dois dedos para preencher o quadro"
+          }
+        }
+      }
+    },
+    "lc.gameSettings.cropReset": {
+      "extractionState": "manual",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "还原"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reset"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restaurar"
           }
         }
       }
@@ -38298,6 +38367,75 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sem pacote de dados"
+          }
+        }
+      }
+    },
+    "lc.datapack.statusNotRequired": {
+      "extractionState": "manual",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无需数据包"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No datapack needed"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pacote de dados desnecessário"
+          }
+        }
+      }
+    },
+    "lc.datapack.notRequiredTitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无需数据包"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No Datapack Needed"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sem necessidade de pacote de dados"
+          }
+        }
+      }
+    },
+    "lc.datapack.notRequiredDetail": {
+      "extractionState": "manual",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "一体包或无需数据包的游戏可打开此项，打开后不再提示导入数据包。"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "For all-in-one packages or games that don't need a datapack. When this is on, the missing-datapack prompts are hidden for this game."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Para pacotes tudo em um ou jogos que não precisam de pacote de dados. Quando ativado, os avisos de pacote de dados ausente são ocultados para este jogo."
           }
         }
       }

@@ -32,12 +32,16 @@ import Foundation
 enum LCGameState: Equatable {
     case playable
     case needsDatapack
+    /// 玩家已声明本游戏无需数据包（LCGameDatapackNeed）且探针什么都
+    /// 没探到：呈现按可玩处理（无帮助卡、无缺包徽标），只有设置页
+    /// 数据包行单独显示中性的「无需」，不冒充「已导入」。
+    case notRequired
     case broken(reason: String, detail: String, technical: String)
 
     /// 状态短名（主页状态行 / 帮助卡标题）
     var title: String {
         switch self {
-        case .playable: return "lc.gameState.playable".loc
+        case .playable, .notRequired: return "lc.gameState.playable".loc
         case .needsDatapack: return "lc.gameState.needsDatapack".loc
         case .broken: return "lc.gameState.broken".loc
         }
@@ -46,7 +50,7 @@ enum LCGameState: Equatable {
     /// 一句说明（帮助卡正文第一段）
     var explanation: String {
         switch self {
-        case .playable:
+        case .playable, .notRequired:
             return ""
         case .needsDatapack:
             return "lc.gameState.needsDatapackExplanation".loc
@@ -60,7 +64,7 @@ enum LCGameState: Equatable {
     /// 原因写好的修法，这里直接透传。
     var fixText: String {
         switch self {
-        case .playable:
+        case .playable, .notRequired:
             return ""
         case .needsDatapack:
             return "lc.gameState.needsDatapackFix".loc
@@ -70,8 +74,10 @@ enum LCGameState: Equatable {
     }
 
     var isPlayable: Bool {
-        if case .playable = self { return true }
-        return false
+        switch self {
+        case .playable, .notRequired: return true
+        case .needsDatapack, .broken: return false
+        }
     }
 }
 
@@ -81,6 +87,29 @@ struct LCGameStateTarget: Identifiable {
     let id = UUID()
     let app: LCAppModel
     let state: LCGameState
+}
+
+/// 每游戏「无需数据包」声明（游戏设置页数据包导入页的开关）：一体包
+/// （数据已打进 IPA）与其他非移植类游戏没有外置数据包，探针永远探
+/// 不到，库与设置页会一直挂「未导入」提示；玩家打开此开关即声明本
+/// 游戏无需数据包，状态解析在「什么都没探到」的出口改判 .notRequired
+/// （见 gameState）。标记只存宿主 UserDefaults
+/// （gc.datapack.notRequired.<bundleId>，默认 false = 需要数据包），
+/// 与 LauncherGate 同类：GC 自己的呈现开关，不进客体偏好。删游戏后
+/// 残留键无害（同 bundleId 重装同名游戏才会被读到，语义仍成立），
+/// 现行没有这类键的清理钩子，不单独为它加。
+enum LCGameDatapackNeed {
+    private static func key(forBundleIdentifier bundleIdentifier: String) -> String {
+        "gc.datapack.notRequired.\(bundleIdentifier)"
+    }
+
+    static func isNotRequired(forBundleIdentifier bundleIdentifier: String) -> Bool {
+        UserDefaults.standard.bool(forKey: key(forBundleIdentifier: bundleIdentifier))
+    }
+
+    static func setNotRequired(_ notRequired: Bool, forBundleIdentifier bundleIdentifier: String) {
+        UserDefaults.standard.set(notRequired, forKey: key(forBundleIdentifier: bundleIdentifier))
+    }
 }
 
 extension LCGameLibraryInfo {
@@ -95,11 +124,17 @@ extension LCGameLibraryInfo {
     /// 件——标记路径是客体编译期常量、GC 无从校验，完整解包必含
     /// 它；不完整的夹子启动时由客体自己报「找不到游戏文件」）；只
     /// 有同名文件夹占着 romfs.img 的位置 → 已损坏（放错）；什么都
-    /// 没有 → 缺数据包。本函数只读不写。
+    /// 没有 → 缺数据包。玩家声明「无需数据包」（LCGameDatapackNeed）
+    /// 时，「什么都没有」的两个出口（无容器记录 / 无任何条目）改判
+    /// .notRequired——开关只压这一件事：探到镜像或文件夹的路径完全
+    /// 不看开关，后来真导入了数据包仍按已导入 / 已损坏呈现。本函
+    /// 数只读不写。
     static func gameState(for app: LCAppModel) -> LCGameState {
         app.refreshContainerSelection()
+        let missing: LCGameState = LCGameDatapackNeed.isNotRequired(forBundleIdentifier: app.bundleIdentifier)
+            ? .notRequired : .needsDatapack
         guard let container = defaultContainer(for: app) else {
-            return .needsDatapack
+            return missing
         }
         let probe = probeDatapack(container: container)
         guard let romfsURL = probe.imageFile else {
@@ -112,7 +147,7 @@ extension LCGameLibraryInfo {
                     detail: "lc.gameState.folderOccupiesDetail".loc,
                     technical: "lc.gameState.folderOccupiesTechnical %@".localizeWithFormat(entry.path))
             }
-            return .needsDatapack
+            return missing
         }
         let fm = FileManager.default
         guard let attrs = try? fm.attributesOfItem(atPath: romfsURL.path),
@@ -184,7 +219,7 @@ extension LCGameLibraryInfo {
                 return 0
             }
             switch gameState(for: app) {
-            case .playable: return 1
+            case .playable, .notRequired: return 1
             case .needsDatapack: return 2
             case .broken: return 3
             }

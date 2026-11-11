@@ -144,7 +144,14 @@ struct LCPhotoImagePicker: UIViewControllerRepresentable {
     }
 }
 
-// MARK: - 16:9 裁剪页（拖动 + 双指缩放，框外变暗）
+// MARK: - 16:9 裁剪页（全屏深色编辑面：图片满屏平移/捏合，中央固定 16:9 画框）
+//
+// 改版口径（玩家反馈「剪裁页面不够优雅」「不应该是方形剪裁」）：整屏深色，
+// 图片以填满画框为基准满屏呈现、可拖动平移 + 双指捏合缩放；中央画框固定
+// 16:9（竖屏满宽、横屏按屏内最大拟合），框内即最终封面，框外是同一张图
+// 压暗 + 三分网格，一眼可见裁掉的部分。顶栏/还原按钮走 GC 玻璃规范
+// （gcGlassButtonStyle / gcGlassProminentButtonStyle：iOS 26 系统原生
+// 玻璃、低版本系统边框样式）；页面底色与画框是内容层，不玻璃化。
 
 struct LCCoverCropView: View {
     let image: UIImage
@@ -156,95 +163,184 @@ struct LCCoverCropView: View {
     @State private var pan: CGSize = .zero
     @GestureState private var gestureZoom: CGFloat = 1
     @GestureState private var gesturePan: CGSize = .zero
-    /// 布局实测的可用尺寸（confirm 时按同尺寸算裁剪框，不靠 UIScreen 猜）
+    /// 布局实测的可用尺寸（confirm 时按同尺寸算画框，不靠 UIScreen 猜）
     @State private var viewSize: CGSize = .zero
 
     private static let aspect: CGFloat = 16.0 / 9.0
     private static let maxZoom: CGFloat = 4
+    /// 框外压暗强度（改版预览定版值）
+    private static let dimOpacity: Double = 0.52
 
     var body: some View {
         GeometryReader { geo in
-            let frameW = geo.size.width - 32
-            let frameH = frameW / Self.aspect
-            let frameRect = CGRect(
-                x: (geo.size.width - frameW) / 2,
-                y: (geo.size.height - frameH) / 2 - 30,
-                width: frameW, height: frameH
-            )
+            let frameRect = Self.frameRect(in: geo.size)
             ZStack {
-                Color(UIColor.systemBackground).ignoresSafeArea()
-                // 框外变暗（eoFill 挖洞）
-                Path { path in
-                    path.addRect(CGRect(origin: .zero, size: geo.size))
-                    path.addRect(frameRect)
-                }
-                .fill(Color.black.opacity(0.55), style: FillStyle(eoFill: true))
-                .ignoresSafeArea()
-                .allowsHitTesting(false)
+                Color.black.ignoresSafeArea()
 
-                cropViewport(frameRect: frameRect)
+                stageImage(frameRect: frameRect)
+
+                // 手势层：整屏接拖动/捏合（顶/底栏在其上层，按钮优先命中）
+                Color.clear
+                    .contentShape(Rectangle())
+                    .gesture(dragGesture(frameSize: frameRect.size))
+                    .simultaneousGesture(magnifyGesture(frameSize: frameRect.size))
+
+                dimOverlay(frameRect: frameRect, canvasSize: geo.size)
+                gridOverlay(frameRect: frameRect)
+
+                topBar(safeTop: geo.safeAreaInsets.top)
+                bottomBar(safeBottom: geo.safeAreaInsets.bottom)
             }
             .onAppear { viewSize = geo.size }
-            .onChange(of: geo.size) { viewSize = $0 }
-        }
-        .navigationTitle("lc.gameSettings.cropCover".loc)
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .cancellationAction) {
-                Button("lc.common.cancel".loc) { dismiss() }
-            }
-            ToolbarItem(placement: .confirmationAction) {
-                Button { confirm() } label: {
-                    Text("lc.gameSettings.useThis".loc).bold()
-                }
+            .onChange(of: geo.size) { newSize in
+                viewSize = newSize
+                let fr = Self.frameRect(in: newSize)
+                pan = clampedPan(pan, zoom: clampedZoom(zoom), frameSize: fr.size)
             }
         }
+        .navigationBarHidden(true)
+        .preferredColorScheme(.dark)
     }
 
-    /// 图片窗口：以 frame 为界裁掉溢出，内部图片按 填充×zoom 缩放并跟随 pan
-    private func cropViewport(frameRect: CGRect) -> some View {
+    // MARK: 舞台与覆盖层
+
+    /// 图片本体：不裁剪、满屏呈现，以画框中心为锚按 填充×zoom 显示并跟随 pan
+    private func stageImage(frameRect: CGRect) -> some View {
         let frameSize = frameRect.size
         let effectiveZoom = clampedZoom(zoom * gestureZoom)
         let effectivePan = clampedPan(pan + gesturePan, zoom: effectiveZoom, frameSize: frameSize)
-        return ZStack {
-            Image(uiImage: image)
-                .resizable()
-                .frame(
-                    width: fillSize(frameSize: frameSize).width * effectiveZoom,
-                    height: fillSize(frameSize: frameSize).height * effectiveZoom
-                )
-                .offset(effectivePan)
+        let fill = fillSize(frameSize: frameSize)
+        return Image(uiImage: image)
+            .resizable()
+            .frame(width: fill.width * effectiveZoom, height: fill.height * effectiveZoom)
+            .offset(effectivePan)
+            .position(x: frameRect.midX, y: frameRect.midY)
+            .allowsHitTesting(false)
+    }
+
+    /// 框外压暗（eoFill 挖洞）：洞外仍是同一张图，只是压暗
+    private func dimOverlay(frameRect: CGRect, canvasSize: CGSize) -> some View {
+        Path { path in
+            path.addRect(CGRect(origin: .zero, size: canvasSize))
+            path.addRect(frameRect)
         }
-        .frame(width: frameSize.width, height: frameSize.height)
-        .clipped()
-        .overlay(
-            RoundedRectangle(cornerRadius: 4, style: .continuous)
-                .stroke(Color.white.opacity(0.65), lineWidth: 1)
-        )
-        .position(x: frameRect.midX, y: frameRect.midY)
-        .contentShape(Rectangle())
-        .gesture(
-            DragGesture(minimumDistance: 0)
-                .updating($gesturePan) { value, state, _ in
-                    state = value.translation
+        .fill(Color.black.opacity(Self.dimOpacity), style: FillStyle(eoFill: true))
+        .ignoresSafeArea()
+        .allowsHitTesting(false)
+    }
+
+    /// 画框：细亮边 + 三分网格
+    private func gridOverlay(frameRect: CGRect) -> some View {
+        ZStack {
+            Path { path in
+                for i in 1...2 {
+                    let x = frameRect.minX + frameRect.width * CGFloat(i) / 3
+                    path.move(to: CGPoint(x: x, y: frameRect.minY))
+                    path.addLine(to: CGPoint(x: x, y: frameRect.maxY))
+                    let y = frameRect.minY + frameRect.height * CGFloat(i) / 3
+                    path.move(to: CGPoint(x: frameRect.minX, y: y))
+                    path.addLine(to: CGPoint(x: frameRect.maxX, y: y))
                 }
-                .onEnded { value in
-                    pan = clampedPan(pan + value.translation, zoom: clampedZoom(zoom), frameSize: frameSize)
+            }
+            .stroke(Color.white.opacity(0.28), lineWidth: 1)
+            Rectangle()
+                .stroke(Color.white.opacity(0.9), lineWidth: 1.5)
+                .frame(width: frameRect.width, height: frameRect.height)
+                .position(x: frameRect.midX, y: frameRect.midY)
+        }
+        .allowsHitTesting(false)
+    }
+
+    // MARK: 顶/底栏（控件走 GC 玻璃规范，文字与底色不玻璃化）
+
+    private func topBar(safeTop: CGFloat) -> some View {
+        VStack {
+            ZStack {
+                HStack {
+                    Button("lc.common.cancel".loc) { dismiss() }
+                        .gcGlassButtonStyle()
+                    Spacer()
+                    Button { confirm() } label: {
+                        Text("lc.gameSettings.useThis".loc).bold()
+                    }
+                    .gcGlassProminentButtonStyle()
                 }
-        )
-        .simultaneousGesture(
-            MagnificationGesture()
-                .updating($gestureZoom) { value, state, _ in
-                    state = value
+                Text("lc.gameSettings.cropCover".loc)
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .shadow(color: .black.opacity(0.5), radius: 6, x: 0, y: 1)
+            }
+            .padding(.horizontal, 14)
+            .padding(.top, safeTop + 8)
+            Spacer()
+        }
+    }
+
+    private func bottomBar(safeBottom: CGFloat) -> some View {
+        VStack {
+            Spacer()
+            VStack(spacing: 12) {
+                Text("lc.gameSettings.cropHint".loc)
+                    .font(.footnote)
+                    .foregroundColor(Color.white.opacity(0.75))
+                    .shadow(color: .black.opacity(0.6), radius: 6, x: 0, y: 1)
+                HStack {
+                    Spacer()
+                    Button("lc.gameSettings.cropReset".loc) { resetView() }
+                        .gcGlassButtonStyle()
+                        .controlSize(.small)
                 }
-                .onEnded { value in
-                    zoom = clampedZoom(zoom * value)
-                    pan = clampedPan(pan, zoom: zoom, frameSize: frameSize)
-                }
-        )
+            }
+            .padding(.horizontal, 16)
+            .padding(.bottom, safeBottom + 14)
+        }
+    }
+
+    // MARK: 手势
+
+    private func dragGesture(frameSize: CGSize) -> some Gesture {
+        DragGesture(minimumDistance: 0)
+            .updating($gesturePan) { value, state, _ in
+                state = value.translation
+            }
+            .onEnded { value in
+                pan = clampedPan(pan + value.translation, zoom: clampedZoom(zoom), frameSize: frameSize)
+            }
+    }
+
+    private func magnifyGesture(frameSize: CGSize) -> some Gesture {
+        MagnificationGesture()
+            .updating($gestureZoom) { value, state, _ in
+                state = value
+            }
+            .onEnded { value in
+                zoom = clampedZoom(zoom * value)
+                pan = clampedPan(pan, zoom: zoom, frameSize: frameSize)
+            }
+    }
+
+    private func resetView() {
+        withAnimation(.easeOut(duration: 0.25)) {
+            zoom = 1
+            pan = .zero
+        }
     }
 
     // MARK: 几何（显示与裁剪共用同一套换算，保证所见即所得）
+
+    /// 中央 16:9 画框：屏内最大拟合（竖屏满宽、横屏按高拟合），居中
+    static func frameRect(in size: CGSize) -> CGRect {
+        guard size.width > 0, size.height > 0 else {
+            return .zero
+        }
+        var w = size.width
+        var h = w / aspect
+        if h > size.height {
+            h = size.height
+            w = h * aspect
+        }
+        return CGRect(x: (size.width - w) / 2, y: (size.height - h) / 2, width: w, height: h)
+    }
 
     /// 图片在 zoom=1 时恰好填满框的显示尺寸（points）
     private func fillSize(frameSize: CGSize) -> CGSize {
@@ -256,6 +352,7 @@ struct LCCoverCropView: View {
         min(max(value, 1), Self.maxZoom)
     }
 
+    /// 平移钳制：图片任何时刻完全覆盖画框，不许露边
     private func clampedPan(_ value: CGSize, zoom: CGFloat, frameSize: CGSize) -> CGSize {
         let fill = fillSize(frameSize: frameSize)
         let maxX = max(0, (fill.width * zoom - frameSize.width) / 2)
@@ -274,36 +371,38 @@ struct LCCoverCropView: View {
         dismiss()
     }
 
-    /// 按当前 zoom/pan 把框内区域映射回原图像素裁出
+    /// 按当前 zoom/pan 把画框区域映射回原图像素裁出
     private func croppedImage() -> UIImage? {
-        // 先把方向归一为 .up 且 scale=1，后续按像素坐标算
+        // 先把方向归一为 .up：按 size×scale 的像素尺寸重绘，@2x/@3x 图不降采样
+        let pixelSize = CGSize(width: image.size.width * image.scale, height: image.size.height * image.scale)
         let format = UIGraphicsImageRendererFormat()
         format.scale = 1
         format.opaque = true
-        let upright = UIGraphicsImageRenderer(size: image.size, format: format).image { _ in
-            image.draw(in: CGRect(origin: .zero, size: image.size))
+        let upright = UIGraphicsImageRenderer(size: pixelSize, format: format).image { _ in
+            image.draw(in: CGRect(origin: .zero, size: pixelSize))
         }
         guard let cgImage = upright.cgImage else {
             return nil
         }
         let iw = CGFloat(cgImage.width)
         let ih = CGFloat(cgImage.height)
-        // 裁剪框尺寸与 body 布局同公式（宽 = 可用宽-32，高 = 宽×9/16）
-        let baseWidth = viewSize.width > 0 ? viewSize.width : UIScreen.main.bounds.width
-        let frameW = baseWidth - 32
-        let frameH = frameW / Self.aspect
-        let frameSize = CGSize(width: frameW, height: frameH)
+        // 画框尺寸与 body 布局同公式（屏内最大 16:9 拟合）
+        let baseSize = viewSize.width > 0 ? viewSize : UIScreen.main.bounds.size
+        let frameRect = Self.frameRect(in: baseSize)
         let z = clampedZoom(zoom)
-        let p = clampedPan(pan, zoom: z, frameSize: frameSize)
-        // points 每像素：填充缩放 × zoom（upright 后 image.size 与像素同值）
-        let fill = fillSize(frameSize: frameSize)
-        let pointsPerPixel = (fill.width / iw) * z
-        let cropW = frameW / pointsPerPixel
-        let cropH = frameH / pointsPerPixel
+        let p = clampedPan(pan, zoom: z, frameSize: frameRect.size)
+        // 图片显示左上在屏幕坐标中的位置，再把画框矩形换算回原图坐标
+        let fill = fillSize(frameSize: frameRect.size)
+        let dispW = fill.width * z
+        let dispH = fill.height * z
+        let pointsPerPixel = dispW / iw
+        let imgMinX = frameRect.midX + p.width - dispW / 2
+        let imgMinY = frameRect.midY + p.height - dispH / 2
         var rect = CGRect(
-            x: iw / 2 - cropW / 2 - p.width / pointsPerPixel,
-            y: ih / 2 - cropH / 2 - p.height / pointsPerPixel,
-            width: cropW, height: cropH
+            x: (frameRect.minX - imgMinX) / pointsPerPixel,
+            y: (frameRect.minY - imgMinY) / pointsPerPixel,
+            width: frameRect.width / pointsPerPixel,
+            height: frameRect.height / pointsPerPixel
         )
         // 整数化并钳进图像范围（浮点误差兜底，正常 clamp 下不会越界）
         rect = rect.integral.intersection(CGRect(x: 0, y: 0, width: iw, height: ih))
