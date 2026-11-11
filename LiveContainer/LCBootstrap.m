@@ -304,6 +304,7 @@ static NSString *LCQBLibraryTitle(void) {
     NSString *lang = (LCQBHostPreferredLanguage ?: NSLocale.preferredLanguages.firstObject).lowercaseString ?: @"en";
     if ([lang hasPrefix:@"zh"]) return @"游戏库";
     if ([lang hasPrefix:@"pt"]) return @"Biblioteca";
+    if ([lang hasPrefix:@"ko"]) return @"보관함";
     return @"Library";
 }
 
