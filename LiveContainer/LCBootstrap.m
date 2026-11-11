@@ -1473,10 +1473,12 @@ static NSString *GCPlayNameSwapToPlayName(NSString *dataRootPath, NSString *rest
 // 装载段没有窗口可用，是架构上盖不住的固有黑段，不在本动画范围）。
 // 画面（与批准预览同构图）：横版封面全屏缓推（scale 1.14→1.03，6s 缓出、
 // 到顶停住不回弹）、底部渐变罩 + 游戏标题 + 细往复光带（indeterminate）。
-// 结束信号取客体首帧最近可得的生命周期点：客体主窗成为 key
-// （UIWindowDidBecomeKeyNotification）——makeKeyAndVisible 在首帧提交前
-// 一两帧触发，故收到后再延迟 0.15s 起 0.35s 淡出。带启动器界面的客体同理，
-// 启动器窗成为 key 即撤（它的首帧就是要露出的界面）。
+// 结束信号认客体真正开始渲染的第一帧：钩 -[CAMetalLayer nextDrawable]
+// （详见下方「首帧信号」段），第一块 drawable 被取走即渲染已开始。旧版曾用
+// 客体主窗成为 key（UIWindowDidBecomeKeyNotification）判首帧，实测证伪：
+// 客体窗在 UIApplicationMain 启动早期即成为 key，比首帧内容早 1–2 秒，
+// 且 attach 前置检查见 key 窗直接判死——两种时序下盖层都不可见，已废弃。
+// 带启动器界面的客体若不用 Metal，信号不触发，走 30s 兜底撤盖。
 // 点任意处跳过：立即淡出撤层，客体在后面继续加载，不取消启动。
 // 层级 Alert+50：盖住客体普通窗，低于快捷栏（+100，盖层之上舌仍露、
 // 可回库逃生）与回库黑 veil（+200）。
@@ -1776,7 +1778,52 @@ static UIImage *LCLaunchCoverResolveImage(NSString *bundlePath, NSString *bundle
 + (instancetype)sharedHandler;
 - (void)beginObserving;
 - (void)setResolvedCoverImage:(UIImage *)image;
+- (void)guestFirstFrameDidRender;
 @end
+
+#pragma mark 首帧信号（CAMetalLayer nextDrawable）
+
+// 撤盖信号认客体真正开始渲染的第一帧：Metal 引擎渲染每帧前必经
+// -[CAMetalLayer nextDrawable] 取走一块可绘制面，第一块被取走即渲染已开始，
+// 其呈现在随后一两帧内（命令缓冲提交后）。这与窗口是否成为 key 无关——
+// 旧版用 UIWindowDidBecomeKeyNotification 判首帧，客体窗在 UIApplicationMain
+// 启动早期就成为 key，比游戏首帧内容（引擎初始化后的 logo 等）早 1–2 秒，
+// 且 attach 前置检查见 key 窗就判死，两种时序下盖层都不可见（实测录屏定案）。
+// 钩子由 LCBootstrap 本体在跳客体 main 前装，不经 TweakLoader.dylib，
+// 「不加载 TweakLoader」开关打开时照常工作。撤盖后恢复原 IMP、零残留。
+// 若客体不用 CAMetalLayer（纯 UIKit/老 GL 引擎），信号不触发，走 30s 兜底撤盖。
+static IMP lcOrigNextDrawableIMP;
+static BOOL lcNextDrawableHookInstalled;
+static BOOL lcFirstDrawableSeen;
+
+static void LCLaunchCoverNoteFirstDrawable(void) {
+    if (!__sync_bool_compare_and_swap(&lcFirstDrawableSeen, NO, YES)) return;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[LCLaunchCoverHandler sharedHandler] guestFirstFrameDidRender];
+    });
+}
+
+static id LCLaunchCoverHookedNextDrawable(id self, SEL _cmd) {
+    id drawable = ((id (*)(id, SEL))lcOrigNextDrawableIMP)(self, _cmd);
+    if (drawable) LCLaunchCoverNoteFirstDrawable();
+    return drawable;
+}
+
+static void LCLaunchCoverInstallFirstFrameHook(void) {
+    if (lcNextDrawableHookInstalled) return;
+    Method m = class_getInstanceMethod(CAMetalLayer.class, @selector(nextDrawable));
+    if (!m) return;
+    lcOrigNextDrawableIMP = method_getImplementation(m);
+    method_setImplementation(m, (IMP)LCLaunchCoverHookedNextDrawable);
+    lcNextDrawableHookInstalled = YES;
+}
+
+static void LCLaunchCoverTeardownFirstFrameHook(void) {
+    if (!lcNextDrawableHookInstalled) return;
+    Method m = class_getInstanceMethod(CAMetalLayer.class, @selector(nextDrawable));
+    if (m) method_setImplementation(m, lcOrigNextDrawableIMP);
+    lcNextDrawableHookInstalled = NO;
+}
 
 @implementation LCLaunchCoverHandler {
     UIWindowScene *_scene;
@@ -1785,6 +1832,7 @@ static UIImage *LCLaunchCoverResolveImage(NSString *bundlePath, NSString *bundle
     UIImage *_coverImage;
     BOOL _attached;
     BOOL _dismissed;
+    CFTimeInterval _attachTime;
 }
 
 + (instancetype)sharedHandler {
@@ -1797,7 +1845,6 @@ static UIImage *LCLaunchCoverResolveImage(NSString *bundlePath, NSString *bundle
 - (void)beginObserving {
     NSNotificationCenter *nc = NSNotificationCenter.defaultCenter;
     [nc addObserver:self selector:@selector(sceneDidActivate:) name:UISceneDidActivateNotification object:nil];
-    [nc addObserver:self selector:@selector(guestWindowDidBecomeKey:) name:UIWindowDidBecomeKeyNotification object:nil];
     [nc addObserver:self selector:@selector(orientationDidChange) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
     // 兜底重试（与快捷栏同款）：场景可能已激活或客体建场较晚
     __weak LCLaunchCoverHandler *weakSelf = self;
@@ -1837,15 +1884,16 @@ static UIImage *LCLaunchCoverResolveImage(NSString *bundlePath, NSString *bundle
 
 - (void)attachToScene:(UIWindowScene *)scene {
     if (_attached || _dismissed || !scene) return;
-    // 客体主窗已成为 key = 首帧已经呈上（挂载晚于客体建场时可能发生）：
-    // 盖层使命已完，不再上盖
-    for (UIWindow *w in scene.windows) {
-        if (!w.hidden && w.isKeyWindow && w.windowLevel < UIWindowLevelAlert) {
-            _dismissed = YES;
-            return;
-        }
+    // 客体已开始渲染（迟到 attach：场景激活通知或 2s/5s 重试晚于首帧到达）：
+    // 内容已上屏，不再上盖。判据是首帧信号本身，不再看窗口 key 状态——
+    // 客体窗在内容呈现前很久就已成为 key，旧版按 key 窗判死盖层永不上盖。
+    if (lcFirstDrawableSeen) {
+        _dismissed = YES;
+        LCLaunchCoverTeardownFirstFrameHook();
+        return;
     }
     _attached = YES;
+    _attachTime = CACurrentMediaTime();
     _scene = scene;
 
     UIWindow *window = [[UIWindow alloc] initWithWindowScene:scene];
@@ -1885,20 +1933,27 @@ static UIImage *LCLaunchCoverResolveImage(NSString *bundlePath, NSString *bundle
     slide.repeatCount = HUGE_VALF;
     slide.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
     [rootView.barSegment.layer addAnimation:slide forKey:@"lcLaunchBarSlide"];
+    // 最长兜底：首帧信号永不到达（客体不用 CAMetalLayer 等）时 30s 自动撤盖
+    __weak LCLaunchCoverHandler *weakSelf2 = self;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(30 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [weakSelf2 dismissWithDuration:0.35];
+    });
     NSLog(@"[LCBootstrap][launchcover] 启动封面已上盖：%@", self.title);
 }
 
-- (void)guestWindowDidBecomeKey:(NSNotification *)note {
+- (void)guestFirstFrameDidRender {
+    // 客体已取走第一块 drawable 开始渲染首帧。尚未上盖时不处理：
+    // attach 前置检查会读 lcFirstDrawableSeen 直接不上盖。
     if (_dismissed || !_attached) return;
-    UIWindow *w = note.object;
-    if (![w isKindOfClass:UIWindow.class] || w == _window) return;
-    // 快捷栏（+100）与回库 veil（+200）等警戒线以上窗口不算客体首帧
-    if (w.windowLevel >= UIWindowLevelAlert) return;
-    // 首帧提交紧随 makeKeyAndVisible 一两帧，稍候 0.15s 再起淡出避免抢帧
+    // 最短显示 0.9s（自上盖起算）防一闪而过；同时留 0.15s 落定，
+    // 让首帧的呈现在淡出（0.35s）走完前完成提交，淡出与首帧交叠不露黑屏
+    NSTimeInterval elapsed = CACurrentMediaTime() - _attachTime;
+    NSTimeInterval delay = MAX(0.9 - elapsed, 0.15);
     __weak LCLaunchCoverHandler *weakSelf = self;
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.15 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [weakSelf dismissWithDuration:0.35];
     });
+    NSLog(@"[LCBootstrap][launchcover] 收到首帧信号，%.2fs 后撤层", delay);
 }
 
 - (void)orientationDidChange {
@@ -1915,6 +1970,7 @@ static UIImage *LCLaunchCoverResolveImage(NSString *bundlePath, NSString *bundle
 - (void)dismissWithDuration:(NSTimeInterval)duration {
     if (_dismissed || !_attached) return;
     _dismissed = YES;
+    LCLaunchCoverTeardownFirstFrameHook();
     UIWindow *window = _window;
     [UIView animateWithDuration:duration animations:^{
         window.alpha = 0;
@@ -1933,6 +1989,8 @@ static void LCLaunchCoverInstall(NSString *bundlePath, NSString *bundleId, NSStr
     lcLaunchCoverInstallAttempted = YES;
     LCLaunchCoverHandler *handler = [LCLaunchCoverHandler sharedHandler];
     handler.title = displayName.length ? displayName : (bundleId ?: @"");
+    // 首帧信号钩子必须赶在跳客体 main 前装好，才不会漏掉第一块 drawable
+    LCLaunchCoverInstallFirstFrameHook();
     [handler beginObserving];
     NSString *pathCopy = [bundlePath copy];
     NSString *idCopy = [bundleId copy];
@@ -2361,7 +2419,8 @@ static NSString* invokeAppMain(NSString *selectedApp, NSString *selectedContaine
     if (!isLiveProcess && !isSideStore) {
         LCQuickBarInstall();
         // 启动动画（游戏启动封面）：安装点全部早期错误返回之后、跳 main 前，
-        // 与快捷栏同处预置；盖层挂客体场景、客体首帧（窗口成为 key）时撤。
+        // 与快捷栏同处预置；盖层挂客体场景、客体首帧渲染开始（CAMetalLayer
+        // 首个 drawable）且满最短显示时长时撤。
         NSString *guestDisplayName = appBundle.infoDictionary[@"CFBundleDisplayName"]
             ?: appBundle.infoDictionary[@"CFBundleName"] ?: selectedApp;
         LCLaunchCoverInstall(bundlePath, appBundle.bundleIdentifier, guestDisplayName);
