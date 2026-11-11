@@ -1,127 +1,137 @@
-# GameCase
+# GameCase 한글판
 
-> 导入 IPA 与数据包，打开就玩
+> IPA와 데이터 팩을 가져오고, 열면 바로 플레이합니다.
 
-GameCase 是一个专为 iOS 移植游戏设计的侧载游戏容器。它基于开源项目 LiveContainer 定制，砍掉通用 App 容器的旁支功能，只保留一件事：把移植游戏装进一个游戏库里——导入、封面、设置、启动、切换，全在库内完成。
+[Tiaoge-tou/GameCase](https://github.com/Tiaoge-tou/GameCase)의 화면 문구를 모두 한국어로 옮긴 포크입니다.
 
-游戏在容器进程内全屏直跑，串行单开；玩完一款，从游戏内快捷栏回到游戏库再开下一款，上一个游戏的进程随之关闭，不留后台。免越狱，侧载即用。
+GameCase는 [nxnative](https://github.com/seedds/nxnative)로 만든 이식 게임을 한 앱 안에 모아 두고 실행하는 iPhone·iPad용 게임 보관함입니다. [LiveContainer](https://github.com/LiveContainer/LiveContainer)를 바탕으로 만들어졌고, 탈옥 없이 사이드로드로 설치합니다.
 
-## 它做对了什么
+**게임은 들어 있지 않습니다.** 게임 IPA와 데이터 팩(`romfs.img`)은 본인이 가진 게임에서 직접 만들어 준비해야 합니다.
 
-**像游戏机一样选游戏**
-游戏库效仿 NX2Apple 壳界面：横屏是封面色调背景加卡片轮播，竖屏是封面大图、最近游玩与游玩时长、底部开始胶囊。打开 GameCase 不是面对一列文件，而是站在自己的游戏架前。
+## 원본과 다른 점
 
-**游戏和数据包，分开导入**
-移植游戏的 IPA 与 romfs 数据包（romfs.img）各走各的通道：数据包导入时校验大小后写入对应游戏的容器，游戏更新只换 IPA，几个 G 的数据包不用重下。
+현재 기준은 원본 **1.0.17**입니다.
 
-**设置项，游戏自己说了算**
-每款游戏的设置直接来自它自带的启动器档案（dm/launcher.json）：帧率、画面模式、超分、皮肤——游戏有什么，这里就有什么，不多一项不少一项。库内修改与游戏内修改双向同步，下次启动生效。设置页是 NX 式整页：大封面头加分段控件。
+| 항목 | 원본 | 한글판 |
+|---|---|---|
+| 한국어 문구 | 637개 중 299개. 나머지는 한국어 기기에서 중국어로 나옵니다 | 637개 전부 |
+| 게임 중 상단 퀵바의 돌아가기 버튼 | Library | 보관함 |
+| 게임 안 키보드 | 등록해 둔 키보드가 하나만 보여 한/영 전환 키가 나오지 않습니다 | 시스템에 등록한 키보드를 그대로 씁니다 ([확인 상태](#확인한-것과-확인하지-못한-것)) |
 
-**装进去，点开就进游戏**
-单装版游戏 IPA 导入后，点封面直接进游戏，不再弹客体启动页；想保留启动页的游戏，在其设置页打开「显示游戏启动页」即可。
+그 밖의 동작은 원본과 같습니다. 바꾼 내용은 [커밋 기록](https://github.com/yazzang-homelab/GameCase-ko/compare/v1.0.17...ko)에서 한 줄씩 볼 수 있습니다.
 
-**云存档，换设备接着玩**
-在设置里选好云文件夹，存档自动同步：GameCase、单装版、NX2Apple 壳与电脑共用同一套云存档格式，在哪边玩都能接上进度。冲突时保留较新的一份，旧的自动备份。
+## 받기
 
-**Mod 与金手指**
-每款游戏有自己的 Mod 组：把散装 Mod 放入对应位置即自动接线，启动生效。金手指导入氛围（Atmosphère）格式文件，逐条开关，数据型修改真实生效。
+[Releases](https://github.com/yazzang-homelab/GameCase-ko/releases)에서 `GameCase-ko.ipa`를 받습니다. 서명되지 않은 파일이므로 그대로는 설치되지 않습니다.
 
-**封面，不用你操心**
-优先用 IPA 自带横版图；有官方主视觉的，按游戏 ID 从任天堂商店自动抓取 1920×1080 封面；也可以换成你自己的图，或随时恢复默认。
+## 설치
 
-**容器夹，就是游戏名**
-每款游戏的数据容器文件夹以游戏名命名（`Data/Application/<游戏名>/`）。在「文件」App 里手动放数据包、管存档时，一眼就知道哪个夹是哪款游戏。
+1. **개발 인증서(Development Certificate)로 서명해 설치합니다.**
+   - 무료 Apple ID: [SideStore](https://sidestore.io)나 [AltStore](https://altstore.io)로 설치하면 개발 인증서로 서명됩니다.
+   - 유료 개발자 계정: 본인 팀의 개발 인증서와 프로비저닝 프로파일로 서명합니다.
+   - 시중에서 파는 배포 인증서(Distribution)나 기업 인증서(Enterprise)로 서명하면 앱이 "개발 인증서로 서명되지 않았습니다"라고 알리고 게임이 실행되지 않습니다.
+2. GameCase의 **설정**에서 앱을 서명한 것과 **같은 팀**의 인증서를 가져옵니다. 이렇게 하면 JIT 없이 게임을 실행할 수 있습니다. 팀이 다르면 가져오기가 거부됩니다.
+3. 게임 IPA와 그 게임의 데이터 팩(`romfs.img`)을 가져옵니다.
+4. 커버를 눌러 실행합니다.
 
-**快捷栏一键回库，只开一款所以稳**
-游戏内顶部吸附一条半藏的玻璃舌，可沿上边拖动、落点记忆；点开是完整快捷栏，一键返回游戏库（带淡出过场）。串行单开不做多任务，全部性能留给正在运行的游戏——对移植游戏来说，这才是正经事。
+iOS·iPadOS 15.0 이상이 필요합니다.
 
-**内存，给满**
-默认开启系统游戏模式：容器里的游戏与单装享有同样的内存上限，不因装在容器里少一截。
+### 원본을 이미 쓰고 있는 경우
 
-**手柄与证书**
-手柄页实时列出已连接手柄与电量状态（按 NX2Apple 的 Controllers 页移植）；容器设置里导入与签名同团队的开发者证书后，可免 JIT 运行。
+번들 ID는 원본과 같은 `com.tiaoge.gamecase`입니다. 지금 쓰는 것과 같은 번들 ID, 같은 인증서로 서명해 덮어 설치하면 가져온 게임과 데이터 팩, 세이브가 그대로 남습니다.
 
-## 截图
+### 알아 둘 점
 
-![横屏游戏库](docs/media/library-landscape.jpg)
+- **서명 식별자는 인증서의 App ID와 맞아야 합니다.** 맞지 않으면 파일 선택 창이 반응하지 않거나 데이터 팩을 고를 수 없고, 인증서 가져오기가 실패합니다.
+- **데이터 팩을 직접 넣을 수도 있습니다.** 파일 앱에서 `GameCase → Data → Application → <게임 이름> → Documents` 폴더에 `romfs.img`를 넣습니다. 게임 폴더 바로 아래가 아니라 그 안의 `Documents`입니다.
+- **한 번에 한 게임만 실행됩니다.** 게임 중 화면 위쪽의 퀵바에서 **보관함**을 누르면 게임이 끝나고 보관함으로 돌아갑니다.
 
-横屏游戏库：封面牌组，中间为当前选中的游戏。
+원본의 기능 소개와 SideStore 내장판 안내는 [원본 README(중국어)](README.zh-Hans.md)에 있습니다.
 
-![竖屏游戏库主页](docs/media/library-portrait.jpg)
+## 한글화 범위
 
-竖屏游戏库主页：大封面、「你的游戏」网格、「最近游玩」与底部的开始按钮。
+**한국어로 나오는 것**
 
-![游戏设置页](docs/media/game-settings.jpg)
+- GameCase의 모든 화면: 보관함, 게임 설정, 데이터 팩·커버·모드·치트 가져오기, 클라우드 세이브, 컨트롤러, 인증서, 앱 설정, 알림 창
+- 게임 중 퀵바의 **보관함** 버튼
 
-游戏设置页（以撒）：显示分组，含主机模式、超分、游戏语言与帧数计数器。
+**한국어가 아닌 것**
 
-## 三步开玩
+- 게임 자체의 화면. 게임 언어는 각 게임이 정합니다.
+- SideStore 내장판(`GameCase+SideStore.ipa`)의 SideStore 화면. 원본 빌드가 이 화면에 중국어만 넣기 때문에 이 저장소에서는 SideStore 내장판을 내지 않습니다.
+- iOS **설정** 앱에 나오는 GameCase 항목(영어)
+- 개발자용 로그(중국어·영어)
 
-1. 侧载安装 GameCase，并在容器设置里导入证书；
-2. 导入游戏 IPA 与对应数据包（romfs.img）；
-3. 点封面，开玩。
+**문체**
 
-## 装机须知
+새로 옮긴 338개는 하십시오체로 통일했습니다. 원본에 이미 있던 299개는 손대지 않았으므로 "~해주세요" 같은 말투가 섞여 있습니다.
 
-- **签名证书要求**：GameCase 须以开发者证书（Development Certificate）签名安装。市面在售证书多为分发证书（Distribution Certificate）或企业证书（Enterprise Certificate）：以此类证书签名，应用打开时将提示「未使用开发者证书签名」，且游戏无法正常启动。购买证书前，请务必向商家确认证书类型为开发者证书。签名方式可使用 [LCSign](https://www.sign.lc) 导入证书签名，或以个人 Apple ID 通过 [SideStore](https://sidestore.io) / [AltStore](https://altstore.io) 免费签名安装（个人签名同为开发者证书）。
-- **全新 App 身份**：GameCase（`com.tiaoge.gamecase`）在系统眼里是一个全新 App，与旧 LiveContainer 并存、互不影响。首次使用需重新导入证书、游戏 IPA 与数据包各一次；确认一切正常后，可删除旧容器。
-- **签名标识必须与证书对齐**：签名工具里改用的标识要与证书的 App ID 一致，否则会出现文件选择器点不动/无回调、数据包选不了、证书导入失败等问题。本仓库 Release 提供未签名 IPA，请用自己的开发者证书签名安装，并作为新项目导入签名工具，不要复用被第三方签名服务改过标识的旧项目。
-- **数据包手动放置**：也可以不用 App 内导入，直接在「文件」App 里把 `romfs.img` 放进 `GameCase → Data → Application → <游戏名> → Documents` 文件夹内（注意是游戏容器夹里面的 Documents，不是放在容器夹根目录）。
-- **免 JIT 模式**：在容器设置中导入与签名容器本体同一团队的证书，团队不一致会被挡下。
+## 확인한 것과 확인하지 못한 것
 
-## SideStore 版使用说明
+확인 기기는 iPad Pro 11(M2), iPadOS 26.5입니다.
 
-Release 同时提供 `GameCase+SideStore.ipa`：内置了完整的 SideStore，整个应用只占一个免费签名名额。它的用处是**内签**——在手机上用你的 Apple ID 给 GameCase 本体续签、更新，以及签名安装其它应用，全程不需要电脑。
+| 항목 | 상태 |
+|---|---|
+| 한국어 문구 637개가 모두 있고 형식 지정자(`%@`, `%lld` 등)가 영어 원문과 일치 | 빌드할 때마다 자동 검사 |
+| 설치, 게임 가져오기, 게임 실행 | 확인 |
+| 게임 안에서 한/영 전환 | **확인하지 못했습니다.** 원인은 소스 분석으로 짚었습니다. 게임이 뜬 뒤에는 시스템 전역 설정까지 게임 폴더 쪽으로 돌려져, 게임에서는 등록된 키보드 목록이 비어 보입니다. 전역 설정만 시스템에서 읽도록 한 줄을 고쳤지만, 실제 입력창에서 전환 키가 나오는지는 아직 보지 못했습니다 |
 
-### 首次设置
+키보드 수정이 문제를 일으키면 [이 커밋](https://github.com/yazzang-homelab/GameCase-ko/commits/ko/LiveContainer/Tweaks/NSUserDefaults.m) 하나만 되돌리면 됩니다. 전역 설정에는 기기 언어도 들어 있으므로, 게임이 기기 언어를 따라 표시 언어를 고르는 경우 원본과 다른 언어로 뜰 수 있습니다.
 
-1. 在 GameCase「设置」页点「打开内置 SideStore」，在它的设置中登录 Apple ID，并连接 LocalDevVPN。
-2. 在内置 SideStore 的设置页进入「Pairing File Management（配对文件管理）」，点「Wireless Pairing（无线配对）」，保持 LocalDevVPN 连接即可在手机上完成配对、生成配对文件，全程不需要电脑。配对文件只需生成一次，之后的刷新都走它。
-3. 到「My Apps」页点一次「Refresh All」。
-4. 回到 GameCase「设置」页点「从 SideStore 导入证书」，按钮变为「移除证书」即已打通，免 JIT 模式随之可用。
+## 직접 빌드
 
-### 免 JIT 的证书前提（重要）
+macOS와 Xcode 26.2가 필요합니다.
 
-免 JIT 只认**开发（Development）证书**，且导入 GameCase 的证书必须与**签 GameCase 本体的证书同团队**，两条缺一不可：
+```sh
+git clone --recursive https://github.com/yazzang-homelab/GameCase-ko.git
+cd GameCase-ko
+python3 tools/ko/ko.py check
+xcodebuild archive -archivePath archive -scheme LiveContainer -project LiveContainer.xcodeproj \
+  -sdk iphoneos -arch arm64 -configuration Release
+mv archive.xcarchive/Products/Applications Payload
+rm -r Payload/LiveContainer.app/Frameworks/SideStoreSupport.framework
+zip -qr GameCase-ko.ipa Payload
+```
 
-- **免费 Apple ID**：登录内置 SideStore 生成的个人团队开发证书可用，但前提是 GameCase 本体也是同一个 ID 签的——先在内置 SideStore 里把本体刷新成该 ID 的签名，再点「从 SideStore 导入证书」。
-- **付费开发者证书**：可以，本体与导入须同团队。
-- **分发（Distribution）证书**：签的本体无法使用免 JIT（会提示「未被使用开发证书签名」），请改用开发证书签名，或使用 JIT 模式。
+Mac이 없으면 이 저장소를 포크한 뒤 Actions의 **Korean build**를 실행하면 같은 IPA가 만들어집니다.
 
-### 登录报 -80045
+## 번역 고치기
 
-`This action cannot be completed at this time (-80045)` 是苹果 2026 年 10 月起收紧登录校验的结果（递交的设备身份与自报信息不一致），与账号密码无关。改一次设置即可，改完后刷新、注册都走这套配置（以下按 GameCase 内置版的中文界面）：
+- 이 포크가 추가한 번역은 `tools/ko/ko.json`에 있습니다. 고친 뒤 `python3 tools/ko/ko.py sync`로 문자열 카탈로그(`Resources/Localizable.xcstrings`)에 반영합니다.
+- 원본에 이미 있던 번역은 `Resources/Localizable.xcstrings`의 `ko` 항목을 직접 고칩니다.
+- `python3 tools/ko/ko.py check`가 통과해야 빌드됩니다. 한국어가 빠진 키, 영어 원문과 형식 지정자가 다른 문구, 한자가 남은 문구가 있으면 실패합니다.
 
-1. 「设置」→「用户自定义」：关掉「设备端 Anisette」，点「立即重启」。
-2. 「设置」→「Anisette 服务器」：选 SideStore (new)，关掉「启用自动轮换」。
-3. 「用户自定义」→「Anisette 客户端配置」→「远程服务器同步」→「另存为覆盖项」，再「保存覆盖项」。同步失败就手动填 Client Info `<PC> <Windows;6.2(0,0);9200> <com.apple.AuthKit/1 (com.apple.iTunes/12.12.4.1)>`、User Agent `akd/1.0 CFNetwork/808.1.4`。
-4. 「用户自定义」→「重置 adi.pb」。
-5. 重新登录；双重验证用其他苹果设备上弹出的验证码，不要等短信。
+어색한 번역이나 중국어가 남은 화면을 발견하면 [이슈](https://github.com/yazzang-homelab/GameCase-ko/issues)에 화면 이름과 함께 알려 주십시오.
 
-### 日常使用
+## 원본 새 버전 따라가기
 
-- **返回 GameCase**：在内置 SideStore 的「My Apps」页点左上角的退出（escape）图标即可回库（或用应用切换器）。News 页条目上的 OPEN 不是返回入口，点了不会有反应。
-- **续签**：免费证书临近到期时，打开内置 SideStore 点「Refresh All」即可为 GameCase 本体续签。
-- **更新**：把新版 GameCase 的 IPA 在内置 SideStore 中安装即覆盖更新，游戏与数据保留。
+| 브랜치 | 내용 |
+|---|---|
+| `ko` (기본) | 원본 정식 릴리스 + 한글화 |
+| `main` | 원본 `main` 그대로 |
 
-## 致谢与开源来源
+```sh
+git remote add upstream https://github.com/Tiaoge-tou/GameCase.git
+git fetch upstream --tags
+git merge v1.0.18                # 새 정식 릴리스 태그
+python3 tools/ko/ko.py check     # 새로 생긴 문구를 영어 원문과 함께 나열합니다
+# tools/ko/ko.json에 번역을 추가한 뒤
+python3 tools/ko/ko.py sync && python3 tools/ko/ko.py check
+```
 
-GameCase 站在以下开源工作之上，特此致谢：
+`README.md`가 충돌하면 한글판을 남기고, 원본의 변경은 `README.zh-Hans.md`에 반영합니다.
 
-- **[LiveContainer](https://github.com/LiveContainer/LiveContainer)** —— 本项目的底座（在容器内免安装运行 iOS 应用的启动器）。原作者 **Duy Tran（[khanhduytran0](https://github.com/khanhduytran0)）**，主要维护者 **[hugeBlack](https://github.com/hugeBlack)**，以及 LiveContainer 组织与众多贡献者。本项目完整继承其代码与 git 历史，并沿用同一许可证 **GNU AGPL v3.0**（见仓库根目录 `LICENSE`）。上游原 README 全文保留于 [docs/livecontainer-readme.md](docs/livecontainer-readme.md)。
-- **[nxnative](https://github.com/seedds/nxnative)**（作者 **[seedds](https://github.com/seedds)**）—— 客体游戏移植的工具链与生态来源：GameCase 中运行的移植游戏 IPA 由 nxnative 产出（NSO 重写、Horizon HLE、NVN→Metal）。
-- **[NX2Apple](https://github.com/LNPANDY/NX2Apple)**（作者 **[LNPANDY](https://github.com/LNPANDY)**）—— 设计参考来源：游戏库界面的效仿对象、其壳的手柄设置页（Controllers）被移植进 GameCase，其一壳多游戏的思路亦为本项目的参照。
+## 출처와 라이선스
 
-## 声明
+- **[GameCase](https://github.com/Tiaoge-tou/GameCase)** — 이 포크의 원본.
+- **[LiveContainer](https://github.com/LiveContainer/LiveContainer)** — GameCase의 바탕. 원작자 Duy Tran([khanhduytran0](https://github.com/khanhduytran0)), 주 관리자 [hugeBlack](https://github.com/hugeBlack)과 기여자들. LiveContainer의 README는 [docs/livecontainer-readme.md](docs/livecontainer-readme.md)에 있습니다.
+- **[nxnative](https://github.com/seedds/nxnative)**([seedds](https://github.com/seedds)) — GameCase에서 실행하는 이식 게임 IPA를 만드는 도구.
+- **[NX2Apple](https://github.com/LNPANDY/NX2Apple)**([LNPANDY](https://github.com/LNPANDY)) — 보관함 화면과 컨트롤러 페이지의 원형.
 
-- GameCase 本身**不包含任何游戏内容**。游戏 IPA 与数据包（romfs.img）需由用户自备，并请确保来源合法。
-- 相关游戏的版权归各原厂所有，本项目与上述原作者、团队及游戏厂商均无隶属关系。
-- 本项目按 GNU AGPL v3.0 发布；若你分发修改版，请同样以 AGPL-3.0 开源并保留上述归属。
+원본과 같은 **GNU AGPL v3.0**으로 배포합니다([LICENSE](LICENSE)). 이 포크를 다시 고쳐 배포할 때도 AGPL-3.0으로 소스를 공개하고 위 출처를 남겨야 합니다.
 
-## 链接
+## 고지
 
-- 本项目：[Tiaoge-tou/GameCase](https://github.com/Tiaoge-tou/GameCase)
-- 下载（nightly）：[Releases](https://github.com/Tiaoge-tou/GameCase/releases)
-- 上游底座：[LiveContainer/LiveContainer](https://github.com/LiveContainer/LiveContainer)
-- 上游原 README（归档）：[docs/livecontainer-readme.md](docs/livecontainer-readme.md)
-- 许可证：[LICENSE](LICENSE)
+- GameCase에는 게임 콘텐츠가 들어 있지 않습니다. 게임 IPA와 데이터 팩은 사용자가 직접 준비하며, 출처가 적법해야 합니다.
+- 각 게임의 저작권은 해당 제작사에 있습니다. 이 저장소는 위 원작자·팀이나 게임 제작사와 관계가 없습니다.
+- 원본 프로젝트의 공식 번역이 아닙니다. 한글판에서 생긴 문제는 원본이 아니라 [이 저장소의 이슈](https://github.com/yazzang-homelab/GameCase-ko/issues)에 알려 주십시오.
