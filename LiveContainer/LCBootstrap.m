@@ -1841,7 +1841,7 @@ static UIImage *LCLaunchCoverResolveImage(NSString *bundlePath, NSString *bundle
 - (void)beginObserving;
 - (void)setResolvedCoverImage:(UIImage *)image;
 - (void)guestFirstFrameDidRender;
-- (void)scheduleDismissIfReady;
+- (void)evaluateDismissCondition;
 - (void)dismissWithReason:(NSString *)reason duration:(NSTimeInterval)duration;
 @end
 
@@ -1854,7 +1854,7 @@ static UIImage *LCLaunchCoverResolveImage(NSString *bundlePath, NSString *bundle
 // #107 曾在本信号上再叠一层 attach 前置判死（信号已到 = 迟到 attach 不
 // 上盖），同样证伪：客体在场景连接/首个刷新周期就取走首块 drawable，
 // 必早于激活通知与 2s/5s 重试，于是 attach 永远判死、症状与 #106 一致。
-// 现行：信号只决定撤盖时刻（见 scheduleDismissIfReady 的下限公式），
+// 现行：信号只决定撤盖时刻（见「撤盖看门狗」段的公式与周期重估），
 // 永远不决定上不上盖。钩子由 LCBootstrap 本体在跳客体 main 前装，不经
 // TweakLoader.dylib，「不加载 TweakLoader」开关打开时照常工作。撤盖后
 // 恢复原 IMP、零残留。若客体不用 CAMetalLayer（纯 UIKit/老 GL 引擎），
@@ -1909,6 +1909,9 @@ static void LCLaunchCoverTeardownFirstFrameHook(void) {
     LCLaunchCoverLog(@"首帧钩子已拆除（恢复原 IMP）");
 }
 
+static void *LCLaunchCoverSceneGeometryContext = &LCLaunchCoverSceneGeometryContext;
+static void *LCLaunchCoverWindowBoundsContext = &LCLaunchCoverWindowBoundsContext;
+
 @implementation LCLaunchCoverHandler {
     UIWindowScene *_scene;
     UIWindow *_window;
@@ -1916,8 +1919,11 @@ static void LCLaunchCoverTeardownFirstFrameHook(void) {
     UIImage *_coverImage;
     BOOL _attached;
     BOOL _dismissed;
-    BOOL _dismissScheduled;
+    NSUInteger _watchdogGeneration;
+    BOOL _watchdogSignalLogged;
     CFTimeInterval _attachTime;
+    NSMutableSet<UIWindow *> *_observedWindows;
+    BOOL _geometryObserving;
 }
 
 + (instancetype)sharedHandler {
@@ -2020,6 +2026,8 @@ static void LCLaunchCoverTeardownFirstFrameHook(void) {
     _rootView = rootView;
     _window = window;
     window.hidden = NO;
+    // 几何跟随的信号从上盖起就装好：场景旋转/落定多发生在上盖后头一两秒内
+    [self installGeometryObservers];
     LCLaunchCoverLog(@"attach 已上盖：window level=%.0f frame=%@ rootView frame=%@ 封面图=%@ 标题=%@",
                      window.windowLevel, NSStringFromCGRect(window.frame),
                      NSStringFromCGRect(rootView.frame),
@@ -2053,54 +2061,186 @@ static void LCLaunchCoverTeardownFirstFrameHook(void) {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(30 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [weakSelf2 dismissWithReason:@"fallback-30s" duration:0.35];
     });
-    // 信号若已先到，上盖即排定撤盖（按下限公式）；未到则等信号送达时排定
-    [self scheduleDismissIfReady];
+    // 撤盖看门狗自上盖起跑：周期重估撤盖公式，不依赖信号/上盖任一单次
+    // 事件送达（见「撤盖看门狗」段的失效路径枚举）
+    [self startDismissWatchdog];
 }
 
 - (void)guestFirstFrameDidRender {
     // 客体已取走第一块 drawable、开始渲染首帧。信号可能先于上盖到达
-    // （常态，见 attach 注释），此时只记账，等上盖后由 attach 末尾的
-    // scheduleDismissIfReady 排定撤盖；已上盖则在此排定。
+    // （常态，见 attach 注释），此时只记账——撤盖由看门狗周期重估，不
+    // 靠这次送达排定；已上盖则在此立即重估一次，缩短迟滞。
     LCLaunchCoverLog(@"首帧信号送达 handler（attached=%d dismissed=%d 距上盖 %+lldms）",
                      _attached, _dismissed,
                      _attached ? (long long)llround((CACurrentMediaTime() - _attachTime) * 1000.0) : -1);
-    [self scheduleDismissIfReady];
+    // 兜底检查点：淡出排定前强制按场景 bounds 对一次帧，防几何错位被带进淡出
+    [self syncGeometryToSceneWithReason:@"first-frame" checkpoint:YES];
+    [self evaluateDismissCondition];
 }
 
-// 撤盖时刻公式（上盖与信号两头都调用，先到者记账、后到者排定）：
-//   撤盖 = max(上盖 + 1.6s, 首帧信号 + 0.35s 落定)，其后 0.35s 淡出。
-// 1.6s 是自上盖起算的总时长下限，覆盖「引擎先画黑帧再出内容」的那段
-// （dm 客体首帧即黑底清屏，logo 晚 1–2s）；0.9s 最短显示被该下限包含。
-// 信号未到时不排定（等信号或 30s 兜底）；点按跳过不走本公式、立即撤。
-- (void)scheduleDismissIfReady {
-    if (!_attached || _dismissed || _dismissScheduled) return;
-    if (!lcFirstDrawableSeen) {
-        LCLaunchCoverLog(@"撤盖暂不排定：首帧信号未到（等信号或 30s 兜底）");
-        return;
-    }
-    NSTimeInterval now = CACurrentMediaTime();
-    NSTimeInterval target = MAX(_attachTime + 1.6, lcFirstDrawableTime + 0.35);
-    NSTimeInterval delay = MAX(target - now, 0);
-    _dismissScheduled = YES;
-    LCLaunchCoverLog(@"撤盖已排定：%.0fms 后开始淡出（公式 max(上盖+1.6s, 首帧+0.35s)，淡出 0.35s）",
-                     delay * 1000.0);
+#pragma mark 撤盖看门狗（条件式周期重估）
+
+// 自动撤盖失效路径枚举（实测：有时自动淡出、有时不自动消失必须手点）：
+//   ① lost-wakeup（单次事件排定、无重估）：旧实现里公式排定只有两个单
+//      次调用点——attach 末尾与信号送达，且带 _dismissScheduled 一次性
+//      闩锁。信号先于上盖到达时，信号侧排定在 !_attached 守卫处静默返
+//      回（只记账），全靠 attach 末尾补排这一次交接；排出的单个
+//      dispatch_after 在客体加载期主队列被长占用时可被推迟到远超公式
+//      时刻且无人复查。任一环丢失/迟到即永久不排定，只能手点或等
+//      30s——点按有效正是因为触摸泵动运行循环、且点按路径不依赖那次
+//      排定。
+//   ② 信号对钩子不可见：钩子在跳客体 main 之前装好（LCLaunchCover
+//      Install），同进程内客体不可能更早取 drawable，「装前已发生」结
+//      构上排除；但变体真实存在——客体金属层类重写 nextDrawable 不走
+//      基类实现、或客体根本不用 CAMetalLayer 呈现（老 GL 等），钩子
+//      永不触发，与③同归「无信号」。
+//   ③ 无信号长加载：着色器重建期（换包首启）前端只画 UIKit 手柄、游
+//      戏层不出帧，nextDrawable 长时间不被调用。口径：这是真加载，盖
+//      层保持是对的、不许到点乱撤；旧实现下这段时间只能等 30s 兜底或
+//      手点。看门狗保证信号一旦置位（哪怕其单次送达/排定被丢），最多
+//      一个判定周期内按公式撤盖，「信号到了却不撤」就此消除；30s 兜
+//      底仍在，只防信号永不到达。
+// 修法：撤盖改条件式看门狗——自上盖起每 0.25s 在主队列重估一次撤盖条
+// 件，满足即撤、不依赖任何单次事件送达；信号送达时仍立即重估一次降迟
+// 滞。撤盖公式不变：撤盖 = max(上盖 + 1.6s, 首帧信号 + 0.35s 落定)，
+// 其后 0.35s 淡出（1.6s 总下限覆盖「引擎先画黑帧再出内容」的那段；
+// 0.9s 最短显示被该下限包含）。撤盖后以代数计数作废在途链、停表；点
+// 按跳过不走公式、立即撤。
+- (void)startDismissWatchdog {
+    NSUInteger gen = ++_watchdogGeneration;
+    LCLaunchCoverLog(@"撤盖看门狗已启动：每 250ms 重估撤盖条件（公式 max(上盖+1.6s, 首帧+0.35s)）");
+    [self runWatchdogGeneration:gen];
+}
+
+- (void)runWatchdogGeneration:(NSUInteger)gen {
+    if (_dismissed || !_attached || gen != _watchdogGeneration) return;
+    [self evaluateDismissCondition];
+    if (_dismissed || gen != _watchdogGeneration) return;
     __weak LCLaunchCoverHandler *weakSelf = self;
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [weakSelf dismissWithReason:@"first-frame" duration:0.35];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [weakSelf runWatchdogGeneration:gen];
     });
+}
+
+- (void)stopDismissWatchdog {
+    _watchdogGeneration++; // 作废在途的看门狗链，链在下一跳自检时自停
+}
+
+// 单次判定（看门狗每 0.25s 调用 + 信号送达时立即调用）：未上盖/已撤盖
+// 直接返回；无信号 = 真加载中（路径③口径），盖层保持且不记流水——仅
+// 状态变化时打点：信号由未到变已到的首次判定记一行目标时刻，其后每
+// 0.25s 静默重估直到公式时刻已过即撤（来源 formula，见撤盖日志）。
+- (void)evaluateDismissCondition {
+    if (!_attached || _dismissed) return;
+    if (!lcFirstDrawableSeen) return;
+    NSTimeInterval target = MAX(_attachTime + 1.6, lcFirstDrawableTime + 0.35);
+    if (!_watchdogSignalLogged) {
+        _watchdogSignalLogged = YES;
+        LCLaunchCoverLog(@"看门狗判定变化：首帧信号已确认，撤盖目标为上盖后 %.0fms（公式 max(上盖+1.6s, 首帧+0.35s)），到期即撤",
+                         (target - _attachTime) * 1000.0);
+    }
+    if (CACurrentMediaTime() >= target) {
+        [self dismissWithReason:@"formula" duration:0.35];
+    }
 }
 
 - (void)orientationDidChange {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (self->_window && self->_scene) {
-            CGRect b = self->_scene.coordinateSpace.bounds;
-            if (!CGRectEqualToRect(self->_window.frame, b)) {
-                LCLaunchCoverLog(@"方向变化：窗口帧自愈 %@ → %@",
-                                 NSStringFromCGRect(self->_window.frame), NSStringFromCGRect(b));
-                self->_window.frame = b;
-            }
+    // 状态栏方向通知只作兜底一路，与 effectiveGeometry/客体窗 bounds 的
+    // KVO 走同一条几何跟随路径（见下方定案注）
+    [self geometryMayHaveChanged];
+}
+
+#pragma mark 几何跟随（场景旋转/落定重排）
+
+// 定案（竖屏网格启动哈迪斯 II 盖层错位：封面按横屏几何成上方一条横带、
+// 下半截裸黑屏）：原重排链两环都不可靠——
+//   1) LCLaunchCoverView.layoutSubviews 按 self.bounds 现算本身没错，但根
+//      视图 bounds 由窗口/根 VC 的旋转机制驱动；自建窗口的根 VC 在客体把
+//      场景转横屏时收不到 viewWillTransitionToSize，窗口被旋转变换整体搬
+//      走、内部布局没人重跑（与本文件快捷栏「旋转重排」段已定案并修好的
+//      失效形态同型），bounds 停在上盖时刻，layoutSubviews 永远按旧几何
+//      算——是「信号没到」型，不是算错。
+//   2) 原 orientationDidChange 只监听 UIApplicationDidChangeStatusBar
+//      OrientationNotification 一路：那是快捷栏三路信号里最弱的兜底，场
+//      景几何更新驱动的旋转不保证送达；即使送达也只改 _window.frame，不
+//      按场景 bounds 强制根视图重排，也没有落定后的二次核对——错位一旦
+//      形成（上盖早于场景转横落定）就保持到撤盖。
+// 修法与快捷栏同款：与 VC 回调无关的三路信号任一触发都走 syncGeometry，
+// 一律读 _scene.coordinateSpace.bounds 现算（不读窗口自身旧帧）、改窗帧
+// 并强制根视图按新 bounds 重排，信号后补 0.3s 延迟复核接住落定滞后；另
+// 在首帧信号送达（guestFirstFrameDidRender）与撤盖开始前（dismissWith
+// Reason）各强制对一次帧作兜底检查点。
+- (void)installGeometryObservers {
+    if (@available(iOS 16.0, *)) {
+        if (!_geometryObserving) {
+            _geometryObserving = YES;
+            [_scene addObserver:self forKeyPath:@"effectiveGeometry" options:0 context:LCLaunchCoverSceneGeometryContext];
         }
+    }
+    [self observeSceneWindows];
+}
+
+- (void)observeSceneWindows {
+    if (!_observedWindows) _observedWindows = [NSMutableSet set];
+    for (UIWindow *w in _scene.windows) {
+        if (w == _window || [_observedWindows containsObject:w]) continue;
+        [_observedWindows addObject:w];
+        [w addObserver:self forKeyPath:@"bounds" options:0 context:LCLaunchCoverWindowBoundsContext];
+    }
+}
+
+- (void)removeGeometryObservers {
+    if (_geometryObserving) {
+        _geometryObserving = NO;
+        [_scene removeObserver:self forKeyPath:@"effectiveGeometry" context:LCLaunchCoverSceneGeometryContext];
+    }
+    for (UIWindow *w in _observedWindows) {
+        [w removeObserver:self forKeyPath:@"bounds" context:LCLaunchCoverWindowBoundsContext];
+    }
+    [_observedWindows removeAllObjects];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
+    if (context == LCLaunchCoverSceneGeometryContext || context == LCLaunchCoverWindowBoundsContext) {
+        [self geometryMayHaveChanged];
+        return;
+    }
+    [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+}
+
+- (void)geometryMayHaveChanged {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self syncGeometryToSceneWithReason:@"signal" checkpoint:NO];
+        // 场景坐标空间可能滞后于窗口 bounds 变化，0.3s 后再核对一次兜住落定
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self syncGeometryToSceneWithReason:@"signal-settle" checkpoint:NO];
+        });
     });
+}
+
+// 按场景当前 bounds 对齐盖层：窗口帧 = 场景 bounds，根视图按同一 bounds
+// 直写帧并 layoutIfNeeded，让 layoutSubviews 按新 bounds 现算封面（aspect
+// -fill）/底部罩/标题/光带。每次实际重排都打点（场景 bounds + 窗口帧 +
+// 根视图 bounds + 场景方向）；checkpoint=YES 的强制对帧（首帧/撤盖前）
+// 即使本已对齐也打点，信号路径未错位时静默，避免刷屏。
+- (BOOL)syncGeometryToSceneWithReason:(NSString *)reason checkpoint:(BOOL)checkpoint {
+    if (!_window || !_scene || _dismissed) return NO;
+    [self observeSceneWindows]; // 顺带补上旋转后/迟建的客体窗口
+    CGRect b = _scene.coordinateSpace.bounds;
+    if (b.size.width <= 0 || b.size.height <= 0) return NO;
+    BOOL mismatch = !CGRectEqualToRect(_window.frame, b) || !CGRectEqualToRect(_rootView.frame, b);
+    if (!mismatch && !checkpoint) return NO;
+    if (mismatch) {
+        _window.frame = b;
+        _rootView.frame = b;
+        [_rootView setNeedsLayout];
+        [_rootView layoutIfNeeded];
+    }
+    LCLaunchCoverLog(@"几何重排[%@]：scene bounds=%@ window frame=%@ rootView bounds=%@ 方向=%ld%@",
+                     reason, NSStringFromCGRect(b), NSStringFromCGRect(_window.frame),
+                     NSStringFromCGRect(_rootView.bounds), (long)_scene.interfaceOrientation,
+                     mismatch ? @"（已修正）" : @"（本已对齐）");
+    return mismatch;
 }
 
 - (void)dismissWithDuration:(NSTimeInterval)duration {
@@ -2112,15 +2252,21 @@ static void LCLaunchCoverTeardownFirstFrameHook(void) {
         LCLaunchCoverLog(@"撤盖请求忽略：reason=%@ attached=%d dismissed=%d", reason, _attached, _dismissed);
         return;
     }
+    [self stopDismissWatchdog]; // 任一来源撤盖都先停表，在途链自检自停
+    // 兜底检查点：开始淡出前强制按场景 bounds 对一次帧，错位不许带进淡出
+    // （须在 _dismissed 置位前调，sync 以未撤盖为前提）
+    [self syncGeometryToSceneWithReason:@"pre-dismiss" checkpoint:YES];
     _dismissed = YES;
     LCLaunchCoverTeardownFirstFrameHook();
-    LCLaunchCoverLog(@"撤盖：reason=%@ 上盖总时长 %.0fms 淡出 %.2fs",
+    // 触发来源三值：formula=看门狗判定公式满足 / tap=点按跳过 / fallback-30s=30s 兜底
+    LCLaunchCoverLog(@"撤盖：触发来源=%@ 上盖总时长 %.0fms 淡出 %.2fs",
                      reason, (CACurrentMediaTime() - _attachTime) * 1000.0, duration);
     UIWindow *window = _window;
     [UIView animateWithDuration:duration animations:^{
         window.alpha = 0;
     } completion:^(BOOL finished) {
         window.hidden = YES;
+        [self removeGeometryObservers];
         [NSNotificationCenter.defaultCenter removeObserver:self];
     }];
 }
