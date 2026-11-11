@@ -167,7 +167,7 @@ struct LCAppSettingsView: View {
                             }
                             .buttonStyle(BorderlessButtonStyle())
                         } else {
-                            Text("No file selected")
+                            Text("lc.appSettings.noFileSelected".loc)
                                 .foregroundColor(.gray)
                         }
                         Button(action: {
@@ -520,7 +520,7 @@ struct LCAppSettingsView: View {
         do {
             let url = try result.get()
             guard url.startAccessingSecurityScopedResource() else {
-                errorInfo = "unable to access directory, startAccessingSecurityScopedResource returns false"
+                errorInfo = "lc.appSettings.externalStorageAccessFailed".loc
                 errorShow = true
                 return
             }
@@ -539,7 +539,7 @@ struct LCAppSettingsView: View {
             }
             
             guard let bookmark = LCUtils.bookmark(for: url) else {
-                errorInfo = "Unable to generate a bookmark for the selected URL!"
+                errorInfo = "lc.appSettings.externalContainerBookmarkFailed".loc
                 errorShow = true
                 return
             }

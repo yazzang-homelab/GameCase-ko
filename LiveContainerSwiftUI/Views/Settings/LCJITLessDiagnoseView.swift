@@ -18,7 +18,7 @@ struct LCEntitlementView : View {
     @State var isBundleIdCorrect = false
     @State var appGroup = false
     
-    @State var entitlementContent = "Failed to Load Entitlement."
+    @State var entitlementContent = "lc.jitlessDiag.entitlementNotLoaded".loc
     
     var body: some View {
         if loaded {
@@ -81,7 +81,7 @@ struct LCEntitlementView : View {
                         .font(.system(.subheadline, design: .monospaced))
                 }
             }
-            .navigationTitle(isLiveProcess ? "LiveProcess Entitlements" : "GameCase Entitlements")
+            .navigationTitle(isLiveProcess ? "lc.jitlessDiag.liveProcessEntitlements".loc : "lc.jitlessDiag.gameCaseEntitlements".loc)
             .navigationBarTitleDisplayMode(.inline)
         } else {
             Text("lc.common.loading".loc)
@@ -107,13 +107,13 @@ struct LCEntitlementView : View {
         } else {
             executablePath = Bundle.main.builtInPlugInsURL?.appendingPathComponent("LiveProcess.appex/LiveProcess").path
             if let executablePath, !FileManager.default.fileExists(atPath: executablePath) {
-                entitlementContent = "LiveProcess is not installed."
+                entitlementContent = "lc.jitlessDiag.liveProcessNotInstalled".loc
                 return
             }
         }
 
         guard let entitlementXML = getExecutableEntitlementXML(executablePath) else {
-            entitlementContent = "Failed to load entitlement."
+            entitlementContent = "lc.jitlessDiag.entitlementLoadFailed".loc
             return
         }
         entitlementContent = entitlementXML
@@ -229,13 +229,13 @@ struct LCJITLessDiagnoseView : View {
                     NavigationLink {
                         LCEntitlementView(isLiveProcess: false)
                     } label: {
-                        Text("GameCase Entitlements".loc)
+                        Text("lc.jitlessDiag.gameCaseEntitlements".loc)
                     }
                     if sharedModel.multiLCStatus == 0 {
                         NavigationLink {
                             LCEntitlementView(isLiveProcess: true)
                         } label: {
-                            Text("LiveProcess Entitlements".loc)
+                            Text("lc.jitlessDiag.liveProcessEntitlements".loc)
                         }
                     }
                 }
@@ -351,7 +351,7 @@ struct LCJITLessDiagnoseView : View {
         
         let task = SecTaskCreateFromSelf(nil)
         guard let value = SecTaskCopyValueForEntitlement(task, "com.apple.developer.team-identifier" as CFString, nil), let teamId = value.takeRetainedValue() as? String else {
-            errorInfo = "Failed to read com.apple.developer.team-identifier"
+            errorInfo = "lc.jitlessDiag.teamIdentifierReadFailed".loc
             errorShow = true
             return
         }

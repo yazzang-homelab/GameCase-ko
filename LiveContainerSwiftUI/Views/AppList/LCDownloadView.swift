@@ -173,7 +173,7 @@ class DownloadDelegate: NSObject, URLSessionDownloadDelegate {
                 completeCallback(location, NSError(domain: "", code: statusCode, userInfo: [NSLocalizedDescriptionKey: "HTTP Error: \(statusCode)"]))
             }
         } else {
-            completeCallback(location, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid response"]))
+            completeCallback(location, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "lc.download.invalidResponse".loc]))
         }
         
 
