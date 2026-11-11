@@ -303,11 +303,12 @@ static NSString *LCBootstrapLocalized(NSString *key) {
 static NSString *LCQBHostPreferredLanguage = nil;
 
 // 快捷栏「游戏库」文案：本代码跑在客体进程内，mainBundle 可能已指向客体，
-// 不能走 NSLocalizedString；按系统首选语言直接挑文案（zh / pt / 其余英文）。
+// 不能走 NSLocalizedString；按系统首选语言直接挑文案（zh / pt / ko / 其余英文）。
 static NSString *LCQBLibraryTitle(void) {
     NSString *lang = (LCQBHostPreferredLanguage ?: NSLocale.preferredLanguages.firstObject).lowercaseString ?: @"en";
     if ([lang hasPrefix:@"zh"]) return @"游戏库";
     if ([lang hasPrefix:@"pt"]) return @"Biblioteca";
+    if ([lang hasPrefix:@"ko"]) return @"보관함";
     return @"Library";
 }
 

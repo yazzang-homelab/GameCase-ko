@@ -6453,6 +6453,12 @@
             "state": "translated",
             "value": "(Experimental) Modo de Compatibilidade"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "(실험적) 호환 모드"
+          }
         }
       }
     },
@@ -6475,6 +6481,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "（实验性）引导系统以合适的分辨率显示 App。在 iPadOS 上，未原生支持 iPad 的 App 将以 iPhone 模式显示。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "(실험적) 시스템이 앱을 알맞은 해상도로 표시하도록 유도합니다. iPadOS에서 iPad를 기본 지원하지 않는 앱은 iPhone 모드로 표시됩니다."
           }
         }
       }
@@ -8770,6 +8782,12 @@
             "state": "translated",
             "value": "32 位模拟器"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "32비트 에뮬레이터"
+          }
         }
       }
     },
@@ -8905,6 +8923,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "签名工具"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "서명 도구"
           }
         }
       }
@@ -9832,6 +9856,12 @@
             "state": "translated",
             "value": "Sempre ativo"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "항상 켜짐"
+          }
         }
       }
     },
@@ -9854,6 +9884,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Apagar"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "삭제"
           }
         }
       }
@@ -9878,6 +9914,12 @@
             "state": "translated",
             "value": "O arquivo de cheats “%@” e as escolhas de ativar/desativar dele serão removidos dos dados deste jogo. Isso não pode ser desfeito."
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "치트 파일 “%@”과 항목별 켜기/끄기 설정을 이 게임의 데이터에서 삭제합니다. 되돌릴 수 없습니다."
+          }
         }
       }
     },
@@ -9900,6 +9942,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Apagar Arquivo de Cheats?"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "치트 파일을 삭제할까요?"
           }
         }
       }
@@ -9924,6 +9972,12 @@
             "state": "translated",
             "value": "%@ entradas"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "항목 %@개"
+          }
         }
       }
     },
@@ -9946,6 +10000,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "A operação falhou: %@"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "작업 실패: %@"
           }
         }
       }
@@ -9970,6 +10030,12 @@
             "state": "translated",
             "value": "Importar Cheats…"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "치트 가져오기…"
+          }
         }
       }
     },
@@ -9992,6 +10058,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Cheats importados. Eles entram em vigor na próxima inicialização."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "치트를 가져왔습니다. 다음 실행부터 적용됩니다."
           }
         }
       }
@@ -10016,6 +10088,12 @@
             "state": "translated",
             "value": "“%@” ignorado: nenhuma entrada de cheat foi encontrada nele."
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“%@” 건너뜀: 치트 항목을 찾지 못했습니다."
+          }
         }
       }
     },
@@ -10038,6 +10116,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "“%@” ignorado: os arquivos de cheats devem ter como nome o build ID de 16 dígitos do jogo, ex.: FC9EA4CCC955D579.txt — o motor encontra os arquivos de cheats pelo nome."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“%@” 건너뜀: 치트 파일 이름은 게임의 16자리 빌드 ID여야 합니다(예: FC9EA4CCC955D579.txt). 엔진이 파일 이름으로 치트를 찾습니다."
           }
         }
       }
@@ -10062,6 +10146,12 @@
             "state": "translated",
             "value": "Estes arquivos de cheats já estão instalados: %@. Substituí-los pelos importados?"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "다음 치트 파일이 이미 설치되어 있습니다: %@. 가져온 파일로 교체할까요?"
+          }
         }
       }
     },
@@ -10084,6 +10174,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Substituir Arquivos de Cheats?"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "치트 파일을 교체할까요?"
           }
         }
       }
@@ -10108,6 +10204,12 @@
             "state": "translated",
             "value": "Nenhum arquivo de cheats ainda. Importe abaixo ou coloque arquivos .txt nomeados pelo build ID em Documents/cheats/."
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "치트 파일이 없습니다. 아래에서 가져오거나, 빌드 ID로 이름 붙인 .txt 파일을 Documents/cheats/에 넣으십시오."
+          }
         }
       }
     },
@@ -10130,6 +10232,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Os arquivos de cheats ficam na pasta de dados deste jogo, em Documents/cheats/, nomeados pelo build ID do jogo. No iOS, entradas que modificam o código do jogo são desativadas automaticamente pelo motor (o motivo é registrado no log do jogo); entradas que apenas gravam dados funcionam normalmente. As alterações valem a partir da próxima inicialização."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "치트 파일은 이 게임 데이터 폴더의 Documents/cheats/에 게임 빌드 ID 이름으로 저장됩니다. iOS에서는 게임 코드를 수정하는 항목을 엔진이 자동으로 끄며(이유는 게임 로그에 기록됩니다), 데이터만 쓰는 항목은 적용됩니다. 변경 사항은 다음 실행부터 적용됩니다."
           }
         }
       }
@@ -10154,6 +10262,12 @@
             "state": "translated",
             "value": "Substituir"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "교체"
+          }
         }
       }
     },
@@ -10176,6 +10290,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Cheats"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "치트"
           }
         }
       }
@@ -10200,6 +10320,12 @@
             "state": "translated",
             "value": "Alterar Pasta…"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "폴더 변경…"
+          }
         }
       }
     },
@@ -10222,6 +10348,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pasta de Sincronização"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "동기화 폴더"
           }
         }
       }
@@ -10246,6 +10378,12 @@
             "state": "translated",
             "value": "Não Escolhida"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "선택 안 함"
+          }
         }
       }
     },
@@ -10268,6 +10406,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Os saves são sincronizados automaticamente com a pasta que você escolher no iCloud Drive. Escolha a mesma pasta que você usa no Mac ou na versão independente e os saves serão compartilhados. Entra em vigor na próxima inicialização."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "세이브가 iCloud Drive의 선택한 폴더로 자동 동기화됩니다. Mac이나 단독 빌드에서 쓰는 폴더와 같은 폴더를 고르면 세이브를 함께 씁니다. 다음 실행부터 적용됩니다."
           }
         }
       }
@@ -10292,6 +10436,12 @@
             "state": "translated",
             "value": "Desativado"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "꺼짐"
+          }
         }
       }
     },
@@ -10314,6 +10464,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Não foi possível salvar a pasta escolhida. Escolha a pasta novamente."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "폴더 선택을 저장하지 못했습니다. 폴더를 다시 선택하십시오."
           }
         }
       }
@@ -10338,6 +10494,12 @@
             "state": "translated",
             "value": "Remover"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "제거"
+          }
         }
       }
     },
@@ -10360,6 +10522,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Escolher Pasta Novamente…"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "폴더 다시 선택…"
           }
         }
       }
@@ -10384,6 +10552,12 @@
             "state": "translated",
             "value": "Saves na Nuvem"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "클라우드 세이브"
+          }
         }
       }
     },
@@ -10406,6 +10580,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Escolher Novamente"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "다시 선택 필요"
           }
         }
       }
@@ -10430,6 +10610,12 @@
             "state": "translated",
             "value": "Desativar Saves na Nuvem"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "클라우드 세이브 끄기"
+          }
         }
       }
     },
@@ -10452,6 +10638,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ativar Saves na Nuvem"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "클라우드 세이브 켜기"
           }
         }
       }
@@ -13603,6 +13795,12 @@
             "state": "translated",
             "value": "推荐"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "추천"
+          }
         }
       }
     },
@@ -14862,6 +15060,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "无效的 IDFV"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "잘못된 IDFV"
           }
         }
       }
@@ -16193,6 +16397,12 @@
             "state": "translated",
             "value": "Escolher Pasta"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "폴더 선택"
+          }
         }
       }
     },
@@ -16215,6 +16425,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Falha ao importar a pasta: %@"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "폴더 가져오기 실패: %@"
           }
         }
       }
@@ -16239,6 +16455,12 @@
             "state": "translated",
             "value": "O nível principal da pasta deve conter romfs.img e/ou uma pasta aoc. O conteúdo é copiado para o Documents deste jogo: romfs.img substitui o pacote de dados e a pasta aoc é substituída por inteiro."
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "폴더 최상위에 romfs.img 또는 aoc 폴더(혹은 둘 다)가 있어야 합니다. 내용은 이 게임의 Documents로 복사됩니다. romfs.img는 데이터 팩을 교체하고, aoc는 폴더째 교체됩니다."
+          }
         }
       }
     },
@@ -16261,6 +16483,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Substituir pela Pasta"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "폴더로 교체"
           }
         }
       }
@@ -16285,6 +16513,12 @@
             "state": "translated",
             "value": "Importar esta pasta substitui o pacote de dados atual (%@) e qualquer conteúdo aoc existente."
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 폴더를 가져오면 현재 데이터 팩(%@)과 기존 aoc 내용이 교체됩니다."
+          }
         }
       }
     },
@@ -16308,6 +16542,12 @@
             "state": "translated",
             "value": "O Datapack Já Existe"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "데이터 팩이 이미 있음"
+          }
         }
       }
     },
@@ -16330,6 +16570,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Não é uma pasta de pacote de dados: não há romfs.img nem pasta aoc no nível principal. Uma pasta solta de arquivos romfs não pode ser montada — empacote-a em romfs.img primeiro."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "데이터 팩 폴더가 아닙니다. 최상위에 romfs.img나 aoc 폴더가 없습니다. 풀어 놓은 romfs 폴더는 마운트할 수 없으니 먼저 romfs.img로 묶으십시오."
           }
         }
       }
@@ -16454,6 +16700,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "D-Pad: Selecionar · A: Iniciar"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "방향키: 선택 · A: 시작"
           }
         }
       }
@@ -19212,6 +19464,12 @@
             "state": "translated",
             "value": "無法載入測試動態連結庫，這可能是由於證書出現問題。請嘗試：1. 重新打開%@；2. 刷新%@；3. 如果仍有問題，請嘗試重新修補%@。"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "테스트 라이브러리를 불러오지 못했습니다. 인증서에 문제가 있을 수 있습니다. 다음을 시도하십시오: 1. %@ 다시 열기 2. %@에서 모든 앱 새로 고침 3. %@ 다시 패치 후 재시도"
+          }
         }
       }
     },
@@ -19336,6 +19594,12 @@
             "state": "translated",
             "value": "游戏库"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "게임 보관함"
+          }
         }
       }
     },
@@ -19358,6 +19622,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "点任意处跳过"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "아무 곳이나 누르면 건너뜁니다"
           }
         }
       }
@@ -19382,6 +19652,12 @@
             "state": "translated",
             "value": "Apagar"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "삭제"
+          }
         }
       }
     },
@@ -19404,6 +19680,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "A pasta do mod “%@” será removida dos dados deste jogo. Isso não pode ser desfeito."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "모드 폴더 “%@”을 이 게임의 데이터에서 삭제합니다. 되돌릴 수 없습니다."
           }
         }
       }
@@ -19428,6 +19710,12 @@
             "state": "translated",
             "value": "Apagar Este Mod?"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 모드를 삭제할까요?"
+          }
         }
       }
     },
@@ -19450,6 +19738,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Desativar"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "사용 안 함"
           }
         }
       }
@@ -19474,6 +19768,12 @@
             "state": "translated",
             "value": "Desativado"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "꺼짐"
+          }
         }
       }
     },
@@ -19496,6 +19796,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ativar"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "사용"
           }
         }
       }
@@ -19520,6 +19826,12 @@
             "state": "translated",
             "value": "A operação falhou: %@"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "작업 실패: %@"
+          }
         }
       }
     },
@@ -19542,6 +19854,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Importar Mod…"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "모드 가져오기…"
           }
         }
       }
@@ -19566,6 +19884,12 @@
             "state": "translated",
             "value": "Mod importado. Ele entra em vigor na próxima inicialização."
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "모드를 가져왔습니다. 다음 실행부터 적용됩니다."
+          }
         }
       }
     },
@@ -19588,6 +19912,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Esta pasta não pode ser usada como mod: os arquivos RomFS devem estar em uma subpasta romfs, em uma estrutura contents no estilo Atmosphere ou diretamente na pasta. Mods só de código (exefs) não são suportados."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 폴더는 모드로 쓸 수 없습니다. RomFS 파일이 romfs 하위 폴더나 Atmosphere 방식의 contents 구조, 또는 폴더 바로 아래에 있어야 합니다. 코드만 있는(exefs) 모드는 지원하지 않습니다."
           }
         }
       }
@@ -19612,6 +19942,12 @@
             "state": "translated",
             "value": "Já existe um mod chamado “%@”. Substituí-lo pelo importado?"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“%@” 모드가 이미 있습니다. 가져온 것으로 교체할까요?"
+          }
         }
       }
     },
@@ -19634,6 +19970,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "O Mod Já Existe"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "같은 이름의 모드가 있음"
           }
         }
       }
@@ -19658,6 +20000,12 @@
             "state": "translated",
             "value": "Importando…"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "가져오는 중…"
+          }
         }
       }
     },
@@ -19680,6 +20028,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nenhum arquivo RomFS utilizável"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "쓸 수 있는 RomFS 파일 없음"
           }
         }
       }
@@ -19704,6 +20058,12 @@
             "state": "translated",
             "value": "Mover para Baixo"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "아래로"
+          }
         }
       }
     },
@@ -19726,6 +20086,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Mover para Cima"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "위로"
           }
         }
       }
@@ -19750,6 +20116,12 @@
             "state": "translated",
             "value": "Já existe uma pasta com o mesmo nome em mods/, então não é possível renomear. Organize isso no app Arquivos primeiro."
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "mods/에 같은 이름의 폴더가 있어 이름을 바꿀 수 없습니다. 먼저 ‘파일’ 앱에서 정리하십시오."
+          }
         }
       }
     },
@@ -19772,6 +20144,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nenhum mod ainda. Importe um abaixo ou coloque pastas de mods em Documents/mods/."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "모드가 없습니다. 아래에서 가져오거나 모드 폴더를 Documents/mods/에 넣으십시오."
           }
         }
       }
@@ -19796,6 +20174,12 @@
             "state": "translated",
             "value": "Mods são pastas na pasta de dados deste jogo, em Documents/mods/. Importe e gerencie aqui ou adicione pelo app Arquivos. Eles são aplicados na ordem da lista, o primeiro prevalece quando há o mesmo arquivo, e as alterações valem a partir da próxima inicialização."
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "모드는 이 게임 데이터 폴더의 Documents/mods/ 안에 있는 폴더입니다. 여기서 가져와 관리하거나 ‘파일’ 앱으로 넣을 수 있습니다. 목록 순서대로 겹쳐지며 같은 파일은 위쪽 모드가 우선합니다. 변경 사항은 다음 실행부터 적용됩니다."
+          }
         }
       }
     },
@@ -19819,6 +20203,12 @@
             "state": "translated",
             "value": "Substituir"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "교체"
+          }
         }
       }
     },
@@ -19841,6 +20231,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Mods"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "모드"
           }
         }
       }
@@ -20270,6 +20666,12 @@
             "state": "translated",
             "value": "Exportar Dados Salvos"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "세이브 내보내기"
+          }
         }
       }
     },
@@ -20292,6 +20694,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "A operação falhou: %@"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "작업 실패: %@"
           }
         }
       }
@@ -20316,6 +20724,12 @@
             "state": "translated",
             "value": "Importar Dados Salvos"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "세이브 가져오기"
+          }
         }
       }
     },
@@ -20338,6 +20752,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Seus dados salvos atuais são copiados primeiro para Documents/save-backups e depois substituídos pelo conteúdo importado. Isso entra em vigor na próxima vez que o jogo for iniciado."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "현재 세이브를 먼저 Documents/save-backups에 백업한 뒤 가져온 내용으로 교체합니다. 다음에 게임을 실행할 때 적용됩니다."
           }
         }
       }
@@ -20362,6 +20782,12 @@
             "state": "translated",
             "value": "Importar Dados Salvos?"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "세이브를 가져올까요?"
+          }
         }
       }
     },
@@ -20384,6 +20810,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dados salvos importados. Isso entra em vigor na próxima vez que o jogo for iniciado."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "세이브를 가져왔습니다. 다음에 게임을 실행할 때 적용됩니다."
           }
         }
       }
@@ -20408,6 +20840,12 @@
             "state": "translated",
             "value": "O arquivo, pacote compactado ou pasta selecionado não contém dados salvos."
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "선택한 파일, 압축 파일 또는 폴더에 세이브 데이터가 없습니다."
+          }
         }
       }
     },
@@ -20431,6 +20869,12 @@
             "state": "translated",
             "value": "Dados Salvos"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "세이브"
+          }
         }
       }
     },
@@ -20453,6 +20897,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Processando…"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "처리 중…"
           }
         }
       }
@@ -21083,6 +21533,12 @@
             "state": "translated",
             "value": "Aparência"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "화면 모드"
+          }
         }
       }
     },
@@ -21105,6 +21561,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Escuro"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "다크"
           }
         }
       }
@@ -21129,6 +21591,12 @@
             "state": "translated",
             "value": "Claro"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "라이트"
+          }
         }
       }
     },
@@ -21151,6 +21619,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sistema"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "시스템 설정"
           }
         }
       }
@@ -21616,6 +22090,12 @@
             "state": "translated",
             "value": "缓存清理完成"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "캐시를 정리했습니다."
+          }
         }
       }
     },
@@ -21687,6 +22167,12 @@
             "state": "translated",
             "value": "确认清除缓存？"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "캐시를 정리할까요?"
+          }
         }
       }
     },
@@ -21757,6 +22243,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "清理缓存"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "캐시 정리"
           }
         }
       }
@@ -22444,6 +22936,12 @@
             "state": "translated",
             "value": "清理 tmp 内容"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "임시 파일 정리"
+          }
         }
       }
     },
@@ -22516,6 +23014,12 @@
             "state": "translated",
             "value": "已清理 tmp 内容。"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "임시 파일을 삭제했습니다."
+          }
         }
       }
     },
@@ -22587,6 +23091,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "要删除 tmp 内容吗？"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "임시 파일을 삭제할까요?"
           }
         }
       }
@@ -22748,6 +23258,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "清除通知"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "알림 지우기"
           }
         }
       }
@@ -22997,6 +23513,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "預設簽署工具"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "기본 서명 도구"
           }
         }
       }
@@ -23866,6 +24388,12 @@
             "state": "translated",
             "value": "隐藏折叠 Dock"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "접힌 Dock 숨기기"
+          }
         }
       }
     },
@@ -24614,6 +25142,12 @@
             "state": "translated",
             "value": "向GameCase加載模組"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GameCase 자체에 트윅 불러오기"
+          }
         }
       }
     },
@@ -24678,6 +25212,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "GameCase 會載入放入全域模組資料夾的模組。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "전역 “Tweaks” 폴더에 트윅을 넣으면 GameCase가 불러옵니다."
           }
         }
       }
@@ -27556,6 +28096,12 @@
             "state": "translated",
             "value": "启动优先级"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "실행 우선순위"
+          }
         }
       }
     },
@@ -27627,6 +28173,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "拖动 GameCase 来设置启动共享 App 时的尝试顺序。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GameCase를 끌어서 공유 앱을 실행할 때 먼저 시도할 순서를 정합니다."
           }
         }
       }
@@ -28193,6 +28745,12 @@
             "state": "translated",
             "value": "没有可清理的缓存。"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "정리할 캐시가 없습니다."
+          }
         }
       }
     },
@@ -28460,6 +29018,12 @@
             "state": "translated",
             "value": "没有可清理的 tmp 内容。"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "삭제할 임시 파일이 없습니다."
+          }
         }
       }
     },
@@ -28571,6 +29135,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Abrir SideStore Integrada"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "내장 SideStore 열기"
           }
         }
       }
@@ -29076,6 +29646,12 @@
             "state": "translated",
             "value": "默认 32 位模拟器"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "기본 32비트 에뮬레이터"
+          }
         }
       }
     },
@@ -29128,6 +29704,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "若AltSign签名遇到问题，可尝试使用ZSign，反之亦然。切换签名工具后请重启GameCase。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AltSign에서 오류가 나면 ZSign을, ZSign에서 오류가 나면 AltSign을 써 보십시오. 서명 도구를 바꾼 뒤에는 GameCase를 다시 시작하십시오."
           }
         }
       }
@@ -29693,6 +30275,12 @@
             "state": "translated",
             "value": "存储管理"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "저장 공간 관리"
+          }
         }
       }
     },
@@ -30256,6 +30844,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "此App没有可用的容器。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 앱에 사용할 수 있는 컨테이너가 없습니다."
           }
         }
       }
@@ -31628,6 +32222,12 @@
             "state": "translated",
             "value": "推荐源"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "추천 소스"
+          }
         }
       }
     },
@@ -31662,6 +32262,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "无可用的推荐源。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "추천 소스가 없습니다."
           }
         }
       }
@@ -32482,6 +33088,12 @@
             "state": "translated",
             "value": "应用本体"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "앱 본체"
+          }
         }
       }
     },
@@ -32553,6 +33165,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "App Group 数据"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App Group 데이터"
           }
         }
       }
@@ -32626,6 +33244,12 @@
             "state": "translated",
             "value": "计算中…"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "계산 중…"
+          }
         }
       }
     },
@@ -32696,6 +33320,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "容器"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "컨테이너"
           }
         }
       }
@@ -32768,6 +33398,12 @@
             "state": "translated",
             "value": "已安装应用"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "설치된 앱"
+          }
         }
       }
     },
@@ -32838,6 +33474,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "没有应用存储数据"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "앱 저장 공간 데이터 없음"
           }
         }
       }
@@ -32911,6 +33553,12 @@
             "state": "translated",
             "value": "其他"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "기타"
+          }
         }
       }
     },
@@ -32981,6 +33629,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "临时文件"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "임시 파일"
           }
         }
       }
@@ -33053,6 +33707,12 @@
             "state": "translated",
             "value": "总存储"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "전체 저장 공간"
+          }
         }
       }
     },
@@ -33123,6 +33783,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tweaks"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "트윅"
           }
         }
       }
@@ -34734,6 +35400,12 @@
             "state": "translated",
             "value": "Fixado pelo arquivo env; não dá para mudar aqui"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "env 파일로 고정되어 있어 여기서 바꿀 수 없습니다"
+          }
         }
       }
     },
@@ -34756,6 +35428,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Capa"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "커버"
           }
         }
       }
@@ -34780,6 +35458,12 @@
             "state": "translated",
             "value": "Escolher das Fotos"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "사진에서 선택"
+          }
         }
       }
     },
@@ -34802,6 +35486,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Escolher dos Arquivos"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "파일에서 선택"
           }
         }
       }
@@ -34826,6 +35516,12 @@
             "state": "translated",
             "value": "Restaurar padrão"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "기본값 복원"
+          }
         }
       }
     },
@@ -34848,6 +35544,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "A capa personalizada só troca a imagem exibida na biblioteca. Ela fica salva neste dispositivo e não afeta o jogo em si."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "사용자 지정 커버는 보관함에 표시되는 이미지만 바꿉니다. 이 기기에 저장되며 게임 자체에는 영향을 주지 않습니다."
           }
         }
       }
@@ -34872,6 +35574,12 @@
             "state": "translated",
             "value": "Não foi possível usar esta imagem"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 이미지를 사용할 수 없음"
+          }
         }
       }
     },
@@ -34894,6 +35602,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "O item selecionado não é uma imagem válida ou não foi possível salvar. Tente outra."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "선택한 항목이 올바른 이미지가 아니거나 저장하지 못했습니다. 다른 이미지로 다시 시도하십시오."
           }
         }
       }
@@ -34918,6 +35632,12 @@
             "state": "translated",
             "value": "Biblioteca"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "보관함"
+          }
         }
       }
     },
@@ -34940,6 +35660,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Restaurar configurações padrão?"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "기본 설정으로 복원할까요?"
           }
         }
       }
@@ -34964,6 +35690,12 @@
             "state": "translated",
             "value": "Apaga todas as escolhas do launcher salvas para este jogo na biblioteca e volta aos padrões do pacote. O layout dos botões não é afetado."
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "보관함에 저장된 이 게임의 런처 설정을 모두 지우고 패키지 기본값으로 되돌립니다. 버튼 배치는 영향을 받지 않습니다."
+          }
         }
       }
     },
@@ -34986,6 +35718,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Configurações do jogo"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "게임 설정"
           }
         }
       }
@@ -35010,6 +35748,12 @@
             "state": "translated",
             "value": "Versão %@"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "버전 %@"
+          }
         }
       }
     },
@@ -35032,6 +35776,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "As configurações são salvas no contêiner do jogo e entram em vigor na próxima vez que você abrir"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "설정은 게임 컨테이너에 저장되며 다음 실행부터 적용됩니다"
           }
         }
       }
@@ -35056,6 +35806,12 @@
             "state": "translated",
             "value": "Pronto para jogar"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "플레이 가능"
+          }
         }
       }
     },
@@ -35078,6 +35834,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "É preciso importar o pacote de dados"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "데이터 팩을 가져와야 합니다"
           }
         }
       }
@@ -35102,6 +35864,12 @@
             "state": "translated",
             "value": "Pronto"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "준비됨"
+          }
         }
       }
     },
@@ -35124,6 +35892,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Não importado"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "가져오지 않음"
           }
         }
       }
@@ -35148,6 +35922,12 @@
             "state": "translated",
             "value": "Desnecessário"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "필요 없음"
+          }
         }
       }
     },
@@ -35170,6 +35950,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Danificado"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "손상됨"
           }
         }
       }
@@ -35194,6 +35980,12 @@
             "state": "translated",
             "value": "Nenhum"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "없음"
+          }
         }
       }
     },
@@ -35216,6 +36008,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Jogo"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "게임"
           }
         }
       }
@@ -35240,6 +36038,12 @@
             "state": "translated",
             "value": "Pacote de dados romfs.img"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "데이터 팩 romfs.img"
+          }
         }
       }
     },
@@ -35262,6 +36066,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Salvamentos"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "세이브"
           }
         }
       }
@@ -35286,6 +36096,12 @@
             "state": "translated",
             "value": "Neste dispositivo"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 기기에 있음"
+          }
         }
       }
     },
@@ -35308,6 +36124,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Log"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "로그"
           }
         }
       }
@@ -35332,6 +36154,12 @@
             "state": "translated",
             "value": "Tela"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "화면"
+          }
         }
       }
     },
@@ -35354,6 +36182,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Controles"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "조작"
           }
         }
       }
@@ -35378,6 +36212,12 @@
             "state": "translated",
             "value": "Desempenho"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "성능"
+          }
         }
       }
     },
@@ -35400,6 +36240,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Restaurar configurações padrão"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "기본 설정 복원"
           }
         }
       }
@@ -35424,6 +36270,12 @@
             "state": "translated",
             "value": "Avançado"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "고급"
+          }
         }
       }
     },
@@ -35446,6 +36298,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Contêiner e configurações avançadas"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "컨테이너 및 고급 설정"
           }
         }
       }
@@ -35470,6 +36328,12 @@
             "state": "translated",
             "value": "Mostrar launcher do jogo"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "게임 런처 표시"
+          }
         }
       }
     },
@@ -35492,6 +36356,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Quando ativado, o launcher do próprio jogo aparece na próxima abertura; desativado, o jogo abre direto."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "켜면 다음 실행 때 게임 자체 런처가 먼저 나타나고, 끄면 게임이 바로 시작됩니다."
           }
         }
       }
@@ -35516,6 +36386,12 @@
             "state": "translated",
             "value": "Este jogo ainda não tem um perfil embutido. Ajuste as configurações no launcher do próprio jogo."
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 게임에는 내장 프로필이 없습니다. 게임 자체 런처에서 설정을 조정하십시오."
+          }
         }
       }
     },
@@ -35538,6 +36414,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Este jogo ainda não tem um contêiner de dados. Abra o jogo uma vez e depois volte aqui para ajustar as configurações."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 게임에는 아직 데이터 컨테이너가 없습니다. 게임을 한 번 실행한 뒤 여기로 돌아와 설정을 조정하십시오."
           }
         }
       }
@@ -35562,6 +36444,12 @@
             "state": "translated",
             "value": "Silksong"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "실크송"
+          }
         }
       }
     },
@@ -35584,6 +36472,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Hades II"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "하데스 II"
           }
         }
       }
@@ -35608,6 +36502,12 @@
             "state": "translated",
             "value": "Recortar capa"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "커버 자르기"
+          }
         }
       }
     },
@@ -35630,6 +36530,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Arraste para ajustar a posição · Use dois dedos para preencher o quadro"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "끌어서 위치 조정 · 두 손가락으로 확대해 프레임 채우기"
           }
         }
       }
@@ -35654,6 +36560,12 @@
             "state": "translated",
             "value": "Restaurar"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "초기화"
+          }
         }
       }
     },
@@ -35676,6 +36588,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Usar esta"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 이미지 사용"
           }
         }
       }
@@ -35700,6 +36618,12 @@
             "state": "translated",
             "value": "Só o final do log está sendo exibido"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "로그의 끝부분만 표시합니다"
+          }
         }
       }
     },
@@ -35722,6 +36646,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nenhum log ainda. Depois que o jogo rodar, o log aparece aqui; se ele não abrir ou travar, dá para ver o motivo aqui."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "아직 로그가 없습니다. 게임을 실행하면 여기에 로그가 생기며, 실행 실패나 비정상 종료의 원인을 확인할 수 있습니다."
           }
         }
       }
@@ -35746,6 +36676,12 @@
             "state": "translated",
             "value": "Detalhes"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "세부사항"
+          }
         }
       }
     },
@@ -35768,6 +36704,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Importar pacote de dados…"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "데이터 팩 가져오기…"
           }
         }
       }
@@ -35792,6 +36734,12 @@
             "state": "translated",
             "value": "Ver log"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "로그 보기"
+          }
         }
       }
     },
@@ -35814,6 +36762,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Reimportar pacote de dados…"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "데이터 팩 다시 가져오기…"
           }
         }
       }
@@ -35838,6 +36792,12 @@
             "state": "translated",
             "value": "Controles"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "컨트롤러"
+          }
         }
       }
     },
@@ -35860,6 +36820,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Fechar página de controles"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "컨트롤러 페이지 닫기"
           }
         }
       }
@@ -35884,6 +36850,12 @@
             "state": "translated",
             "value": "Controle de jogo"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "게임 컨트롤러"
+          }
         }
       }
     },
@@ -35906,6 +36878,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nenhum controle conectado"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "연결된 컨트롤러 없음"
           }
         }
       }
@@ -35930,6 +36908,12 @@
             "state": "translated",
             "value": "Conecte um controle nas configurações de Bluetooth. Os controles por toque estão sempre disponíveis na biblioteca."
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "블루투스 설정에서 컨트롤러를 연결하십시오. 보관함에서는 언제든 터치로 조작할 수 있습니다."
+          }
         }
       }
     },
@@ -35952,6 +36936,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Jogador %lld"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "플레이어 %lld"
           }
         }
       }
@@ -35976,6 +36966,12 @@
             "state": "translated",
             "value": "Carregando"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "충전 중"
+          }
         }
       }
     },
@@ -35998,6 +36994,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sem info de bateria"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "배터리 정보 없음"
           }
         }
       }
@@ -36022,6 +37024,12 @@
             "state": "translated",
             "value": "Botões"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "버튼"
+          }
         }
       }
     },
@@ -36044,6 +37052,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Teste de botões"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "버튼 테스트"
           }
         }
       }
@@ -36068,6 +37082,12 @@
             "state": "translated",
             "value": "Aperte um botão e ele vai acender na tela."
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "버튼을 누르면 해당 버튼에 불이 켜집니다."
+          }
         }
       }
     },
@@ -36090,6 +37110,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Voltar para a página de controles"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "컨트롤러 페이지로 돌아가기"
           }
         }
       }
@@ -36114,6 +37140,12 @@
             "state": "translated",
             "value": "Movimentos dos analógicos e gatilhos são mostrados em tempo real"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "스틱 움직임과 트리거 압력이 실시간으로 반영됩니다"
+          }
         }
       }
     },
@@ -36136,6 +37168,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Aperte qualquer botão no controle"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "컨트롤러의 아무 버튼이나 누르십시오"
           }
         }
       }
@@ -36160,6 +37198,12 @@
             "state": "translated",
             "value": "Analógico esquerdo"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "왼쪽 스틱"
+          }
         }
       }
     },
@@ -36182,6 +37226,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Analógico direito"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "오른쪽 스틱"
           }
         }
       }
@@ -36206,6 +37256,12 @@
             "state": "translated",
             "value": "Analógico esquerdo pressionado"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "왼쪽 스틱 누르기"
+          }
         }
       }
     },
@@ -36228,6 +37284,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Analógico direito pressionado"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "오른쪽 스틱 누르기"
           }
         }
       }
@@ -36252,6 +37314,12 @@
             "state": "translated",
             "value": "Menu"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "메뉴"
+          }
         }
       }
     },
@@ -36274,6 +37342,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Opções"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "옵션"
           }
         }
       }
@@ -36298,6 +37372,12 @@
             "state": "translated",
             "value": "Início"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "홈"
+          }
         }
       }
     },
@@ -36320,6 +37400,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nenhum botão pressionado"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "누른 버튼 없음"
           }
         }
       }
@@ -36344,6 +37430,12 @@
             "state": "translated",
             "value": "Direcional para cima"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "방향 패드 위"
+          }
         }
       }
     },
@@ -36366,6 +37458,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Direcional para baixo"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "방향 패드 아래"
           }
         }
       }
@@ -36390,6 +37488,12 @@
             "state": "translated",
             "value": "Direcional para a esquerda"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "방향 패드 왼쪽"
+          }
         }
       }
     },
@@ -36412,6 +37516,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Direcional para a direita"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "방향 패드 오른쪽"
           }
         }
       }
@@ -36436,6 +37546,12 @@
             "state": "translated",
             "value": "Silksong"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "실크송"
+          }
         }
       }
     },
@@ -36458,6 +37574,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Hades II"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "하데스 II"
           }
         }
       }
@@ -36482,6 +37604,12 @@
             "state": "translated",
             "value": "Atacar"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "공격"
+          }
         }
       }
     },
@@ -36504,6 +37632,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pular"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "점프"
           }
         }
       }
@@ -36528,6 +37662,12 @@
             "state": "translated",
             "value": "Avançar"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "대시"
+          }
         }
       }
     },
@@ -36550,6 +37690,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ferramenta"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "도구"
           }
         }
       }
@@ -36574,6 +37720,12 @@
             "state": "translated",
             "value": "Needolin"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "니돌린"
+          }
         }
       }
     },
@@ -36596,6 +37748,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Atar"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "바인드"
           }
         }
       }
@@ -36620,6 +37778,12 @@
             "state": "translated",
             "value": "Clawline"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "클로라인"
+          }
         }
       }
     },
@@ -36642,6 +37806,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Olho"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "눈"
           }
         }
       }
@@ -36666,6 +37836,12 @@
             "state": "translated",
             "value": "Mapa"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "지도"
+          }
         }
       }
     },
@@ -36688,6 +37864,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Inventário"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "인벤토리"
           }
         }
       }
@@ -36712,6 +37894,12 @@
             "state": "translated",
             "value": "Pausar"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "일시정지"
+          }
         }
       }
     },
@@ -36734,6 +37922,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Menos"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "마이너스"
           }
         }
       }
@@ -36758,6 +37952,12 @@
             "state": "translated",
             "value": "Mais"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "플러스"
+          }
         }
       }
     },
@@ -36780,6 +37980,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Esquerda"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "왼쪽"
           }
         }
       }
@@ -36804,6 +38010,12 @@
             "state": "translated",
             "value": "Cima"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "위"
+          }
         }
       }
     },
@@ -36826,6 +38038,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Baixo"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "아래"
           }
         }
       }
@@ -36850,6 +38068,12 @@
             "state": "translated",
             "value": "Direita"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "오른쪽"
+          }
         }
       }
     },
@@ -36872,6 +38096,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Vidro"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "글래스"
           }
         }
       }
@@ -36896,6 +38126,12 @@
             "state": "translated",
             "value": "Espinhos"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "가시"
+          }
         }
       }
     },
@@ -36918,6 +38154,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Emblema"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "배지"
           }
         }
       }
@@ -36942,6 +38184,12 @@
             "state": "translated",
             "value": "Ferro negro"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "흑철"
+          }
         }
       }
     },
@@ -36964,6 +38212,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Lua"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "달"
           }
         }
       }
@@ -36988,6 +38242,12 @@
             "state": "translated",
             "value": "Lua com emblema"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "달 배지"
+          }
         }
       }
     },
@@ -37010,6 +38270,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld min"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld분"
           }
         }
       }
@@ -37034,6 +38300,12 @@
             "state": "translated",
             "value": "%lld h %lld min"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld시간 %lld분"
+          }
         }
       }
     },
@@ -37056,6 +38328,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Total: %@"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "누적 %@"
           }
         }
       }
@@ -37080,6 +38358,12 @@
             "state": "translated",
             "value": "Última: %@"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "마지막 %@"
+          }
         }
       }
     },
@@ -37102,6 +38386,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "O GameCase é baseado no projeto de código aberto LiveContainer e é licenciado sob a GNU AGPL-3.0. Autor original: Duy Tran; mantenedor principal: hugeBlack."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GameCase는 오픈소스 프로젝트 LiveContainer를 기반으로 만들었으며 GNU AGPL-3.0 라이선스를 따릅니다. 원작자: Duy Tran, 주 관리자: hugeBlack."
           }
         }
       }
@@ -37126,6 +38416,12 @@
             "state": "translated",
             "value": "Desinstalar %@?"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@을(를) 제거할까요?"
+          }
         }
       }
     },
@@ -37148,6 +38444,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Biblioteca"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "보관함"
           }
         }
       }
@@ -37172,6 +38474,12 @@
             "state": "translated",
             "value": "Desinstalar (manter dados)"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "제거(데이터 유지)"
+          }
         }
       }
     },
@@ -37194,6 +38502,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Desinstalar e apagar dados"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "제거하고 데이터 삭제"
           }
         }
       }
@@ -37218,6 +38532,12 @@
             "state": "translated",
             "value": "Personalizada"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "사용자 지정"
+          }
         }
       }
     },
@@ -37240,6 +38560,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Do jogo"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "게임 제공"
           }
         }
       }
@@ -37264,6 +38590,12 @@
             "state": "translated",
             "value": "Arte integrada"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "내장 아트워크"
+          }
         }
       }
     },
@@ -37286,6 +38618,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Baixada da internet"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "내려받은 이미지"
           }
         }
       }
@@ -37310,6 +38648,12 @@
             "state": "translated",
             "value": "Ícone do app"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "앱 아이콘"
+          }
         }
       }
     },
@@ -37332,6 +38676,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Skin de vidro"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "글래스 스킨"
           }
         }
       }
@@ -37356,6 +38706,12 @@
             "state": "translated",
             "value": "Skin de espinhos"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "가시 스킨"
+          }
         }
       }
     },
@@ -37378,6 +38734,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Skin de emblema"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "배지 스킨"
           }
         }
       }
@@ -37402,6 +38764,12 @@
             "state": "translated",
             "value": "Skin de ferro negro"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "흑철 스킨"
+          }
         }
       }
     },
@@ -37424,6 +38792,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Skin da lua"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "달 스킨"
           }
         }
       }
@@ -37448,6 +38822,12 @@
             "state": "translated",
             "value": "Emblema da lua"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "달 배지"
+          }
         }
       }
     },
@@ -37470,6 +38850,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Jogado hoje"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "오늘 플레이"
           }
         }
       }
@@ -37494,6 +38880,12 @@
             "state": "translated",
             "value": "Jogado ontem"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "어제 플레이"
+          }
         }
       }
     },
@@ -37516,6 +38908,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Jogado há %lld dias"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld일 전 플레이"
           }
         }
       }
@@ -37540,6 +38938,12 @@
             "state": "translated",
             "value": "Jogado em %@"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ 플레이"
+          }
         }
       }
     },
@@ -37562,6 +38966,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Versão %@"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "버전 %@"
           }
         }
       }
@@ -37586,6 +38996,12 @@
             "state": "translated",
             "value": "Importar IPA"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "IPA 가져오기"
+          }
         }
       }
     },
@@ -37608,6 +39024,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Importar pacote de dados"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "데이터 팩 가져오기"
           }
         }
       }
@@ -37632,6 +39054,12 @@
             "state": "translated",
             "value": "Jogos ocultos (%lld)"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "숨긴 게임(%lld)"
+          }
         }
       }
     },
@@ -37654,6 +39082,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Configurações do jogo"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "게임 설정"
           }
         }
       }
@@ -37678,6 +39112,12 @@
             "state": "translated",
             "value": "Instalando %lld%%"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "설치 중 %lld%%"
+          }
         }
       }
     },
@@ -37700,6 +39140,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nenhum jogo importado ainda"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "가져온 게임이 없습니다"
           }
         }
       }
@@ -37724,6 +39170,12 @@
             "state": "translated",
             "value": "+ Importar IPA"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+ IPA 가져오기"
+          }
         }
       }
     },
@@ -37746,6 +39198,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "+ Importar pacote de dados"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+ 데이터 팩 가져오기"
           }
         }
       }
@@ -37770,6 +39228,12 @@
             "state": "translated",
             "value": "Seus jogos"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "내 게임"
+          }
         }
       }
     },
@@ -37792,6 +39256,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Jogados recentemente"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "최근 플레이"
           }
         }
       }
@@ -37816,6 +39286,12 @@
             "state": "translated",
             "value": "Jogar"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "시작"
+          }
         }
       }
     },
@@ -37838,6 +39314,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld de %lld"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld번째, 전체 %lld개"
           }
         }
       }
@@ -37862,6 +39344,12 @@
             "state": "translated",
             "value": "Pronto para jogar · Pacote de dados pronto"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "플레이 가능 · 데이터 팩 준비됨"
+          }
         }
       }
     },
@@ -37884,6 +39372,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Estes jogos estão ocultos e não aparecem na sua biblioteca. Toque e segure uma linha para iniciar, abrir as configurações ou desinstalar; toque em “Mostrar” para exibi-lo de novo."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "숨긴 게임은 보관함에 표시되지 않습니다. 항목을 길게 누르면 실행, 설정 열기, 제거를 할 수 있고 “숨김 해제”를 누르면 다시 표시됩니다."
           }
         }
       }
@@ -37908,6 +39402,12 @@
             "state": "translated",
             "value": "Nenhum jogo oculto"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "숨긴 게임 없음"
+          }
         }
       }
     },
@@ -37930,6 +39430,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Mostrar"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "숨김 해제"
           }
         }
       }
@@ -37954,6 +39460,12 @@
             "state": "translated",
             "value": "Iniciar"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "실행"
+          }
         }
       }
     },
@@ -37976,6 +39488,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Jogos ocultos"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "숨긴 게임"
           }
         }
       }
@@ -38000,6 +39518,12 @@
             "state": "translated",
             "value": "Importar pacote de dados"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "데이터 팩 가져오기"
+          }
         }
       }
     },
@@ -38022,6 +39546,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Substituir pacote de dados atual"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "기존 데이터 팩 교체"
           }
         }
       }
@@ -38046,6 +39576,12 @@
             "state": "translated",
             "value": "Este jogo já tem um pacote de dados importado (%@). Quer substituí-lo?"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 게임에는 이미 데이터 팩(%@)이 있습니다. 교체할까요?"
+          }
         }
       }
     },
@@ -38068,6 +39604,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Versão %@"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "버전 %@"
           }
         }
       }
@@ -38092,6 +39634,12 @@
             "state": "translated",
             "value": "Para qual jogo é este pacote de dados?"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "어느 게임의 데이터 팩입니까?"
+          }
         }
       }
     },
@@ -38114,6 +39662,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "O pacote de dados é gravado no contêiner de dados deste jogo (Documents/romfs.img) e passa a valer na próxima vez que você abrir o jogo."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "데이터 팩은 이 게임의 데이터 컨테이너(Documents/romfs.img)에 저장되며 다음 실행부터 적용됩니다."
           }
         }
       }
@@ -38138,6 +39692,12 @@
             "state": "translated",
             "value": "Escolher arquivo romfs.img"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "romfs.img 파일 선택"
+          }
         }
       }
     },
@@ -38160,6 +39720,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Escolher outro jogo"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "다른 게임 선택"
           }
         }
       }
@@ -38184,6 +39750,12 @@
             "state": "translated",
             "value": "Copiando %@ / %@"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "복사 중 %@ / %@"
+          }
         }
       }
     },
@@ -38206,6 +39778,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Cancelar cópia"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "복사 취소"
           }
         }
       }
@@ -38230,6 +39808,12 @@
             "state": "translated",
             "value": "Pacote de dados importado (%@)"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "데이터 팩을 가져왔습니다(%@)"
+          }
         }
       }
     },
@@ -38252,6 +39836,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Escolher outro arquivo"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "다른 파일 선택"
           }
         }
       }
@@ -38276,6 +39866,12 @@
             "state": "translated",
             "value": "O arquivo selecionado não é um pacote de dados .img: %@"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "선택한 파일은 .img 데이터 팩이 아닙니다: %@"
+          }
         }
       }
     },
@@ -38298,6 +39894,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Este jogo ainda não tem um contêiner de dados. Abra o jogo uma vez para criá-lo e depois importe de novo."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 게임에는 아직 데이터 컨테이너가 없습니다. 게임을 한 번 실행해 컨테이너를 만든 뒤 다시 가져오십시오."
           }
         }
       }
@@ -38322,6 +39924,12 @@
             "state": "translated",
             "value": "Falha na cópia: %@"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "복사 실패: %@"
+          }
         }
       }
     },
@@ -38344,6 +39952,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pacote de dados pronto"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "데이터 팩 준비됨"
           }
         }
       }
@@ -38368,6 +39982,12 @@
             "state": "translated",
             "value": "Sem pacote de dados"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "데이터 팩 없음"
+          }
         }
       }
     },
@@ -38390,6 +40010,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pacote de dados desnecessário"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "데이터 팩 필요 없음"
           }
         }
       }
@@ -38414,6 +40040,12 @@
             "state": "translated",
             "value": "Sem necessidade de pacote de dados"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "데이터 팩 필요 없음"
+          }
         }
       }
     },
@@ -38436,6 +40068,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Para pacotes tudo em um ou jogos que não precisam de pacote de dados. Quando ativado, os avisos de pacote de dados ausente são ocultados para este jogo."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "일체형 패키지이거나 데이터 팩이 필요 없는 게임에 사용합니다. 켜면 이 게임에서는 데이터 팩이 없다는 안내를 표시하지 않습니다."
           }
         }
       }
@@ -38460,6 +40098,12 @@
             "state": "translated",
             "value": "Pronto para jogar"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "플레이 가능"
+          }
         }
       }
     },
@@ -38482,6 +40126,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Falta o pacote de dados"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "데이터 팩 없음"
           }
         }
       }
@@ -38506,6 +40156,12 @@
             "state": "translated",
             "value": "Com problema"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "손상됨"
+          }
         }
       }
     },
@@ -38528,6 +40184,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "O jogo já está instalado, mas ainda falta o pacote de dados. Importe-o e já dá para jogar."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "게임 본체는 설치되었지만 데이터 팩이 필요합니다. 가져오면 바로 플레이할 수 있습니다."
           }
         }
       }
@@ -38552,6 +40214,12 @@
             "state": "translated",
             "value": "Toque em \"Importar pacote de dados…\" e escolha o arquivo romfs.img deste jogo, ou uma pasta que contenha o pacote de dados. O pacote precisa corresponder à versão do jogo; uma versão errada dá erro ao abrir, e o motivo fica registrado no log."
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“데이터 팩 가져오기…”를 누르고 이 게임의 데이터 팩 파일 romfs.img 또는 데이터 팩이 든 폴더를 선택하십시오. 데이터 팩은 게임 버전과 맞아야 합니다. 버전이 다르면 실행할 때 실패하며 원인이 로그에 기록됩니다."
+          }
         }
       }
     },
@@ -38574,6 +40242,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Uma pasta está no lugar do pacote de dados"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "데이터 팩 자리에 폴더가 있음"
           }
         }
       }
@@ -38598,6 +40272,12 @@
             "state": "translated",
             "value": "O romfs.img no contêiner deveria ser um arquivo, mas é uma pasta — provavelmente algo deu errado ao extrair ou copiar. Apague essa pasta no app Arquivos e importe o pacote de dados de novo."
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "컨테이너의 romfs.img는 파일이어야 하는데 폴더입니다. 압축을 풀거나 복사할 때 잘못 놓인 것으로 보입니다. 먼저 ‘파일’ 앱에서 그 폴더를 삭제한 뒤 데이터 팩을 다시 가져오십시오."
+          }
         }
       }
     },
@@ -38620,6 +40300,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Caminho: %@\nAtualmente é uma pasta, não um arquivo"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "경로: %@\n현재 파일이 아니라 폴더임"
           }
         }
       }
@@ -38644,6 +40330,12 @@
             "state": "translated",
             "value": "Não foi possível ler o pacote de dados"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "데이터 팩을 읽을 수 없음"
+          }
         }
       }
     },
@@ -38666,6 +40358,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "O arquivo do pacote de dados está no contêiner, mas o sistema não consegue ler as informações dele. Importe o pacote de novo para substituí-lo; se não resolver, envie o log para o desenvolvedor."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "데이터 팩 파일이 컨테이너에 있지만 시스템이 파일 정보를 읽지 못합니다. 데이터 팩을 다시 가져와 교체하십시오. 그래도 안 되면 로그를 개발자에게 보내십시오."
           }
         }
       }
@@ -38690,6 +40388,12 @@
             "state": "translated",
             "value": "Caminho: %@\nFalha ao ler as informações do arquivo"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "경로: %@\n파일 정보를 읽지 못함"
+          }
         }
       }
     },
@@ -38712,6 +40416,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pacote de dados incompleto"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "데이터 팩이 불완전함"
           }
         }
       }
@@ -38736,6 +40446,12 @@
             "state": "translated",
             "value": "O pacote de dados no contêiner tem 0 bytes, provavelmente porque a transferência ou cópia foi interrompida. É só importar de novo um pacote completo para substituí-lo."
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "컨테이너의 데이터 팩이 0바이트입니다. 전송이나 복사가 중단된 것으로 보입니다. 온전한 데이터 팩을 다시 가져와 교체하십시오."
+          }
         }
       }
     },
@@ -38758,6 +40474,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tamanho do romfs.img: 0 bytes\nCaminho: %@"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "romfs.img 크기: 0바이트\n경로: %@"
           }
         }
       }
@@ -38782,6 +40504,12 @@
             "state": "translated",
             "value": "Pacote de dados não corresponde à versão do jogo"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "데이터 팩이 게임 버전과 맞지 않음"
+          }
         }
       }
     },
@@ -38804,6 +40532,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Este pacote de dados não é o que corresponde à versão atual do jogo — o tamanho não bate. Importe o pacote correspondente; se você acabou de atualizar o jogo, normalmente o pacote antigo também precisa ser trocado pela versão nova."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 데이터 팩은 게임의 현재 버전과 맞는 것이 아니며 크기가 일치하지 않습니다. 맞는 데이터 팩을 가져오십시오. 게임을 방금 업데이트했다면 데이터 팩도 대개 새 버전으로 바꿔야 합니다."
           }
         }
       }
@@ -38828,6 +40562,12 @@
             "state": "translated",
             "value": "Tamanho registrado no romfs.id: %lld bytes\nTamanho real: %lld bytes"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "romfs.id에 기록된 크기: %lld바이트\n실제 크기: %lld바이트"
+          }
         }
       }
     },
@@ -38850,6 +40590,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Redefinir tudo?"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "모두 초기화할까요?"
           }
         }
       }
@@ -38874,6 +40620,12 @@
             "state": "translated",
             "value": "Redefinir tudo"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "모두 초기화"
+          }
         }
       }
     },
@@ -38896,6 +40648,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Todos os botões voltam à posição e ao tamanho originais."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "모든 버튼이 원래 위치와 크기로 돌아갑니다."
           }
         }
       }
@@ -38920,6 +40678,12 @@
             "state": "translated",
             "value": "Ajustes do jogo"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "게임 설정"
+          }
         }
       }
     },
@@ -38942,6 +40706,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@ · Layout dos botões (só na tela de combate)"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · 버튼 배치(전투 화면 전용)"
           }
         }
       }
@@ -38966,6 +40736,12 @@
             "state": "translated",
             "value": "Layout dos botões"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "버튼 배치"
+          }
         }
       }
     },
@@ -38988,6 +40764,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Botão selecionado"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "선택한 버튼"
           }
         }
       }
@@ -39012,6 +40794,12 @@
             "state": "translated",
             "value": "Posição (cada toque move 1%)"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "위치(누를 때마다 1% 이동)"
+          }
         }
       }
     },
@@ -39034,6 +40822,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tamanho"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "크기"
           }
         }
       }
@@ -39058,6 +40852,12 @@
             "state": "translated",
             "value": "Redefinir botão"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "버튼 초기화"
+          }
         }
       }
     },
@@ -39080,6 +40880,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Os botões de exemplo seguem a configuração de skin (atual: %@). Compartilha %@ com o editor do jogo; as mudanças valem na próxima vez que você abrir o jogo."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "미리보기 버튼은 스킨 설정(현재: %@)을 따릅니다. 게임 내 편집기와 %@을(를) 함께 쓰며, 변경 사항은 다음에 게임을 실행할 때 적용됩니다."
           }
         }
       }
@@ -39104,6 +40910,12 @@
             "state": "translated",
             "value": "(Toque em um botão para selecioná-lo)"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "(버튼을 눌러 선택)"
+          }
         }
       }
     },
@@ -39126,6 +40938,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Analógico"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "스틱"
           }
         }
       }
@@ -39150,6 +40968,12 @@
             "state": "translated",
             "value": "O modo JITLess é necessário a partir do iOS 26. Configure-o primeiro nos ajustes.\nVá para os ajustes do GameCase -> toque em \"Importar Certificado do SideStore\" / \"Importar Certificado\""
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iOS 26부터는 JIT-Less 모드가 필요합니다. 설정에서 구성하십시오.\nGameCase 설정에서 “SideStore에서 인증서 가져오기” 또는 “인증서 가져오기”를 누르십시오."
+          }
         }
       }
     },
@@ -39172,6 +40996,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "O JIT não foi ativado. Se quiser usar o GameCase sem JIT, configure o modo JITLess nos ajustes."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "JIT가 켜져 있지 않습니다. JIT 없이 GameCase를 쓰려면 설정에서 JIT-Less 모드를 구성하십시오."
           }
         }
       }
@@ -39196,6 +41026,12 @@
             "state": "translated",
             "value": "Pacote do app não encontrado! Não foi possível ler o LCAppInfo.plist."
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "앱 번들을 찾을 수 없습니다! LCAppInfo.plist를 읽을 수 없습니다."
+          }
         }
       }
     },
@@ -39218,6 +41054,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "App não encontrado"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "앱을 찾을 수 없습니다"
           }
         }
       }
@@ -39242,6 +41084,12 @@
             "state": "translated",
             "value": "Contêiner não encontrado!"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "컨테이너를 찾을 수 없습니다!"
+          }
         }
       }
     },
@@ -39264,6 +41112,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tempo esgotado ao resolver o marcador do contêiner. O armazenamento de dados está offline?"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "북마크 해석 시간이 초과되었습니다. 데이터 저장소가 오프라인 상태입니까?"
           }
         }
       }
@@ -39288,6 +41142,12 @@
             "state": "translated",
             "value": "Falha ao resolver o marcador ou não foi possível acessar o contêiner. Talvez seja necessário adicionar o armazenamento de dados novamente. %@"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "북마크를 해석하지 못했거나 컨테이너에 접근할 수 없습니다. 데이터 저장소를 다시 추가해야 할 수 있습니다. %@"
+          }
         }
       }
     },
@@ -39310,6 +41170,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Caminho do executável do app não encontrado. Tente forçar uma nova assinatura ou reinstalar o app."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "앱의 실행 파일 경로를 찾을 수 없습니다. 강제로 다시 서명하거나 앱을 다시 설치해 보십시오."
           }
         }
       }
@@ -39334,6 +41200,12 @@
             "state": "translated",
             "value": "O JIT é necessário para executar apps de 32 bits."
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "32비트 앱을 실행하려면 JIT가 필요합니다."
+          }
         }
       }
     },
@@ -39356,6 +41228,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nenhum emulador de 32 bits selecionado"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "선택한 32비트 에뮬레이터 없음"
           }
         }
       }
@@ -39380,6 +41258,12 @@
             "state": "translated",
             "value": "O app emulador de 32 bits especificado não foi encontrado"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "지정한 32비트 에뮬레이터 앱을 찾을 수 없습니다"
+          }
         }
       }
     },
@@ -39402,6 +41286,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "dlopen: ocorreu um erro desconhecido"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "dlopen: 알 수 없는 오류가 발생했습니다"
           }
         }
       }
@@ -39426,6 +41316,12 @@
             "state": "translated",
             "value": "Não foi possível encontrar o ponto de entrada principal"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "메인 진입점을 찾을 수 없습니다"
+          }
         }
       }
     },
@@ -39448,6 +41344,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "O app retornou da sua função main com o código %d."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "앱이 main 함수에서 코드 %d(으)로 반환했습니다."
           }
         }
       }
@@ -39472,6 +41374,12 @@
             "state": "translated",
             "value": "Configurações do desenvolvedor"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "개발자 설정"
+          }
         }
       }
     },
@@ -39494,6 +41402,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ignorar o JIT ao iniciar o app"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "앱 실행 시 JIT 무시"
           }
         }
       }
@@ -39518,6 +41432,12 @@
             "state": "translated",
             "value": "Manter o app selecionado ao sair"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "종료 시 선택한 앱 유지"
+          }
         }
       }
     },
@@ -39540,6 +41460,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Aguardar o depurador"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "디버거 대기"
           }
         }
       }
@@ -39564,6 +41490,12 @@
             "state": "translated",
             "value": "Permitir o acesso do LiveProcess a dados privados"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "LiveProcess의 비공개 데이터 접근 허용"
+          }
         }
       }
     },
@@ -39586,6 +41518,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Desativar o encerramento pelo watchdog do LiveProcess"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "LiveProcess 워치독 종료 끄기"
           }
         }
       }
@@ -39610,6 +41548,12 @@
             "state": "translated",
             "value": "Exportar certificado"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "인증서 내보내기"
+          }
         }
       }
     },
@@ -39632,6 +41576,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Exportar o Dyld"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dyld 내보내기"
           }
         }
       }
@@ -39656,6 +41606,12 @@
             "state": "translated",
             "value": "Apagar o SideStore"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SideStore 초기화"
+          }
         }
       }
     },
@@ -39678,6 +41634,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Exportar o pacote principal do app"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "메인 번들 내보내기"
           }
         }
       }
@@ -39702,6 +41664,12 @@
             "state": "translated",
             "value": "Redefinir os deslocamentos de símbolos"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "심볼 오프셋 초기화"
+          }
         }
       }
     },
@@ -39724,6 +41692,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Mostrar a sobreposição do FLEX"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "FLEX 오버레이 표시"
           }
         }
       }
@@ -39748,6 +41722,12 @@
             "state": "translated",
             "value": "Entitlements do GameCase"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GameCase 권한 파일"
+          }
         }
       }
     },
@@ -39770,6 +41750,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Entitlements do LiveProcess"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "LiveProcess 권한 파일"
           }
         }
       }
@@ -39794,6 +41780,12 @@
             "state": "translated",
             "value": "Falha ao carregar o Entitlement."
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "권한 파일을 불러오지 못했습니다."
+          }
         }
       }
     },
@@ -39816,6 +41808,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Falha ao carregar o entitlement."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "권한 파일을 불러오지 못했습니다."
           }
         }
       }
@@ -39840,6 +41838,12 @@
             "state": "translated",
             "value": "O LiveProcess não está instalado."
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "LiveProcess가 설치되어 있지 않습니다."
+          }
         }
       }
     },
@@ -39862,6 +41866,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Falha ao ler com.apple.developer.team-identifier"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "com.apple.developer.team-identifier를 읽지 못했습니다"
           }
         }
       }
@@ -39886,6 +41896,12 @@
             "state": "translated",
             "value": "Contêiner privado"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "비공개 컨테이너"
+          }
         }
       }
     },
@@ -39908,6 +41924,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Contêiner do App Group"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App Group 컨테이너"
           }
         }
       }
@@ -39932,6 +41954,12 @@
             "state": "translated",
             "value": "Pacote do GameCase"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GameCase 본체"
+          }
         }
       }
     },
@@ -39954,6 +41982,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nenhum arquivo selecionado"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "선택한 파일 없음"
           }
         }
       }
@@ -39978,6 +42012,12 @@
             "state": "translated",
             "value": "Não foi possível acessar o diretório; startAccessingSecurityScopedResource retornou false"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "디렉터리에 접근할 수 없습니다. startAccessingSecurityScopedResource가 false를 반환했습니다."
+          }
         }
       }
     },
@@ -40000,6 +42040,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Não foi possível gerar um marcador para a URL selecionada!"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "선택한 URL의 북마크를 만들 수 없습니다!"
           }
         }
       }
@@ -40024,6 +42070,12 @@
             "state": "translated",
             "value": "Falha ao carregar as preferências."
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "설정을 불러오지 못했습니다."
+          }
         }
       }
     },
@@ -40046,6 +42098,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Falha ao criar um marcador para a pasta Documents?"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Documents 폴더의 북마크를 만들지 못했습니다."
           }
         }
       }
@@ -40070,6 +42128,12 @@
             "state": "translated",
             "value": "Resposta inválida"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "잘못된 응답"
+          }
         }
       }
     },
@@ -40093,6 +42157,12 @@
             "state": "translated",
             "value": "Falha ao decodificar os dados do certificado"
           }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "인증서 데이터를 디코딩하지 못했습니다"
+          }
         }
       }
     },
@@ -40115,6 +42185,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Falha ao inicializar a URL de importação do certificado."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "인증서 가져오기 URL을 초기화하지 못했습니다."
           }
         }
       }
