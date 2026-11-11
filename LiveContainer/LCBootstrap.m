@@ -1909,6 +1909,9 @@ static void LCLaunchCoverTeardownFirstFrameHook(void) {
     LCLaunchCoverLog(@"首帧钩子已拆除（恢复原 IMP）");
 }
 
+static void *LCLaunchCoverSceneGeometryContext = &LCLaunchCoverSceneGeometryContext;
+static void *LCLaunchCoverWindowBoundsContext = &LCLaunchCoverWindowBoundsContext;
+
 @implementation LCLaunchCoverHandler {
     UIWindowScene *_scene;
     UIWindow *_window;
@@ -1918,6 +1921,8 @@ static void LCLaunchCoverTeardownFirstFrameHook(void) {
     BOOL _dismissed;
     BOOL _dismissScheduled;
     CFTimeInterval _attachTime;
+    NSMutableSet<UIWindow *> *_observedWindows;
+    BOOL _geometryObserving;
 }
 
 + (instancetype)sharedHandler {
@@ -2020,6 +2025,8 @@ static void LCLaunchCoverTeardownFirstFrameHook(void) {
     _rootView = rootView;
     _window = window;
     window.hidden = NO;
+    // 几何跟随的信号从上盖起就装好：场景旋转/落定多发生在上盖后头一两秒内
+    [self installGeometryObservers];
     LCLaunchCoverLog(@"attach 已上盖：window level=%.0f frame=%@ rootView frame=%@ 封面图=%@ 标题=%@",
                      window.windowLevel, NSStringFromCGRect(window.frame),
                      NSStringFromCGRect(rootView.frame),
@@ -2064,6 +2071,8 @@ static void LCLaunchCoverTeardownFirstFrameHook(void) {
     LCLaunchCoverLog(@"首帧信号送达 handler（attached=%d dismissed=%d 距上盖 %+lldms）",
                      _attached, _dismissed,
                      _attached ? (long long)llround((CACurrentMediaTime() - _attachTime) * 1000.0) : -1);
+    // 兜底检查点：淡出排定前强制按场景 bounds 对一次帧，防几何错位被带进淡出
+    [self syncGeometryToSceneWithReason:@"first-frame" checkpoint:YES];
     [self scheduleDismissIfReady];
 }
 
@@ -2091,16 +2100,102 @@ static void LCLaunchCoverTeardownFirstFrameHook(void) {
 }
 
 - (void)orientationDidChange {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (self->_window && self->_scene) {
-            CGRect b = self->_scene.coordinateSpace.bounds;
-            if (!CGRectEqualToRect(self->_window.frame, b)) {
-                LCLaunchCoverLog(@"方向变化：窗口帧自愈 %@ → %@",
-                                 NSStringFromCGRect(self->_window.frame), NSStringFromCGRect(b));
-                self->_window.frame = b;
-            }
+    // 状态栏方向通知只作兜底一路，与 effectiveGeometry/客体窗 bounds 的
+    // KVO 走同一条几何跟随路径（见下方定案注）
+    [self geometryMayHaveChanged];
+}
+
+#pragma mark 几何跟随（场景旋转/落定重排）
+
+// 定案（竖屏网格启动哈迪斯 II 盖层错位：封面按横屏几何成上方一条横带、
+// 下半截裸黑屏）：原重排链两环都不可靠——
+//   1) LCLaunchCoverView.layoutSubviews 按 self.bounds 现算本身没错，但根
+//      视图 bounds 由窗口/根 VC 的旋转机制驱动；自建窗口的根 VC 在客体把
+//      场景转横屏时收不到 viewWillTransitionToSize，窗口被旋转变换整体搬
+//      走、内部布局没人重跑（与本文件快捷栏「旋转重排」段已定案并修好的
+//      失效形态同型），bounds 停在上盖时刻，layoutSubviews 永远按旧几何
+//      算——是「信号没到」型，不是算错。
+//   2) 原 orientationDidChange 只监听 UIApplicationDidChangeStatusBar
+//      OrientationNotification 一路：那是快捷栏三路信号里最弱的兜底，场
+//      景几何更新驱动的旋转不保证送达；即使送达也只改 _window.frame，不
+//      按场景 bounds 强制根视图重排，也没有落定后的二次核对——错位一旦
+//      形成（上盖早于场景转横落定）就保持到撤盖。
+// 修法与快捷栏同款：与 VC 回调无关的三路信号任一触发都走 syncGeometry，
+// 一律读 _scene.coordinateSpace.bounds 现算（不读窗口自身旧帧）、改窗帧
+// 并强制根视图按新 bounds 重排，信号后补 0.3s 延迟复核接住落定滞后；另
+// 在首帧信号送达（guestFirstFrameDidRender）与撤盖开始前（dismissWith
+// Reason）各强制对一次帧作兜底检查点。
+- (void)installGeometryObservers {
+    if (@available(iOS 16.0, *)) {
+        if (!_geometryObserving) {
+            _geometryObserving = YES;
+            [_scene addObserver:self forKeyPath:@"effectiveGeometry" options:0 context:LCLaunchCoverSceneGeometryContext];
         }
+    }
+    [self observeSceneWindows];
+}
+
+- (void)observeSceneWindows {
+    if (!_observedWindows) _observedWindows = [NSMutableSet set];
+    for (UIWindow *w in _scene.windows) {
+        if (w == _window || [_observedWindows containsObject:w]) continue;
+        [_observedWindows addObject:w];
+        [w addObserver:self forKeyPath:@"bounds" options:0 context:LCLaunchCoverWindowBoundsContext];
+    }
+}
+
+- (void)removeGeometryObservers {
+    if (_geometryObserving) {
+        _geometryObserving = NO;
+        [_scene removeObserver:self forKeyPath:@"effectiveGeometry" context:LCLaunchCoverSceneGeometryContext];
+    }
+    for (UIWindow *w in _observedWindows) {
+        [w removeObserver:self forKeyPath:@"bounds" context:LCLaunchCoverWindowBoundsContext];
+    }
+    [_observedWindows removeAllObjects];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
+    if (context == LCLaunchCoverSceneGeometryContext || context == LCLaunchCoverWindowBoundsContext) {
+        [self geometryMayHaveChanged];
+        return;
+    }
+    [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+}
+
+- (void)geometryMayHaveChanged {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self syncGeometryToSceneWithReason:@"signal" checkpoint:NO];
+        // 场景坐标空间可能滞后于窗口 bounds 变化，0.3s 后再核对一次兜住落定
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self syncGeometryToSceneWithReason:@"signal-settle" checkpoint:NO];
+        });
     });
+}
+
+// 按场景当前 bounds 对齐盖层：窗口帧 = 场景 bounds，根视图按同一 bounds
+// 直写帧并 layoutIfNeeded，让 layoutSubviews 按新 bounds 现算封面（aspect
+// -fill）/底部罩/标题/光带。每次实际重排都打点（场景 bounds + 窗口帧 +
+// 根视图 bounds + 场景方向）；checkpoint=YES 的强制对帧（首帧/撤盖前）
+// 即使本已对齐也打点，信号路径未错位时静默，避免刷屏。
+- (BOOL)syncGeometryToSceneWithReason:(NSString *)reason checkpoint:(BOOL)checkpoint {
+    if (!_window || !_scene || _dismissed) return NO;
+    [self observeSceneWindows]; // 顺带补上旋转后/迟建的客体窗口
+    CGRect b = _scene.coordinateSpace.bounds;
+    if (b.size.width <= 0 || b.size.height <= 0) return NO;
+    BOOL mismatch = !CGRectEqualToRect(_window.frame, b) || !CGRectEqualToRect(_rootView.frame, b);
+    if (!mismatch && !checkpoint) return NO;
+    if (mismatch) {
+        _window.frame = b;
+        _rootView.frame = b;
+        [_rootView setNeedsLayout];
+        [_rootView layoutIfNeeded];
+    }
+    LCLaunchCoverLog(@"几何重排[%@]：scene bounds=%@ window frame=%@ rootView bounds=%@ 方向=%ld%@",
+                     reason, NSStringFromCGRect(b), NSStringFromCGRect(_window.frame),
+                     NSStringFromCGRect(_rootView.bounds), (long)_scene.interfaceOrientation,
+                     mismatch ? @"（已修正）" : @"（本已对齐）");
+    return mismatch;
 }
 
 - (void)dismissWithDuration:(NSTimeInterval)duration {
@@ -2112,6 +2207,9 @@ static void LCLaunchCoverTeardownFirstFrameHook(void) {
         LCLaunchCoverLog(@"撤盖请求忽略：reason=%@ attached=%d dismissed=%d", reason, _attached, _dismissed);
         return;
     }
+    // 兜底检查点：开始淡出前强制按场景 bounds 对一次帧，错位不许带进淡出
+    // （须在 _dismissed 置位前调，sync 以未撤盖为前提）
+    [self syncGeometryToSceneWithReason:@"pre-dismiss" checkpoint:YES];
     _dismissed = YES;
     LCLaunchCoverTeardownFirstFrameHook();
     LCLaunchCoverLog(@"撤盖：reason=%@ 上盖总时长 %.0fms 淡出 %.2fs",
@@ -2121,6 +2219,7 @@ static void LCLaunchCoverTeardownFirstFrameHook(void) {
         window.alpha = 0;
     } completion:^(BOOL finished) {
         window.hidden = YES;
+        [self removeGeometryObservers];
         [NSNotificationCenter.defaultCenter removeObserver:self];
     }];
 }
