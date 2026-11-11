@@ -15,5 +15,9 @@ jobs:
           submodules: recursive
       - name: Compile LiveContainerShared only (raw log)
         run: |
-          xcodebuild build -project LiveContainer.xcodeproj -target LiveContainerShared -sdk iphoneos -arch arm64 -configuration Release 2>&1 | grep -E "error:|warning:|LCBootstrap" | head -80
-          exit ${PIPESTATUS[0]}
+          xcodebuild build -project LiveContainer.xcodeproj -target LiveContainerShared -sdk iphoneos -arch arm64 -configuration Release > /tmp/build-raw.log 2>&1
+          ec=$?
+          echo "xcodebuild exit: $ec"
+          grep -E "error:" /tmp/build-raw.log | head -60
+          grep -c "Compiling LCBootstrap" /tmp/build-raw.log || true
+          exit $ec
