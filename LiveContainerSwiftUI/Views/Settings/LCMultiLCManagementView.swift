@@ -112,8 +112,6 @@ struct LCMultiLCManagementView : View, InstallAnotherLCButtonDelegate {
                 Text("lc.common.miscellaneous".loc)
             }
         }
-        // 全页开关走玻璃开关（玻璃关/低版本时回退系统开关）
-        .gcGlassToggleStyle()
         .environment(\.editMode, .constant(.active))
         .onAppear {
             reloadLaunchPriorityItems()

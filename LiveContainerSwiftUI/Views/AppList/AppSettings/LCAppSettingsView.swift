@@ -390,8 +390,6 @@ struct LCAppSettingsView: View {
             }
 
         }
-        // 全页开关走玻璃开关（玻璃关/低版本时回退系统开关）
-        .gcGlassToggleStyle()
         .navigationTitle(appInfo.displayName())
         .navigationBarTitleDisplayMode(.inline)
         .alert("lc.common.error".loc, isPresented: $errorShow) {

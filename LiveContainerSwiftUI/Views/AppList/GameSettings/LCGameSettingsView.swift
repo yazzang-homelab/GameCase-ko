@@ -191,19 +191,31 @@ private struct LCNXShellButtonStyle: ButtonStyle {
 /// NX CreamSwitch 移植：46×28 奶油轨开关。NX 用本地 shown 态驱动钮位
 /// 动画（外部值变化时 onChange 同步），本版同法；动画曲线 NX 为
 /// .snappy（iOS 17+），部署目标 iOS 15，用等效 spring 代（报告注明）。
-/// Liquid Glass 分支（iOS 26 + 玻璃开）：轨道换玻璃——浅色按用户口径
-/// （开态背景系统绿、滑块打开/关闭两态都白色），深色开态保留奶油
-/// tint 玻璃、滑块沿用现行配色（深色定版观感不变）；非玻璃逐字保留
-/// 原实现。
+/// Liquid Glass 分支（iOS 26 + 玻璃开，用户 2026-11-11 口径）：不用
+/// 自绘玻璃，改渲染系统原生 Toggle（原生玻璃滑块与轨道，与系统
+/// 设置同款）；原生开关尺寸 51×31，比奶油开关略大（行 minHeight 44
+/// 容得下，两处使用点行高不变）。非玻璃逐字保留奶油自绘原实现。
 private struct LCCreamSwitch: View {
     let isOn: Bool
     var onToggle: (Bool) -> Void
     @State private var shown: Bool?
-    @Environment(\.colorScheme) private var colorScheme
 
     private var displayOn: Bool { shown ?? isOn }
 
+    @ViewBuilder
     var body: some View {
+        if #available(iOS 26.0, *), SharedModel.isLiquidGlassEnabled {
+            Toggle("", isOn: Binding(
+                get: { isOn },
+                set: { onToggle($0) }
+            ))
+            .labelsHidden()
+        } else {
+            creamButton
+        }
+    }
+
+    private var creamButton: some View {
         Button {
             let target = !displayOn
             withAnimation(.spring(response: 0.2, dampingFraction: 0.75)) {
@@ -212,58 +224,19 @@ private struct LCCreamSwitch: View {
             onToggle(target)
         } label: {
             ZStack(alignment: displayOn ? .trailing : .leading) {
-                track
-                knob
+                Capsule()
+                    .fill(displayOn ? LCNXColor.cream : Color.primary.opacity(0.14))
+                    .frame(width: 46, height: 28)
+                Circle()
+                    .fill(displayOn ? LCNXColor.background : Color.primary.opacity(0.85))
+                    .padding(3)
+                    .frame(width: 28, height: 28)
             }
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
         .onChange(of: isOn) { newValue in
             shown = newValue
-        }
-    }
-
-    @ViewBuilder
-    private var track: some View {
-        if #available(iOS 26.0, *), SharedModel.isLiquidGlassEnabled {
-            Capsule()
-                .fill(.clear)
-                .frame(width: 46, height: 28)
-                .glassEffect(trackGlass, in: .capsule)
-        } else {
-            Capsule()
-                .fill(displayOn ? LCNXColor.cream : Color.primary.opacity(0.14))
-                .frame(width: 46, height: 28)
-        }
-    }
-
-    /// 玻璃轨 tint：开态浅色 = 系统绿、深色 = 奶油（深色定版色）；
-    /// 关态无色 + primary 浅 tint 保底可辨（与 GCGlassSwitchToggleStyle 同）
-    @available(iOS 26.0, *)
-    private var trackGlass: Glass {
-        if displayOn {
-            if colorScheme == .light {
-                return .regular.tint(Color(UIColor.systemGreen))
-            }
-            return .regular.tint(Color(red: 1, green: 0.94, blue: 0.84))
-        }
-        return .regular.tint(Color.primary.opacity(0.10))
-    }
-
-    @ViewBuilder
-    private var knob: some View {
-        if #available(iOS 26.0, *), SharedModel.isLiquidGlassEnabled, colorScheme == .light {
-            // 浅色 + 玻璃：滑块两态恒白（用户口径），配轻阴影与玻璃轨分开
-            Circle()
-                .fill(Color.white)
-                .shadow(color: Color.black.opacity(0.18), radius: 2, y: 1)
-                .padding(3)
-                .frame(width: 28, height: 28)
-        } else {
-            Circle()
-                .fill(displayOn ? LCNXColor.background : Color.primary.opacity(0.85))
-                .padding(3)
-                .frame(width: 28, height: 28)
         }
     }
 }
@@ -285,7 +258,7 @@ private struct LCChoiceRow: View {
             if useSegments {
                 VStack(alignment: .leading, spacing: 12) {
                     labelBlock
-                    segmentedBar
+                    segmentedControl
                 }
             } else {
                 Menu {
@@ -343,15 +316,39 @@ private struct LCChoiceRow: View {
         }
     }
 
+    /// 分段控件分流（用户 2026-11-11 口径）：Liquid Glass 语境
+    /// （iOS 26 + 玻璃开）不用自绘分段条，改系统原生 segmented
+    /// Picker——与宿主设置页「外观」切换同款渲染（原生玻璃轨道 +
+    /// 玻璃选中滑块、全圆角）；绑定经 currentValue/onPick 转接，
+    /// 选项与行为不变。布局差异：原生分段高由系统定（约 28pt），
+    /// 比自绘条（minHeight 40 + padding 3）矮，分段区行高相应变小；
+    /// 原生字号略小于自绘的 13.5，「放得下」判定（useSegments）沿用
+    /// 自绘标尺、偏保守不会溢出。非玻璃走自绘 segmentedBar 原实现。
+    @ViewBuilder
+    private var segmentedControl: some View {
+        if #available(iOS 26.0, *), SharedModel.isLiquidGlassEnabled {
+            Picker("", selection: Binding(
+                get: { currentValue },
+                set: { onPick($0) }
+            )) {
+                ForEach(setting.options, id: \.value) { option in
+                    Text(option.label).tag(option.value)
+                }
+            }
+            .pickerStyle(.segmented)
+            .labelsHidden()
+        } else {
+            segmentedBar
+        }
+    }
+
     /// NX SegmentedChoice：轨道 padding 3、白 0.055、圆角 11、白 0.08
     /// 描边；段间距 2 等宽，字 13.5（选中 bold 黑字、圆角 8 填充：
     /// 深色奶油底、浅色系统白 + 描边 + 轻阴影（P4）；未选 medium
     /// 白 0.75），段 minHeight 40、横向内距 14。
     /// 等宽用 HStack + maxWidth .infinity（NX 的 EqualRow 是 iOS 16
     /// Layout 协议，部署目标 iOS 15 不可用，报告注明）。
-    /// Liquid Glass 分支（用户口径：选项框全圆角）：轨道换玻璃胶囊、
-    /// 选中段换同色 tint 玻璃胶囊（深色奶油 / 浅色白，与现行选中块
-    /// 同色），未选段透轨；非玻璃逐字保留原实现。
+    /// 仅非玻璃语境使用（玻璃语境走原生 segmented Picker，见上）。
     private var segmentedBar: some View {
         HStack(spacing: 2) {
             ForEach(setting.options, id: \.value) { option in
@@ -370,61 +367,38 @@ private struct LCChoiceRow: View {
                                 chosenSegmentBackground
                             }
                         }
-                        .modifier { content in
-                            if #available(iOS 26.0, *), SharedModel.isLiquidGlassEnabled {
-                                content.contentShape(Capsule())
-                            } else {
-                                content
-                            }
-                        }
                 }
                 .buttonStyle(.plain)
             }
         }
         .padding(3)
-        .modifier { content in
-            if #available(iOS 26.0, *), SharedModel.isLiquidGlassEnabled {
-                content.glassEffect(.regular, in: .capsule)
-            } else {
-                content
-                    .background(Color.primary.opacity(0.055), in: RoundedRectangle(cornerRadius: 11))
-                    .overlay {
-                        RoundedRectangle(cornerRadius: 11)
-                            .strokeBorder(LCNXColor.hairline, lineWidth: 1)
-                    }
-            }
+        .background(Color.primary.opacity(0.055), in: RoundedRectangle(cornerRadius: 11))
+        .overlay {
+            RoundedRectangle(cornerRadius: 11)
+                .strokeBorder(LCNXColor.hairline, lineWidth: 1)
         }
     }
 
-    /// 选中段背景：玻璃时为 segmentChosenFill tint 的玻璃胶囊；
-    /// 非玻璃逐字保留 P4 实现（实色填充 + 浅色描边 + 轻阴影）。
-    @ViewBuilder
+    /// 选中段背景：实色填充 + 浅色描边 + 轻阴影（P4 原实现，
+    /// 仅自绘分段条使用）。
     private var chosenSegmentBackground: some View {
-        if #available(iOS 26.0, *), SharedModel.isLiquidGlassEnabled {
-            Capsule()
-                .fill(.clear)
-                .glassEffect(.regular.tint(LCNXColor.segmentChosenFill), in: .capsule)
-                .shadow(color: colorScheme == .light ? Color.black.opacity(0.08) : .clear,
-                        radius: 4, y: 1)
-        } else {
-            RoundedRectangle(cornerRadius: 8)
-                .fill(LCNXColor.segmentChosenFill)
-                .overlay {
-                    if colorScheme == .light {
-                        RoundedRectangle(cornerRadius: 8)
-                            .strokeBorder(LCNXColor.hairline, lineWidth: 1)
-                    }
+        RoundedRectangle(cornerRadius: 8)
+            .fill(LCNXColor.segmentChosenFill)
+            .overlay {
+                if colorScheme == .light {
+                    RoundedRectangle(cornerRadius: 8)
+                        .strokeBorder(LCNXColor.hairline, lineWidth: 1)
                 }
-                .shadow(color: colorScheme == .light ? Color.black.opacity(0.08) : .clear,
-                        radius: 4, y: 1)
-        }
+            }
+            .shadow(color: colorScheme == .light ? Color.black.opacity(0.08) : .clear,
+                    radius: 4, y: 1)
     }
 
     /// NX ChoiceValueRow：整行浅底（白 0.055、圆角 11、白 0.08 描边、
     /// 内距横 14 纵 8、minHeight 48），值 14.5 semibold 奶油右置，
-    /// chevron 13 bold 白 0.4。
-    /// Liquid Glass 分支：整行换玻璃胶囊（选项框全圆角同口径）；
-    /// 非玻璃逐字保留原实现。
+    /// chevron 13 bold 白 0.4。此行是 Menu 的标签：弹出层本身为系统
+    /// 呈现，行面不自绘玻璃（#101 的玻璃胶囊已按用户口径撤掉），
+    /// 全语境同一渲染。
     private var valueRow: some View {
         HStack(spacing: 12) {
             labelBlock
@@ -439,21 +413,12 @@ private struct LCChoiceRow: View {
         .padding(.horizontal, 14)
         .padding(.vertical, 8)
         .frame(minHeight: 48)
-        .modifier { content in
-            if #available(iOS 26.0, *), SharedModel.isLiquidGlassEnabled {
-                content
-                    .glassEffect(.regular.interactive(), in: .capsule)
-                    .contentShape(Capsule())
-            } else {
-                content
-                    .background(Color.primary.opacity(0.055), in: RoundedRectangle(cornerRadius: 11))
-                    .overlay {
-                        RoundedRectangle(cornerRadius: 11)
-                            .strokeBorder(LCNXColor.hairline, lineWidth: 1)
-                    }
-                    .contentShape(RoundedRectangle(cornerRadius: 11))
-            }
+        .background(Color.primary.opacity(0.055), in: RoundedRectangle(cornerRadius: 11))
+        .overlay {
+            RoundedRectangle(cornerRadius: 11)
+                .strokeBorder(LCNXColor.hairline, lineWidth: 1)
         }
+        .contentShape(RoundedRectangle(cornerRadius: 11))
     }
 }
 
