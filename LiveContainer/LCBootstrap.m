@@ -17,6 +17,9 @@
 #include <stdlib.h>
 #include "../litehook/src/litehook.h"
 #import "Tweaks/Tweaks.h"
+#import "Localization.h"
+#import <CoreImage/CoreImage.h>
+#import <QuartzCore/QuartzCore.h>
 #include <mach-o/ldsyms.h>
 
 extern char **environ;
@@ -1462,6 +1465,485 @@ static NSString *GCPlayNameSwapToPlayName(NSString *dataRootPath, NSString *rest
     return restingName;
 }
 
+#pragma mark - 启动动画（游戏启动封面）
+// standalone 进程内直跑路径上，跳客体 main 前与快捷栏同处预置。与快捷栏一样，
+// 本进程不存在宿主 UI，盖层只能挂在客体场景上：最早可建窗的时点是客体场景
+// 激活（UISceneDidActivateNotification，与快捷栏同一挂载信号），盖层在那一刻
+// 盖满场景，罩住客体加载至首帧的整段等待（此前的进程重拉与 invokeAppMain
+// 装载段没有窗口可用，是架构上盖不住的固有黑段，不在本动画范围）。
+// 画面（与批准预览同构图）：横版封面全屏缓推（scale 1.14→1.03，6s 缓出、
+// 到顶停住不回弹）、底部渐变罩 + 游戏标题 + 细往复光带（indeterminate）。
+// 结束信号取客体首帧最近可得的生命周期点：客体主窗成为 key
+// （UIWindowDidBecomeKeyNotification）——makeKeyAndVisible 在首帧提交前
+// 一两帧触发，故收到后再延迟 0.15s 起 0.35s 淡出。带启动器界面的客体同理，
+// 启动器窗成为 key 即撤（它的首帧就是要露出的界面）。
+// 点任意处跳过：立即淡出撤层，客体在后面继续加载，不取消启动。
+// 层级 Alert+50：盖住客体普通窗，低于快捷栏（+100，盖层之上舌仍露、
+// 可回库逃生）与回库黑 veil（+200）。
+// 封面解析与库侧 LCGameLibraryInfo.bannerResolution 同优先级：自定义封面 →
+// 客体自带横版图 → 宿主内置原画 → 联网抓取缓存 → 应用图标放大虚化；解析在
+// 后台队列做，不拖慢跳 main；未解析完先以深色底 + 标题上盖，图到后原地换入。
+// 失败路径：安装点在 invokeAppMain 全部早期错误返回之后，早期报错不装盖层；
+// 跳 main 后客体报错退出，进程随之终止、盖层同灭；下一进程的报错弹层由库侧
+// 呈现，与盖层无交叠（库侧开屏动画在待报错时亦不播，见 LCAppListView init）。
+
+/// 宿主进程首选语言在 LiveContainerMain 跳 invokeAppMain 前捕获（此后客体钩子
+/// 会改写本进程的 AppleLanguages，届时现读 preferredLanguages 会退化成客体
+/// 包语言——快捷栏语言修复同因）。仅供盖层提示文案按宿主语言查表。
+static NSString *lcLaunchHostLanguage;
+
+static void LCLaunchCoverCaptureHostLanguage(void) {
+    lcLaunchHostLanguage = NSLocale.preferredLanguages.firstObject;
+}
+
+static NSString *LCLaunchCoverHintText(void) {
+    NSString *key = @"lc.launchCover.skipHint";
+    NSString *lang = lcLaunchHostLanguage;
+    while (lang.length) {
+        NSString *path = [lcMainBundle pathForResource:lang ofType:@"lproj"];
+        if (path) {
+            NSString *s = [[NSBundle bundleWithPath:path] localizedStringForKey:key value:nil table:nil];
+            if (s.length && ![s isEqualToString:key]) return s;
+            break;
+        }
+        NSRange cut = [lang rangeOfString:@"-" options:NSBackwardsSearch];
+        if (cut.location == NSNotFound) break;
+        lang = [lang substringToIndex:cut.location];
+    }
+    return [key localized];
+}
+
+#pragma mark 封面解析（后台队列）
+
+static BOOL LCLaunchCoverIsLandscapePixelSize(CGSize px) {
+    return px.width > px.height && px.width >= 600 && px.width / px.height <= 3;
+}
+
+static UIImage *LCLaunchCoverGuestLandscapeImage(NSString *bundlePath) {
+    NSArray<NSString *> *entries = [NSFileManager.defaultManager contentsOfDirectoryAtPath:bundlePath error:nil];
+    NSMutableArray<NSString *> *files = [NSMutableArray array];
+    for (NSString *e in entries) {
+        NSString *ext = e.pathExtension.lowercaseString;
+        if (([ext isEqualToString:@"png"] || [ext isEqualToString:@"jpg"] || [ext isEqualToString:@"jpeg"])
+            && ![e.lowercaseString hasPrefix:@"appicon"]) {
+            [files addObject:e];
+        }
+    }
+    if (!files.count) return nil;
+    // 候选名与库侧 bannerCandidateNames 同表同序
+    static NSArray<NSString *> *candidates;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        candidates = @[@"LCBanner.jpg", @"LCBanner.png", @"banner.jpg", @"banner.png",
+                       @"cover.jpg", @"cover.png", @"keyart.jpg", @"keyart.png",
+                       @"header.jpg", @"header.png", @"capsule.jpg", @"capsule.png",
+                       @"hero.jpg", @"hero.png", @"poster.jpg", @"poster.png",
+                       @"artwork.jpg", @"artwork.png"];
+    });
+    NSMutableSet<NSString *> *candidateSet = [NSMutableSet set];
+    for (NSString *cand in candidates) {
+        for (NSString *f in files) {
+            if ([f.lowercaseString isEqualToString:cand]) {
+                [candidateSet addObject:f];
+                UIImage *img = [UIImage imageWithContentsOfFile:[bundlePath stringByAppendingPathComponent:f]];
+                if (img && LCLaunchCoverIsLandscapePixelSize(CGSizeMake(CGImageGetWidth(img.CGImage), CGImageGetHeight(img.CGImage)))) {
+                    return img;
+                }
+            }
+        }
+    }
+    UIImage *best = nil;
+    CGFloat bestArea = 0;
+    for (NSString *f in [files sortedArrayUsingSelector:@selector(compare:)]) {
+        if ([candidateSet containsObject:f]) continue;
+        UIImage *img = [UIImage imageWithContentsOfFile:[bundlePath stringByAppendingPathComponent:f]];
+        if (!img) continue;
+        CGSize px = CGSizeMake(CGImageGetWidth(img.CGImage), CGImageGetHeight(img.CGImage));
+        if (!LCLaunchCoverIsLandscapePixelSize(px)) continue;
+        CGFloat area = px.width * px.height;
+        if (area > bestArea) { bestArea = area; best = img; }
+    }
+    return best;
+}
+
+static NSString *LCLaunchCoverTitleId(NSString *bundleId) {
+    if (!bundleId.length) return nil;
+    NSArray<NSString *> *parts = [bundleId.lowercaseString componentsSeparatedByString:@"."];
+    // 与库侧 titleId(from:) 同规则：末段是 16 位十六进制优先，否则取首个命中段
+    NSString *(^check)(NSArray<NSString *> *) = ^NSString *(NSArray<NSString *> *list) {
+        for (NSString *p in list) {
+            if (p.length != 16) continue;
+            BOOL hex = YES;
+            for (NSUInteger i = 0; i < p.length; i++) {
+                unichar c = [p characterAtIndex:i];
+                if (!((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f'))) { hex = NO; break; }
+            }
+            if (hex) return p.uppercaseString;
+        }
+        return nil;
+    };
+    NSString *hit = check(@[parts.lastObject ?: @""]);
+    return hit ?: check(parts);
+}
+
+static UIImage *LCLaunchCoverBundledImage(NSString *bundleId) {
+    NSString *titleId = LCLaunchCoverTitleId(bundleId);
+    if (!titleId) return nil;
+    NSString *name = [NSString stringWithFormat:@"cover-%@", titleId];
+    NSString *fwPath = [lcMainBundle.bundlePath stringByAppendingPathComponent:@"Frameworks/LiveContainerSwiftUI.framework"];
+    NSBundle *fwBundle = [NSBundle bundleWithPath:fwPath];
+    NSMutableArray<NSBundle *> *bundles = [NSMutableArray array];
+    if (fwBundle) [bundles addObject:fwBundle];
+    [bundles addObject:lcMainBundle];
+    for (NSBundle *b in bundles) {
+        for (NSString *sub in @[[NSNull null], @"GameCovers"]) {
+            NSURL *url = [b URLForResource:name withExtension:@"jpg" subdirectory:(sub == (id)NSNull.null ? nil : sub)];
+            if (url) {
+                UIImage *img = [UIImage imageWithContentsOfFile:url.path];
+                if (img) return img;
+            }
+        }
+    }
+    return nil;
+}
+
+static UIImage *LCLaunchCoverGuestIconImage(NSString *bundlePath) {
+    NSDictionary *info = [NSDictionary dictionaryWithContentsOfFile:[bundlePath stringByAppendingPathComponent:@"Info.plist"]];
+    NSMutableArray<NSString *> *names = [NSMutableArray array];
+    NSArray *iconFiles = info[@"CFBundleIcons"][@"CFBundlePrimaryIcon"][@"CFBundleIconFiles"];
+    if ([iconFiles isKindOfClass:NSArray.class]) {
+        for (NSString *f in iconFiles) {
+            if ([f isKindOfClass:NSString.class]) [names addObject:f];
+        }
+    }
+    if (!names.count) {
+        for (NSString *e in [NSFileManager.defaultManager contentsOfDirectoryAtPath:bundlePath error:nil]) {
+            if ([e.lowercaseString hasPrefix:@"appicon"] && [e.lowercaseString hasSuffix:@".png"]) {
+                [names addObject:e.stringByDeletingPathExtension];
+            }
+        }
+    }
+    UIImage *best = nil;
+    CGFloat bestArea = 0;
+    for (NSString *name in names) {
+        for (NSString *suffix in @[@"@3x.png", @"@2x.png", @".png"]) {
+            NSString *path = [bundlePath stringByAppendingPathComponent:[name stringByAppendingString:suffix]];
+            if (![NSFileManager.defaultManager fileExistsAtPath:path]) continue;
+            UIImage *img = [UIImage imageWithContentsOfFile:path];
+            if (!img) continue;
+            CGFloat area = img.size.width * img.size.height;
+            if (area > bestArea) { bestArea = area; best = img; }
+        }
+    }
+    return best;
+}
+
+static UIImage *LCLaunchCoverBlurredImage(UIImage *image) {
+    CIImage *input = [CIImage imageWithCGImage:image.CGImage];
+    if (!input) return nil;
+    CGFloat radius = MAX(24, MIN(64, input.extent.size.width * 0.09));
+    CIFilter *clamp = [CIFilter filterWithName:@"CIAffineClamp"];
+    [clamp setValue:input forKey:kCIInputImageKey];
+    [clamp setValue:[NSValue valueWithCGAffineTransform:CGAffineTransformIdentity] forKey:kCIInputTransformKey];
+    CIFilter *blur = [CIFilter filterWithName:@"CIGaussianBlur"];
+    [blur setValue:clamp.outputImage forKey:kCIInputImageKey];
+    [blur setValue:@(radius) forKey:kCIInputRadiusKey];
+    CIContext *context = [CIContext contextWithOptions:nil];
+    CGImageRef cg = [context createCGImage:blur.outputImage fromRect:input.extent];
+    if (!cg) return nil;
+    UIImage *out = [UIImage imageWithCGImage:cg scale:image.scale orientation:image.imageOrientation];
+    CGImageRelease(cg);
+    return out;
+}
+
+/// 与库侧 bannerResolution 同优先级：自定义 → 客体横版 → 内置原画 → 抓取缓存 → 图标虚化
+static UIImage *LCLaunchCoverResolveImage(NSString *bundlePath, NSString *bundleId) {
+    NSString *docPath = [NSString stringWithFormat:@"%s/Documents", getenv("LC_HOME_PATH")];
+    UIImage *img = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/CustomCovers/%@.jpg", docPath, bundleId]];
+    if (img) return img;
+    img = LCLaunchCoverGuestLandscapeImage(bundlePath);
+    if (img) return img;
+    img = LCLaunchCoverBundledImage(bundleId);
+    if (img) return img;
+    img = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/FetchedCovers/%@.jpg", docPath, bundleId]];
+    if (img) return img;
+    UIImage *icon = LCLaunchCoverGuestIconImage(bundlePath);
+    if (icon) return LCLaunchCoverBlurredImage(icon) ?: icon;
+    return nil;
+}
+
+#pragma mark 盖层视图
+
+/// 底部渐变罩：与预览同 stops（底 .82 → 42% 处 .25 → 65% 处全透）
+@interface LCLaunchScrimView : UIView
+@end
+@implementation LCLaunchScrimView
++ (Class)layerClass { return CAGradientLayer.class; }
+- (instancetype)init {
+    self = [super init];
+    CAGradientLayer *g = (CAGradientLayer *)self.layer;
+    UIColor *ink = [UIColor colorWithRed:4/255.0 green:4/255.0 blue:8/255.0 alpha:1];
+    g.colors = @[(__bridge id)[ink colorWithAlphaComponent:0.82].CGColor,
+                 (__bridge id)[ink colorWithAlphaComponent:0.25].CGColor,
+                 (__bridge id)UIColor.clearColor.CGColor];
+    g.locations = @[@0, @0.42, @0.65];
+    g.startPoint = CGPointMake(0.5, 1);
+    g.endPoint = CGPointMake(0.5, 0);
+    self.userInteractionEnabled = NO;
+    return self;
+}
+@end
+
+/// 盖层根视图：子视图帧全在 layoutSubviews 按当前 bounds 现算，旋转跟随无状态
+@interface LCLaunchCoverView : UIView
+@property (nonatomic, strong) UIImageView *coverView;
+@property (nonatomic, strong) LCLaunchScrimView *scrimView;
+@property (nonatomic, strong) UIView *metaView;
+@property (nonatomic, strong) UILabel *titleLabel;
+@property (nonatomic, strong) UIView *barTrack;
+@property (nonatomic, strong) UIView *barSegment;
+@property (nonatomic, copy) dispatch_block_t onTap;
+@end
+@implementation LCLaunchCoverView
+- (instancetype)init {
+    self = [super init];
+    self.backgroundColor = [UIColor colorWithRed:7/255.0 green:7/255.0 blue:12/255.0 alpha:1];
+    _coverView = [[UIImageView alloc] init];
+    _coverView.contentMode = UIViewContentModeScaleAspectFill;
+    _coverView.clipsToBounds = YES;
+    [self addSubview:_coverView];
+    _scrimView = [[LCLaunchScrimView alloc] init];
+    [self addSubview:_scrimView];
+    _metaView = [[UIView alloc] init];
+    _metaView.userInteractionEnabled = NO;
+    [self addSubview:_metaView];
+    _titleLabel = [[UILabel alloc] init];
+    _titleLabel.font = [UIFont systemFontOfSize:17 weight:UIFontWeightBold];
+    _titleLabel.textColor = UIColor.whiteColor;
+    _titleLabel.textAlignment = NSTextAlignmentCenter;
+    _titleLabel.numberOfLines = 2;
+    _titleLabel.layer.shadowColor = UIColor.blackColor.CGColor;
+    _titleLabel.layer.shadowOpacity = 0.6;
+    _titleLabel.layer.shadowRadius = 12;
+    _titleLabel.layer.shadowOffset = CGSizeMake(0, 2);
+    [_metaView addSubview:_titleLabel];
+    _barTrack = [[UIView alloc] init];
+    _barTrack.backgroundColor = [UIColor colorWithWhite:1 alpha:0.22];
+    _barTrack.layer.cornerRadius = 1.5;
+    _barTrack.clipsToBounds = YES;
+    [_metaView addSubview:_barTrack];
+    _barSegment = [[UIView alloc] init];
+    _barSegment.backgroundColor = [UIColor colorWithRed:0.949 green:0.918 blue:0.847 alpha:1];
+    _barSegment.layer.cornerRadius = 1.5;
+    [_barTrack addSubview:_barSegment];
+    UILabel *hint = [[UILabel alloc] init];
+    hint.font = [UIFont systemFontOfSize:10 weight:UIFontWeightMedium];
+    hint.textColor = [UIColor colorWithWhite:1 alpha:0.55];
+    hint.textAlignment = NSTextAlignmentCenter;
+    hint.attributedText = [[NSAttributedString alloc] initWithString:LCLaunchCoverHintText()
+                                                          attributes:@{NSKernAttributeName: @1.8,
+                                                                       NSFontAttributeName: hint.font,
+                                                                       NSForegroundColorAttributeName: hint.textColor}];
+    hint.tag = 1;
+    [_metaView addSubview:hint];
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap)];
+    [self addGestureRecognizer:tap];
+    return self;
+}
+- (void)handleTap { if (self.onTap) self.onTap(); }
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    CGRect b = self.bounds;
+    _coverView.frame = b;
+    _scrimView.frame = b;
+    // 底部信息组：标题 24 + 间隔 12 + 光带 3 + 间隔 10 + 提示 14，底边距取高 9% 与 28 的大者
+    CGFloat metaH = 24 + 12 + 3 + 10 + 14;
+    CGFloat bottomGap = MAX(b.size.height * 0.09, 28);
+    _metaView.frame = CGRectMake(0, b.size.height - bottomGap - metaH, b.size.width, metaH);
+    _titleLabel.frame = CGRectMake(20, 0, b.size.width - 40, 24);
+    CGFloat trackW = 118;
+    _barTrack.frame = CGRectMake((b.size.width - trackW) / 2, 24 + 12, trackW, 3);
+    _barSegment.frame = CGRectMake(-12, 0, 52, 3);
+    UIView *hint = [_metaView viewWithTag:1];
+    hint.frame = CGRectMake(20, 24 + 12 + 3 + 10, b.size.width - 40, 14);
+}
+@end
+
+#pragma mark 盖层处理器
+
+@interface LCLaunchCoverHandler : NSObject
+@property (nonatomic, copy) NSString *title;
++ (instancetype)sharedHandler;
+- (void)beginObserving;
+- (void)setResolvedCoverImage:(UIImage *)image;
+@end
+
+@implementation LCLaunchCoverHandler {
+    UIWindowScene *_scene;
+    UIWindow *_window;
+    LCLaunchCoverView *_rootView;
+    UIImage *_coverImage;
+    BOOL _attached;
+    BOOL _dismissed;
+}
+
++ (instancetype)sharedHandler {
+    static LCLaunchCoverHandler *handler;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{ handler = [LCLaunchCoverHandler new]; });
+    return handler;
+}
+
+- (void)beginObserving {
+    NSNotificationCenter *nc = NSNotificationCenter.defaultCenter;
+    [nc addObserver:self selector:@selector(sceneDidActivate:) name:UISceneDidActivateNotification object:nil];
+    [nc addObserver:self selector:@selector(guestWindowDidBecomeKey:) name:UIWindowDidBecomeKeyNotification object:nil];
+    [nc addObserver:self selector:@selector(orientationDidChange) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
+    // 兜底重试（与快捷栏同款）：场景可能已激活或客体建场较晚
+    __weak LCLaunchCoverHandler *weakSelf = self;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [weakSelf attachToActiveSceneIfNeeded];
+    });
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [weakSelf attachToActiveSceneIfNeeded];
+    });
+}
+
+- (void)setResolvedCoverImage:(UIImage *)image {
+    _coverImage = image;
+    if (_attached && !_dismissed && image) {
+        _rootView.coverView.image = image;
+    }
+}
+
+- (void)sceneDidActivate:(NSNotification *)note {
+    if ([note.object isKindOfClass:UIWindowScene.class]) {
+        [self attachToScene:(UIWindowScene *)note.object];
+    } else {
+        [self attachToActiveSceneIfNeeded];
+    }
+}
+
+- (void)attachToActiveSceneIfNeeded {
+    if (_attached || _dismissed) return;
+    for (UIScene *scene in UIApplication.sharedApplication.connectedScenes) {
+        if ([scene isKindOfClass:UIWindowScene.class] &&
+            scene.activationState == UISceneActivationStateForegroundActive) {
+            [self attachToScene:(UIWindowScene *)scene];
+            return;
+        }
+    }
+}
+
+- (void)attachToScene:(UIWindowScene *)scene {
+    if (_attached || _dismissed || !scene) return;
+    // 客体主窗已成为 key = 首帧已经呈上（挂载晚于客体建场时可能发生）：
+    // 盖层使命已完，不再上盖
+    for (UIWindow *w in scene.windows) {
+        if (!w.hidden && w.isKeyWindow && w.windowLevel < UIWindowLevelAlert) {
+            _dismissed = YES;
+            return;
+        }
+    }
+    _attached = YES;
+    _scene = scene;
+
+    UIWindow *window = [[UIWindow alloc] initWithWindowScene:scene];
+    window.windowLevel = UIWindowLevelAlert + 50;
+    window.backgroundColor = [UIColor colorWithRed:7/255.0 green:7/255.0 blue:12/255.0 alpha:1];
+    LCLaunchCoverView *rootView = [[LCLaunchCoverView alloc] init];
+    rootView.titleLabel.text = self.title;
+    if (_coverImage) rootView.coverView.image = _coverImage;
+    __weak LCLaunchCoverHandler *weakSelf = self;
+    rootView.onTap = ^{ [weakSelf dismissWithDuration:0.3]; };
+    UIViewController *rootVC = [[UIViewController alloc] init];
+    rootVC.view = rootView;
+    window.rootViewController = rootVC;
+    _rootView = rootView;
+    _window = window;
+    window.hidden = NO;
+
+    // 入场（与预览同时序）：罩 0.25s 起 0.7s 淡入、信息组 0.4s 起 0.6s 淡入、
+    // 封面缓推与光带同时启动
+    rootView.scrimView.alpha = 0;
+    rootView.metaView.alpha = 0;
+    rootView.coverView.transform = CGAffineTransformMakeScale(1.14, 1.14);
+    [UIView animateWithDuration:0.7 delay:0.25 options:UIViewAnimationOptionCurveEaseOut animations:^{
+        rootView.scrimView.alpha = 1;
+    } completion:nil];
+    [UIView animateWithDuration:0.6 delay:0.4 options:UIViewAnimationOptionCurveEaseOut animations:^{
+        rootView.metaView.alpha = 1;
+    } completion:nil];
+    [UIView animateWithDuration:6 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+        rootView.coverView.transform = CGAffineTransformMakeScale(1.03, 1.03);
+    } completion:nil];
+    CABasicAnimation *slide = [CABasicAnimation animationWithKeyPath:@"transform.translation.x"];
+    slide.fromValue = @0;
+    slide.toValue = @90;
+    slide.duration = 1.1;
+    slide.autoreverses = YES;
+    slide.repeatCount = HUGE_VALF;
+    slide.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    [rootView.barSegment.layer addAnimation:slide forKey:@"lcLaunchBarSlide"];
+    NSLog(@"[LCBootstrap][launchcover] 启动封面已上盖：%@", self.title);
+}
+
+- (void)guestWindowDidBecomeKey:(NSNotification *)note {
+    if (_dismissed || !_attached) return;
+    UIWindow *w = note.object;
+    if (![w isKindOfClass:UIWindow.class] || w == _window) return;
+    // 快捷栏（+100）与回库 veil（+200）等警戒线以上窗口不算客体首帧
+    if (w.windowLevel >= UIWindowLevelAlert) return;
+    // 首帧提交紧随 makeKeyAndVisible 一两帧，稍候 0.15s 再起淡出避免抢帧
+    __weak LCLaunchCoverHandler *weakSelf = self;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.15 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [weakSelf dismissWithDuration:0.35];
+    });
+}
+
+- (void)orientationDidChange {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (self->_window && self->_scene) {
+            CGRect b = self->_scene.coordinateSpace.bounds;
+            if (!CGRectEqualToRect(self->_window.frame, b)) {
+                self->_window.frame = b;
+            }
+        }
+    });
+}
+
+- (void)dismissWithDuration:(NSTimeInterval)duration {
+    if (_dismissed || !_attached) return;
+    _dismissed = YES;
+    UIWindow *window = _window;
+    [UIView animateWithDuration:duration animations:^{
+        window.alpha = 0;
+    } completion:^(BOOL finished) {
+        window.hidden = YES;
+        [NSNotificationCenter.defaultCenter removeObserver:self];
+    }];
+    NSLog(@"[LCBootstrap][launchcover] 启动封面撤层");
+}
+
+@end
+
+static BOOL lcLaunchCoverInstallAttempted;
+static void LCLaunchCoverInstall(NSString *bundlePath, NSString *bundleId, NSString *displayName) {
+    if (lcLaunchCoverInstallAttempted) return;
+    lcLaunchCoverInstallAttempted = YES;
+    LCLaunchCoverHandler *handler = [LCLaunchCoverHandler sharedHandler];
+    handler.title = displayName.length ? displayName : (bundleId ?: @"");
+    [handler beginObserving];
+    NSString *pathCopy = [bundlePath copy];
+    NSString *idCopy = [bundleId copy];
+    dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
+        UIImage *image = LCLaunchCoverResolveImage(pathCopy, idCopy);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [handler setResolvedCoverImage:image];
+        });
+    });
+}
+
 static NSString* invokeAppMain(NSString *selectedApp, NSString *selectedContainer, int argc, char *argv[]) {
     NSString *appError = nil;
     if([[lcUserDefaults objectForKey:@"LCWaitForDebugger"] boolValue]) {
@@ -1878,6 +2360,11 @@ static NSString* invokeAppMain(NSString *selectedApp, NSString *selectedContaine
     // 的游玩时长心跳对 SideStore 本就是误计（伪会话永远不会正常结清）。
     if (!isLiveProcess && !isSideStore) {
         LCQuickBarInstall();
+        // 启动动画（游戏启动封面）：安装点全部早期错误返回之后、跳 main 前，
+        // 与快捷栏同处预置；盖层挂客体场景、客体首帧（窗口成为 key）时撤。
+        NSString *guestDisplayName = appBundle.infoDictionary[@"CFBundleDisplayName"]
+            ?: appBundle.infoDictionary[@"CFBundleName"] ?: selectedApp;
+        LCLaunchCoverInstall(bundlePath, appBundle.bundleIdentifier, guestDisplayName);
     }
 
     // Go!
@@ -2058,6 +2545,9 @@ int LiveContainerMain(int argc, char *argv[]) {
             lcLaunchURL = launchUrl;
             [lcUserDefaults removeObjectForKey:@"launchAppUrlScheme"];
         }
+        // 先捕获宿主首选语言（启动封面提示文案用）：invokeAppMain 内的客体
+        // 钩子会改写本进程 AppleLanguages，之后现读会失真
+        LCLaunchCoverCaptureHostLanguage();
         NSString *appError = invokeAppMain(selectedApp, selectedContainer, argc, argv);
         if (appError) {
             if(isLiveProcess) {

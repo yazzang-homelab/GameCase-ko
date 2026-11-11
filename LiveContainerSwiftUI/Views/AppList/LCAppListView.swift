@@ -55,6 +55,16 @@ struct LCAppListView : View, LCAppBannerDelegate, LCAppModelDelegate {
     // 标记并盖黑遮罩自拉起；本视图冷启动读到标记则首帧盖黑、0.3s 淡出后清除标记。
     @State private var returnFadeVisible = false
     @State private var returnFadeOpacity: Double = 0
+    // 冷启动开屏动画（启动动画 A）：只在真冷启动出现一层品牌开屏（图标轻缩放
+    // 入场 + 光扫 + 字标上浮，约 1.5s 后溶进游戏库）。回库自拉起（returning
+    // 标记在）与启动失败待报错（error 键在，LCTabView 将呈现错误页）都不播：
+    // 前者有回库淡入专管接缝，后者的报错弹层不许被动画盖住。盖层全程不拦截
+    // 触摸，库在下层照常构建；播完（或超时兜底）即移除。
+    @State private var splashVisible = false
+    @State private var splashIconIn = false
+    @State private var splashSweepIn = false
+    @State private var splashWordIn = false
+    @State private var splashFading = false
     // ipa choosing stuff
     @State var choosingIPA = false
     @State var errorShow = false
@@ -131,6 +141,12 @@ struct LCAppListView : View, LCAppBannerDelegate, LCAppModelDelegate {
         let returning = Self.quickBarReturningMarker()
         _returnFadeVisible = State(initialValue: returning)
         _returnFadeOpacity = State(initialValue: returning ? 1 : 0)
+        // 开屏只在冷启动播：回库（returning）不播；上一局启动失败留下待呈现
+        // 报错（error 键 / 签名中断标记，与 LCTabView.checkLastLaunchError 读的
+        // 同一组键）时也不播，避免动画压住随后的报错弹层
+        let pendingLaunchError = UserDefaults.standard.string(forKey: "error") != nil
+            || UserDefaults.standard.bool(forKey: "SigningInProgress")
+        _splashVisible = State(initialValue: !returning && !pendingLaunchError)
     }
 
     /// 快捷栏状态文件：与 LCBootstrap 同一路径（宿主容器 Library/Preferences/LCQuickBar.plist）
@@ -158,6 +174,78 @@ struct LCAppListView : View, LCAppBannerDelegate, LCAppModelDelegate {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
             returnFadeVisible = false
         }
+    }
+
+    /// 冷启动开屏时序（与批准预览一致）：图标 0.88→1 缩放入场（0.55s）、光带
+    /// 0.45s 起扫过图标（0.8s）、字标 0.3s 起上浮淡入（0.6s）、1.55s 起整层
+    /// 0.5s 溶出、2.1s 移除。盖层不拦截触摸，纯视觉；此处只在视图出现时调一次。
+    func playSplashIfNeeded() {
+        guard splashVisible else { return }
+        withAnimation(.timingCurve(0.2, 0.8, 0.25, 1, duration: 0.55)) {
+            splashIconIn = true
+        }
+        withAnimation(.easeInOut(duration: 0.8).delay(0.45)) {
+            splashSweepIn = true
+        }
+        withAnimation(.timingCurve(0.2, 0.8, 0.25, 1, duration: 0.6).delay(0.3)) {
+            splashWordIn = true
+        }
+        withAnimation(.easeOut(duration: 0.5).delay(1.55)) {
+            splashFading = true
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.1) {
+            splashVisible = false
+        }
+    }
+
+    /// 开屏盖层：深色径向底（中心略亮）+ 图标（圆角 + 光扫）+ GameCase 字标 +
+    /// 「游戏库」小字。构图与时序按批准预览；横竖屏同一居中构图。
+    private var splashOverlay: some View {
+        ZStack {
+            RadialGradient(
+                colors: [Color(red: 0.09, green: 0.09, blue: 0.12), Color(red: 0.027, green: 0.027, blue: 0.047)],
+                center: UnitPoint(x: 0.5, y: 0.3),
+                startRadius: 0,
+                endRadius: 520
+            )
+            VStack(spacing: 18) {
+                Image("GCLaunchIcon")
+                    .resizable()
+                    .frame(width: 92, height: 92)
+                    .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
+                    .overlay {
+                        // 光扫：115° 白色渐变带横穿图标，初值藏于左外
+                        Rectangle()
+                            .fill(LinearGradient(
+                                colors: [.clear, Color.white.opacity(0.35), .clear],
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            ))
+                            .frame(width: 46)
+                            .rotationEffect(.degrees(20))
+                            .offset(x: splashSweepIn ? 110 : -110)
+                            .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
+                    }
+                    .shadow(color: .black.opacity(0.55), radius: 15, x: 0, y: 10)
+                    .scaleEffect(splashIconIn ? 1 : 0.88)
+                    .opacity(splashIconIn ? 1 : 0)
+                Text("GameCase")
+                    .font(.system(size: 25, weight: .bold))
+                    .tracking(3.5)
+                    .foregroundColor(Color(red: 0.949, green: 0.918, blue: 0.847))
+                    .opacity(splashWordIn ? 1 : 0)
+                    .offset(y: splashWordIn ? 0 : 10)
+                Text("lc.launch.splashSubtitle".loc)
+                    .font(.system(size: 11, weight: .medium))
+                    .tracking(3.7)
+                    .foregroundColor(Color(red: 0.949, green: 0.918, blue: 0.847).opacity(0.45))
+                    .opacity(splashWordIn ? 1 : 0)
+                    .offset(y: splashWordIn ? 0 : 10)
+            }
+        }
+        .ignoresSafeArea()
+        .opacity(splashFading ? 0 : 1)
+        .allowsHitTesting(false)
     }
 
     var uninstallDialogTitle: String {
@@ -313,6 +401,12 @@ struct LCAppListView : View, LCAppBannerDelegate, LCAppModelDelegate {
                 LCSidePanelContainer(isPresented: containerSettingsPanelPresented, onClose: { containerSettingsPanelPresented = false }) {
                     LCSettingsView(onClose: { containerSettingsPanelPresented = false })
                 }
+
+                // 冷启动开屏（启动动画 A）：仅冷启动在场（init 按 returning /
+                // 待报错定初值），盖住首帧构建、播完自溶。不拦截触摸。
+                if splashVisible {
+                    splashOverlay
+                }
             }
             .navigationBarHidden(true)
             .navigationBarProgressBar(show: $installprogressVisible, progress: $installProgressPercentage)
@@ -321,6 +415,7 @@ struct LCAppListView : View, LCAppBannerDelegate, LCAppModelDelegate {
                     onAppear()
                 }
                 consumeReturnFade()
+                playSplashIfNeeded()
             }
         }
         .navigationViewStyle(StackNavigationViewStyle())
