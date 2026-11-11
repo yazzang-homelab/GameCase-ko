@@ -1471,7 +1471,8 @@ static NSString *GCPlayNameSwapToPlayName(NSString *dataRootPath, NSString *rest
 // 本进程不存在宿主 UI，盖层只能挂在客体场景上：最早可建窗的时点是客体场景
 // 激活（UISceneDidActivateNotification，与快捷栏同一挂载信号），盖层在那一刻
 // 盖满场景，罩住客体加载至首帧的整段等待（此前的进程重拉与 invokeAppMain
-// 装载段没有窗口可用，是架构上盖不住的固有黑段，不在本动画范围）。
+// 装载段在本进程没有窗口可用，该段的系统 morph 一闪改由宿主侧预盖层从另
+// 一侧掩盖，见下方「宿主侧预盖层」段）。
 // 画面（与批准预览同构图）：横版封面全屏缓推（scale 1.14→1.03，6s 缓出、
 // 到顶停住不回弹）、底部渐变罩 + 游戏标题 + 细往复光带（indeterminate）。
 // 结束信号认客体真正开始渲染的第一帧：钩 -[CAMetalLayer nextDrawable]
@@ -1504,6 +1505,30 @@ static NSString *GCPlayNameSwapToPlayName(NSString *dataRootPath, NSString *rest
 // 失败路径：安装点在 invokeAppMain 全部早期错误返回之后，早期报错不装盖层；
 // 跳 main 后客体报错退出，进程随之终止、盖层同灭；下一进程的报错弹层由库侧
 // 呈现，与盖层无交叠（库侧开屏动画在待报错时亦不播，见 LCAppListView init）。
+//
+// 宿主侧预盖层（掩盖进程交棒那一闪）：点开始 → runApp 派发 →
+// LCSharedUtils.launchToGuestApp 让系统自拉起本 App 并 SIGKILL 当前进程，
+// 新进程 LiveContainerMain → invokeAppMain 才装本盖层。SIGKILL 到客体场
+// 景激活之间两进程都没有可控窗口，系统只能拿「宿主最后一帧」与「客体场
+// 景第一帧」做切换 morph：入场快照未就绪时是纯黑帧 + 转圈，先就绪时是
+// 圆角卡片（内容即本盖层）浮在被虚化的库界面上——2026-11-11 竖屏复验录
+// 屏逐帧定案：几何修对后仅剩这一闪，两帧异常都出在这段无窗口区间，本
+// 盖层装得再早也够不着。修法在宿主侧：runApp 派发前由 LCLaunchPreCover
+// （LiveContainerSwiftUI）在宿主当前窗口全屏呈现与本盖层同图同构图的静
+// 态封面（图走库侧 bannerResolution 同链，构图逐项同参；静态态 = 本盖
+// 层入场终态：封面 scale 1.14、罩/信息组满 alpha），成为宿主进程的最
+// 后一帧；morph 两侧同为满屏封面，一闪即被掩盖。宿主以 UserDefaults
+// 键 GCLaunchPreCoverPresented 告知新进程（与 selected 同一跨进程通
+// 道），标记在 LiveContainerMain 跳 invokeAppMain 前与宿主语言一并捕获
+// 并消费（LCLaunchCoverCapturePreCoverFlag——invokeAppMain 内客体钩子
+// 会改写本进程偏好域，之后现读不可靠，与语言捕获同因同址），本盖层据
+// 此跳过罩/信息组入场淡入防交接亮度下沉；缓推与光带、几何/时机/撤盖
+// 公式均不变。朝向：客体根 VC（dm front_ios.m）只声明 MaskLandscape、
+// 无 preferred 覆盖，宿主 Info.plist 首个横屏项为 LandscapeLeft，从竖
+// 屏连接恒落该方向，其实测呈现为画布顺时针 90° 显示于竖屏（录屏帧旋
+// 转 −90° 恰可摆正本盖层）；预盖层在竖屏宿主窗口内以横屏画布 + 旋转
+// +π/2 复现同一呈现，横屏宿主时客体场景在同一物理横屏连接、画布即窗
+// 口 bounds 恒等呈现。
 
 /// 宿主进程首选语言在 LiveContainerMain 跳 invokeAppMain 前捕获（此后客体钩子
 /// 会改写本进程的 AppleLanguages，届时现读 preferredLanguages 会退化成客体
@@ -1512,6 +1537,21 @@ static NSString *lcLaunchHostLanguage;
 
 static void LCLaunchCoverCaptureHostLanguage(void) {
     lcLaunchHostLanguage = NSLocale.preferredLanguages.firstObject;
+}
+
+/// 「本次启动宿主侧已呈现预盖层」标记：宿主在 runApp 派发前写进
+/// UserDefaults.standard（与 selected 同一存储、同一跨进程通道），新进程
+/// 在 LiveContainerMain 跳 invokeAppMain 前与宿主语言一并捕获并消费
+/// （一次性语义，捕获即删键）——invokeAppMain 内的客体钩子会改写本进程
+/// 偏好域，之后现读不可靠，故必须在彼处捕获（与语言捕获同因同址）。
+/// 键名与宿主侧 LCLaunchPreCover.presentedDefaultsKey 两侧同字面，勿改名。
+static BOOL lcLaunchPreCoverPresented;
+static NSString *const LCLaunchPreCoverDefaultsKey = @"GCLaunchPreCoverPresented";
+static void LCLaunchCoverCapturePreCoverFlag(void) {
+    lcLaunchPreCoverPresented = [lcUserDefaults boolForKey:LCLaunchPreCoverDefaultsKey];
+    if (lcLaunchPreCoverPresented) {
+        [lcUserDefaults removeObjectForKey:LCLaunchPreCoverDefaultsKey];
+    }
 }
 
 static NSString *LCLaunchCoverHintText(void) {
@@ -1837,6 +1877,8 @@ static UIImage *LCLaunchCoverResolveImage(NSString *bundlePath, NSString *bundle
 
 @interface LCLaunchCoverHandler : NSObject
 @property (nonatomic, copy) NSString *title;
+/// 本次启动宿主侧已呈现预盖层（交接语境）：attach 跳过罩/信息组入场淡入
+@property (nonatomic) BOOL preCoverPresented;
 + (instancetype)sharedHandler;
 - (void)beginObserving;
 - (void)setResolvedCoverImage:(UIImage *)image;
@@ -2055,16 +2097,24 @@ static NSString *LCLaunchCoverWindowDesc(UIWindow *w) {
                      self.title ?: @"");
 
     // 入场（与预览同时序）：罩 0.25s 起 0.7s 淡入、信息组 0.4s 起 0.6s 淡入、
-    // 封面缓推与光带同时启动
-    rootView.scrimView.alpha = 0;
-    rootView.metaView.alpha = 0;
+    // 封面缓推与光带同时启动。
+    // 交接语境（宿主侧已呈现预盖层）：预盖层的静态画面就是本盖层的入场终
+    // 态（罩/信息组满 alpha、封面 scale 1.14），若再把两组压回 0 重播淡
+    // 入，交接帧会出现一次亮度下沉。故跳过两组淡入、保持满 alpha；封面
+    // 缓推（1.14 起）与光带照常启动，与预盖层逐项对齐。
     rootView.coverView.transform = CGAffineTransformMakeScale(1.14, 1.14);
-    [UIView animateWithDuration:0.7 delay:0.25 options:UIViewAnimationOptionCurveEaseOut animations:^{
-        rootView.scrimView.alpha = 1;
-    } completion:nil];
-    [UIView animateWithDuration:0.6 delay:0.4 options:UIViewAnimationOptionCurveEaseOut animations:^{
-        rootView.metaView.alpha = 1;
-    } completion:nil];
+    if (self.preCoverPresented) {
+        LCLaunchCoverLog(@"交接语境：宿主侧预盖层在位，跳过罩/信息组入场淡入（保持满 alpha）");
+    } else {
+        rootView.scrimView.alpha = 0;
+        rootView.metaView.alpha = 0;
+        [UIView animateWithDuration:0.7 delay:0.25 options:UIViewAnimationOptionCurveEaseOut animations:^{
+            rootView.scrimView.alpha = 1;
+        } completion:nil];
+        [UIView animateWithDuration:0.6 delay:0.4 options:UIViewAnimationOptionCurveEaseOut animations:^{
+            rootView.metaView.alpha = 1;
+        } completion:nil];
+    }
     [UIView animateWithDuration:6 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
         rootView.coverView.transform = CGAffineTransformMakeScale(1.03, 1.03);
     } completion:nil];
@@ -2380,6 +2430,9 @@ static void LCLaunchCoverInstall(NSString *bundlePath, NSString *bundleId, NSStr
     LCLaunchCoverHandler *handler = [LCLaunchCoverHandler sharedHandler];
     handler.title = displayName.length ? displayName : (bundleId ?: @"");
     LCLaunchCoverLog(@"==== 盖层会话开始 bundleId=%@ 标题=%@ ====", bundleId ?: @"", handler.title);
+    LCLaunchCoverLog(@"宿主侧预盖层标记=%@（LiveContainerMain 跳 invokeAppMain 前捕获并消费）",
+                     lcLaunchPreCoverPresented ? @"有（交接语境）" : @"无（常规入场）");
+    handler.preCoverPresented = lcLaunchPreCoverPresented;
     // 首帧信号钩子必须赶在跳客体 main 前装好，才不会漏掉第一块 drawable
     LCLaunchCoverInstallFirstFrameHook();
     [handler beginObserving];
@@ -2922,6 +2975,10 @@ int LiveContainerMain(int argc, char *argv[]) {
         selectedApp = nil;
         [lcUserDefaults removeObjectForKey:@"selected"];
         [lcUserDefaults removeObjectForKey:@"selectedContainer"];
+        // 回库/UI 启动不消费预盖层标记：顺手清掉可能残留的宿主侧标记，
+        // 防下一次未经预盖层的启动误入交接语境（正常路径已在派发失败
+        // catch 与新进程捕获处各自清理，此为兜底）
+        [lcUserDefaults removeObjectForKey:LCLaunchPreCoverDefaultsKey];
     }
     
     if(isLiveProcess) {
@@ -2998,6 +3055,9 @@ int LiveContainerMain(int argc, char *argv[]) {
         // 先捕获宿主首选语言（启动封面提示文案用）：invokeAppMain 内的客体
         // 钩子会改写本进程 AppleLanguages，之后现读会失真
         LCLaunchCoverCaptureHostLanguage();
+        // 同址捕获并消费宿主侧预盖层标记（同一偏好域改写风险、同一通道）：
+        // 宿主 runApp 派发前写入，客体盖层据此跳过罩/信息组入场淡入
+        LCLaunchCoverCapturePreCoverFlag();
         NSString *appError = invokeAppMain(selectedApp, selectedContainer, argc, argv);
         if (appError) {
             if(isLiveProcess) {
