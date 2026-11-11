@@ -42,17 +42,59 @@
 //  floating 面板形态为 true、整屏形态为 false，旋转时随形态翻转，
 //  本容器的列宽 / 安全区语义跟着原地切换（页面实例不重建）。
 //
+//  灵动岛右侧留白（搬运 S2Arm 上游 PR #452 的合并形态，上游提交
+//  026bff15「灵动岛转到右边时，设置浮窗和设置页右侧照扣安全区」，
+//  用户 2026-11-11 在 S2Arm 线拍板保留、再令搬入 GC）：面板贴屏幕
+//  右缘、整页忽略横向 safe inset 时，行尾的开关 / 分段条直达物理
+//  右缘；iPhone 横屏时系统给左右两边同样的安全区（灵动岛机型
+//  59pt），但灵动岛只在一边——转到右边时右侧控件会被它盖住。故
+//  判定与 S2Arm 的 SensorEdge 逐字同构：手机且界面朝向为
+//  landscapeLeft（设备顶部、即传感器那一端在右）时，面板内只忽
+//  略 leading 一边、trailing 照常计入（行右缘退回安全区内，内容
+//  自己的 padding 之外再留 59pt）；其余情形（竖屏、朝向相反、
+//  无岛 / iPad）维持现行两侧全忽略的全宽布局。S2Arm 把该判定做
+//  成独立的 TrailingOverlaySafeArea 修饰器逐页挂（壳设置页 / 手
+//  柄页），另在库页浮窗用 padding 内联现算；GC 的三页（游戏设
+//  置 / 宿主设置 / 手柄）共用本容器一处根层，等价映射为把朝向
+//  状态收进本容器：出现在面板内时读一次、每次设备转向时刷新
+//  （面板常驻、旋转时输入不变，页面不一定重画——与 S2Arm 把朝
+//  向放进状态的理由相同）。整屏形态不经此路：640 居中列在横屏
+//  左右各留 ≥117pt，行不达右缘，与岛无关，逐点不变。
+//
 
 import SwiftUI
+import UIKit
+
+/// 横屏时灵动岛 / 刘海在不在界面的右侧（trailing）：S2Arm
+/// SensorEdge 的等价搬运（出处见文件头注）。竖屏、iPad 恒 false。
+enum GCSensorEdge {
+    @MainActor static var onTrailing: Bool {
+        let scene = UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .first { $0.activationState == .foregroundActive }
+            ?? UIApplication.shared.connectedScenes
+                .compactMap { $0 as? UIWindowScene }.first
+        return UIDevice.current.userInterfaceIdiom == .phone
+            && scene?.interfaceOrientation == .landscapeLeft
+    }
+}
 
 struct LCSettingsColumn<Content: View>: View {
     @ViewBuilder var content: (_ isLandscape: Bool) -> Content
     @Environment(\.lcInSidePanel) private var inSidePanel
+    /// 灵动岛当前是否在界面右侧（仅面板形态用，见文件头注）：出现
+    /// 时与每次设备转向时刷新，语义与 S2Arm TrailingOverlaySafeArea
+    /// 的同名状态一致。
+    @State private var sensorOnTrailing = false
 
     var body: some View {
         if inSidePanel {
             reader
-                .ignoresSafeArea(edges: [.leading, .trailing])
+                .ignoresSafeArea(edges: sensorOnTrailing ? [.leading] : [.leading, .trailing])
+                .onAppear { sensorOnTrailing = GCSensorEdge.onTrailing }
+                .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
+                    sensorOnTrailing = GCSensorEdge.onTrailing
+                }
         } else {
             reader
         }
