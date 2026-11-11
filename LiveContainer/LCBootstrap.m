@@ -1597,7 +1597,7 @@ static UIImage *LCLaunchCoverBundledImage(NSString *bundleId) {
     [bundles addObject:lcMainBundle];
     for (NSBundle *b in bundles) {
         for (NSString *sub in @[[NSNull null], @"GameCovers"]) {
-            NSURL *url = [b urlForResource:name withExtension:@"jpg" subdirectory:(sub == (id)NSNull.null ? nil : sub)];
+            NSURL *url = [b URLForResource:name withExtension:@"jpg" subdirectory:(sub == (id)NSNull.null ? nil : sub)];
             if (url) {
                 UIImage *img = [UIImage imageWithContentsOfFile:url.path];
                 if (img) return img;
