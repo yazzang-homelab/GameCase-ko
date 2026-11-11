@@ -1841,7 +1841,7 @@ static UIImage *LCLaunchCoverResolveImage(NSString *bundlePath, NSString *bundle
 - (void)beginObserving;
 - (void)setResolvedCoverImage:(UIImage *)image;
 - (void)guestFirstFrameDidRender;
-- (void)scheduleDismissIfReady;
+- (void)evaluateDismissCondition;
 - (void)dismissWithReason:(NSString *)reason duration:(NSTimeInterval)duration;
 @end
 
@@ -1854,7 +1854,7 @@ static UIImage *LCLaunchCoverResolveImage(NSString *bundlePath, NSString *bundle
 // #107 曾在本信号上再叠一层 attach 前置判死（信号已到 = 迟到 attach 不
 // 上盖），同样证伪：客体在场景连接/首个刷新周期就取走首块 drawable，
 // 必早于激活通知与 2s/5s 重试，于是 attach 永远判死、症状与 #106 一致。
-// 现行：信号只决定撤盖时刻（见 scheduleDismissIfReady 的下限公式），
+// 现行：信号只决定撤盖时刻（见「撤盖看门狗」段的公式与周期重估），
 // 永远不决定上不上盖。钩子由 LCBootstrap 本体在跳客体 main 前装，不经
 // TweakLoader.dylib，「不加载 TweakLoader」开关打开时照常工作。撤盖后
 // 恢复原 IMP、零残留。若客体不用 CAMetalLayer（纯 UIKit/老 GL 引擎），
@@ -1919,7 +1919,8 @@ static void *LCLaunchCoverWindowBoundsContext = &LCLaunchCoverWindowBoundsContex
     UIImage *_coverImage;
     BOOL _attached;
     BOOL _dismissed;
-    BOOL _dismissScheduled;
+    NSUInteger _watchdogGeneration;
+    BOOL _watchdogSignalLogged;
     CFTimeInterval _attachTime;
     NSMutableSet<UIWindow *> *_observedWindows;
     BOOL _geometryObserving;
@@ -2060,43 +2061,87 @@ static void *LCLaunchCoverWindowBoundsContext = &LCLaunchCoverWindowBoundsContex
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(30 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [weakSelf2 dismissWithReason:@"fallback-30s" duration:0.35];
     });
-    // 信号若已先到，上盖即排定撤盖（按下限公式）；未到则等信号送达时排定
-    [self scheduleDismissIfReady];
+    // 撤盖看门狗自上盖起跑：周期重估撤盖公式，不依赖信号/上盖任一单次
+    // 事件送达（见「撤盖看门狗」段的失效路径枚举）
+    [self startDismissWatchdog];
 }
 
 - (void)guestFirstFrameDidRender {
     // 客体已取走第一块 drawable、开始渲染首帧。信号可能先于上盖到达
-    // （常态，见 attach 注释），此时只记账，等上盖后由 attach 末尾的
-    // scheduleDismissIfReady 排定撤盖；已上盖则在此排定。
+    // （常态，见 attach 注释），此时只记账——撤盖由看门狗周期重估，不
+    // 靠这次送达排定；已上盖则在此立即重估一次，缩短迟滞。
     LCLaunchCoverLog(@"首帧信号送达 handler（attached=%d dismissed=%d 距上盖 %+lldms）",
                      _attached, _dismissed,
                      _attached ? (long long)llround((CACurrentMediaTime() - _attachTime) * 1000.0) : -1);
     // 兜底检查点：淡出排定前强制按场景 bounds 对一次帧，防几何错位被带进淡出
     [self syncGeometryToSceneWithReason:@"first-frame" checkpoint:YES];
-    [self scheduleDismissIfReady];
+    [self evaluateDismissCondition];
 }
 
-// 撤盖时刻公式（上盖与信号两头都调用，先到者记账、后到者排定）：
-//   撤盖 = max(上盖 + 1.6s, 首帧信号 + 0.35s 落定)，其后 0.35s 淡出。
-// 1.6s 是自上盖起算的总时长下限，覆盖「引擎先画黑帧再出内容」的那段
-// （dm 客体首帧即黑底清屏，logo 晚 1–2s）；0.9s 最短显示被该下限包含。
-// 信号未到时不排定（等信号或 30s 兜底）；点按跳过不走本公式、立即撤。
-- (void)scheduleDismissIfReady {
-    if (!_attached || _dismissed || _dismissScheduled) return;
-    if (!lcFirstDrawableSeen) {
-        LCLaunchCoverLog(@"撤盖暂不排定：首帧信号未到（等信号或 30s 兜底）");
-        return;
-    }
-    NSTimeInterval now = CACurrentMediaTime();
-    NSTimeInterval target = MAX(_attachTime + 1.6, lcFirstDrawableTime + 0.35);
-    NSTimeInterval delay = MAX(target - now, 0);
-    _dismissScheduled = YES;
-    LCLaunchCoverLog(@"撤盖已排定：%.0fms 后开始淡出（公式 max(上盖+1.6s, 首帧+0.35s)，淡出 0.35s）",
-                     delay * 1000.0);
+#pragma mark 撤盖看门狗（条件式周期重估）
+
+// 自动撤盖失效路径枚举（实测：有时自动淡出、有时不自动消失必须手点）：
+//   ① lost-wakeup（单次事件排定、无重估）：旧实现里公式排定只有两个单
+//      次调用点——attach 末尾与信号送达，且带 _dismissScheduled 一次性
+//      闩锁。信号先于上盖到达时，信号侧排定在 !_attached 守卫处静默返
+//      回（只记账），全靠 attach 末尾补排这一次交接；排出的单个
+//      dispatch_after 在客体加载期主队列被长占用时可被推迟到远超公式
+//      时刻且无人复查。任一环丢失/迟到即永久不排定，只能手点或等
+//      30s——点按有效正是因为触摸泵动运行循环、且点按路径不依赖那次
+//      排定。
+//   ② 信号对钩子不可见：钩子在跳客体 main 之前装好（LCLaunchCover
+//      Install），同进程内客体不可能更早取 drawable，「装前已发生」结
+//      构上排除；但变体真实存在——客体金属层类重写 nextDrawable 不走
+//      基类实现、或客体根本不用 CAMetalLayer 呈现（老 GL 等），钩子
+//      永不触发，与③同归「无信号」。
+//   ③ 无信号长加载：着色器重建期（换包首启）前端只画 UIKit 手柄、游
+//      戏层不出帧，nextDrawable 长时间不被调用。口径：这是真加载，盖
+//      层保持是对的、不许到点乱撤；旧实现下这段时间只能等 30s 兜底或
+//      手点。看门狗保证信号一旦置位（哪怕其单次送达/排定被丢），最多
+//      一个判定周期内按公式撤盖，「信号到了却不撤」就此消除；30s 兜
+//      底仍在，只防信号永不到达。
+// 修法：撤盖改条件式看门狗——自上盖起每 0.25s 在主队列重估一次撤盖条
+// 件，满足即撤、不依赖任何单次事件送达；信号送达时仍立即重估一次降迟
+// 滞。撤盖公式不变：撤盖 = max(上盖 + 1.6s, 首帧信号 + 0.35s 落定)，
+// 其后 0.35s 淡出（1.6s 总下限覆盖「引擎先画黑帧再出内容」的那段；
+// 0.9s 最短显示被该下限包含）。撤盖后以代数计数作废在途链、停表；点
+// 按跳过不走公式、立即撤。
+- (void)startDismissWatchdog {
+    NSUInteger gen = ++_watchdogGeneration;
+    LCLaunchCoverLog(@"撤盖看门狗已启动：每 250ms 重估撤盖条件（公式 max(上盖+1.6s, 首帧+0.35s)）");
+    [self runWatchdogGeneration:gen];
+}
+
+- (void)runWatchdogGeneration:(NSUInteger)gen {
+    if (_dismissed || !_attached || gen != _watchdogGeneration) return;
+    [self evaluateDismissCondition];
+    if (_dismissed || gen != _watchdogGeneration) return;
     __weak LCLaunchCoverHandler *weakSelf = self;
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [weakSelf dismissWithReason:@"first-frame" duration:0.35];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [weakSelf runWatchdogGeneration:gen];
     });
+}
+
+- (void)stopDismissWatchdog {
+    _watchdogGeneration++; // 作废在途的看门狗链，链在下一跳自检时自停
+}
+
+// 单次判定（看门狗每 0.25s 调用 + 信号送达时立即调用）：未上盖/已撤盖
+// 直接返回；无信号 = 真加载中（路径③口径），盖层保持且不记流水——仅
+// 状态变化时打点：信号由未到变已到的首次判定记一行目标时刻，其后每
+// 0.25s 静默重估直到公式时刻已过即撤（来源 formula，见撤盖日志）。
+- (void)evaluateDismissCondition {
+    if (!_attached || _dismissed) return;
+    if (!lcFirstDrawableSeen) return;
+    NSTimeInterval target = MAX(_attachTime + 1.6, lcFirstDrawableTime + 0.35);
+    if (!_watchdogSignalLogged) {
+        _watchdogSignalLogged = YES;
+        LCLaunchCoverLog(@"看门狗判定变化：首帧信号已确认，撤盖目标为上盖后 %.0fms（公式 max(上盖+1.6s, 首帧+0.35s)），到期即撤",
+                         (target - _attachTime) * 1000.0);
+    }
+    if (CACurrentMediaTime() >= target) {
+        [self dismissWithReason:@"formula" duration:0.35];
+    }
 }
 
 - (void)orientationDidChange {
@@ -2207,12 +2252,14 @@ static void *LCLaunchCoverWindowBoundsContext = &LCLaunchCoverWindowBoundsContex
         LCLaunchCoverLog(@"撤盖请求忽略：reason=%@ attached=%d dismissed=%d", reason, _attached, _dismissed);
         return;
     }
+    [self stopDismissWatchdog]; // 任一来源撤盖都先停表，在途链自检自停
     // 兜底检查点：开始淡出前强制按场景 bounds 对一次帧，错位不许带进淡出
     // （须在 _dismissed 置位前调，sync 以未撤盖为前提）
     [self syncGeometryToSceneWithReason:@"pre-dismiss" checkpoint:YES];
     _dismissed = YES;
     LCLaunchCoverTeardownFirstFrameHook();
-    LCLaunchCoverLog(@"撤盖：reason=%@ 上盖总时长 %.0fms 淡出 %.2fs",
+    // 触发来源三值：formula=看门狗判定公式满足 / tap=点按跳过 / fallback-30s=30s 兜底
+    LCLaunchCoverLog(@"撤盖：触发来源=%@ 上盖总时长 %.0fms 淡出 %.2fs",
                      reason, (CACurrentMediaTime() - _attachTime) * 1000.0, duration);
     UIWindow *window = _window;
     [UIView animateWithDuration:duration animations:^{
