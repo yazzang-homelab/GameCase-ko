@@ -19,6 +19,7 @@
 #import "Tweaks/Tweaks.h"
 #import "Localization.h"
 #import <CoreImage/CoreImage.h>
+#import <QuartzCore/QuartzCore.h>
 #include <mach-o/ldsyms.h>
 
 extern char **environ;
