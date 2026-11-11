@@ -1,0 +1,44 @@
+name: Korean build
+
+on:
+  push:
+    branches: [ko]
+    paths-ignore: ['**.md']
+  pull_request:
+    branches: [ko]
+    paths-ignore: ['**.md']
+  workflow_dispatch:
+
+jobs:
+  check:
+    name: Korean string table
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - run: python3 tools/ko/ko.py check
+
+  build:
+    name: Unsigned IPA
+    needs: check
+    runs-on: macos-latest
+    steps:
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '26.2'
+      - uses: actions/checkout@v6
+        with:
+          submodules: recursive
+      - name: Archive
+        run: xcodebuild archive -archivePath archive -scheme LiveContainer -project LiveContainer.xcodeproj -sdk iphoneos -arch arm64 -configuration Release | xcpretty && exit ${PIPESTATUS[0]}
+      # Same packaging as the first half of .github/build_github.sh: the plain IPA ships without
+      # the SideStore support framework. The SideStore edition is not built here, its embedded
+      # SideStore screens have no Korean.
+      - name: Package
+        run: |
+          mv archive.xcarchive/Products/Applications Payload
+          rm -r Payload/LiveContainer.app/Frameworks/SideStoreSupport.framework
+          zip -qr GameCase-ko.ipa Payload -x "._*" -x ".DS_Store" -x "__MACOSX"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: GameCase-ko.ipa
+          path: GameCase-ko.ipa
