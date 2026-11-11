@@ -449,7 +449,6 @@ struct LCGameCheatsSectionView: View {
                 Toggle("", isOn: entryBinding(file: file, entry: entry))
                     .labelsHidden()
                     .tint(Self.cream)
-                    .gcGlassToggleStyle()
             }
         }
         .frame(minHeight: 44)

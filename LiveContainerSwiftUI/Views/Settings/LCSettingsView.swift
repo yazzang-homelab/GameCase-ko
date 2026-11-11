@@ -96,8 +96,6 @@ struct LCSettingsView: View {
             // 视图、不随此列收窄（与原来一致）。
             LCSettingsColumn { _ in
                 settingsForm
-                    // 全页开关走玻璃开关（玻璃关/低版本时回退系统开关）
-                    .gcGlassToggleStyle()
             }
                 .toolbar {
                     // 关闭钮与数据包导入页「取消」同款做法：sheet 自己的工具栏
