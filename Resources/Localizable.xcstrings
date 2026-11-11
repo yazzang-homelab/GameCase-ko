@@ -2687,6 +2687,12 @@
             "value": "Ciemny"
           }
         },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escuro"
+          }
+        },
         "ru": {
           "stringUnit": {
             "state": "translated",
@@ -2768,6 +2774,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Jasny"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Claro"
           }
         },
         "ru": {
@@ -2853,6 +2865,12 @@
             "value": "Oryginalny"
           }
         },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Original"
+          }
+        },
         "ru": {
           "stringUnit": {
             "state": "translated",
@@ -2934,6 +2952,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Proszę wybrać jakikolwiek styl ikon"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selecione um estilo de ícone"
           }
         },
         "ru": {
@@ -4433,6 +4457,12 @@
             "value": "Nieprawidłowy format adresu URL itms-services"
           }
         },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Formato de URL do itms-services inválido"
+          }
+        },
         "ru": {
           "stringUnit": {
             "state": "translated",
@@ -4516,6 +4546,12 @@
             "value": "W pliku plist nie znaleziono adresu URL do pobrania pliku IPA"
           }
         },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhuma URL de download de IPA encontrada no plist"
+          }
+        },
         "ru": {
           "stringUnit": {
             "state": "translated",
@@ -4597,6 +4633,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nie udało się przeanalizować pliku plist"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Falha ao analisar o arquivo plist"
           }
         },
         "ru": {
@@ -6056,6 +6098,12 @@
             "value": "Dodawanie nielokalnego kontenera"
           }
         },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adicionar contêiner não local"
+          }
+        },
         "ru": {
           "stringUnit": {
             "state": "translated",
@@ -6137,6 +6185,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dodawanie kontenera do pamięci masowej innej niż lokalna nie jest obsługiwane przez większość aplikacji i spowoduje nieoczekiwane zachowanie (w tym awarię). Kontynuować?"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adicionar um contêiner em um armazenamento não local não é suportado pela maioria dos apps e resultará em comportamento indefinido, incluindo travamentos. Continuar?"
           }
         },
         "ru": {
@@ -8569,6 +8623,12 @@
             "value": "Uwaga"
           }
         },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Observação"
+          }
+        },
         "ru": {
           "stringUnit": {
             "state": "translated",
@@ -8650,6 +8710,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Wpisz uwagę..."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Digite a observação..."
           }
         },
         "ru": {
@@ -8756,6 +8822,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Wybierz zewnętrzny folder danych"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selecionar pasta de dados externa"
           }
         },
         "ru": {
@@ -13508,6 +13580,12 @@
             "value": "Sugerowane"
           }
         },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sugerido"
+          }
+        },
         "tr": {
           "stringUnit": {
             "state": "translated",
@@ -13880,6 +13958,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Rozwiązywanie zakładki kontenera..."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resolvendo o marcador do contêiner..."
           }
         },
         "ru": {
@@ -14470,6 +14554,12 @@
             "value": "Ten kontener nie jest w tym momencie dostępny"
           }
         },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Este contêiner não está disponível no momento"
+          }
+        },
         "ru": {
           "stringUnit": {
             "state": "translated",
@@ -14742,6 +14832,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Błędne IDFV"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "IDFV inválido"
           }
         },
         "ru": {
@@ -18535,6 +18631,12 @@
             "value": "Team ID Certyfikatu"
           }
         },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ID da equipe do certificado"
+          }
+        },
         "ru": {
           "stringUnit": {
             "state": "translated",
@@ -18711,6 +18813,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Oczekiwany Team ID"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ID da equipe esperado"
           }
         },
         "ru": {
@@ -21433,6 +21541,12 @@
             "value": "Wyczyszczono cache"
           }
         },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Caches limpos."
+          }
+        },
         "ru": {
           "stringUnit": {
             "state": "translated",
@@ -21498,6 +21612,12 @@
             "value": "Czy chcesz usunąć cache?"
           }
         },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deseja limpar o cache?"
+          }
+        },
         "ru": {
           "stringUnit": {
             "state": "translated",
@@ -21561,6 +21681,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Wyczyść cache"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Limpar caches"
           }
         },
         "ru": {
@@ -22243,6 +22369,12 @@
             "value": "Wyczyść tymczasowe pliki"
           }
         },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Limpar arquivos temporários"
+          }
+        },
         "ru": {
           "stringUnit": {
             "state": "translated",
@@ -22309,6 +22441,12 @@
             "value": "Usunięto pliki tymczasowe"
           }
         },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Arquivos temporários removidos."
+          }
+        },
         "ru": {
           "stringUnit": {
             "state": "translated",
@@ -22373,6 +22511,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Czy chcesz usunąć tymczasowe pliki?"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deseja excluir os arquivos temporários?"
           }
         },
         "ru": {
@@ -22452,6 +22596,12 @@
             "value": "Wyczyść pamięć podręczną ikon"
           }
         },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Limpar cache de ícones"
+          }
+        },
         "ru": {
           "stringUnit": {
             "state": "translated",
@@ -22522,6 +22672,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Wyczyść powiadomienia"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Limpar notificações"
           }
         },
         "ru": {
@@ -22599,6 +22755,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ciemny motyw ikony"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ícone do modo escuro"
           }
         },
         "ru": {
@@ -23633,6 +23795,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ukryj Zwinięty Dok"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ocultar o Dock recolhido"
           }
         },
         "ru": {
@@ -27313,6 +27481,12 @@
             "value": "Priorytet uruchomienia"
           }
         },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prioridade de inicialização"
+          }
+        },
         "ru": {
           "stringUnit": {
             "state": "translated",
@@ -27377,6 +27551,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Przeciągnij GameCase, aby wybrać, który z nich zostanie wypróbowany jako pierwszy podczas uruchamiania udostępnionych aplikacji."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Arraste os GameCases para escolher qual será tentado primeiro ao iniciar apps compartilhados."
           }
         },
         "ru": {
@@ -27938,6 +28118,12 @@
             "value": "Brak cache do wyczyszczenia"
           }
         },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhum cache para limpar."
+          }
+        },
         "ru": {
           "stringUnit": {
             "state": "translated",
@@ -28199,6 +28385,12 @@
             "value": "Brak plików tymczasowych do usunięcia"
           }
         },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhum arquivo temporário para remover."
+          }
+        },
         "ru": {
           "stringUnit": {
             "state": "translated",
@@ -28274,6 +28466,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tryb pojedynczego okna"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modo de janela única"
           }
         },
         "ru": {
@@ -28380,6 +28578,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Schematy przekierowań URL do hosta GameCase"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Redirecionar esquemas de URL para o GameCase anfitrião"
           }
         },
         "ru": {
@@ -28766,6 +28970,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Automatyczne ponowne uruchomienie aplikacji po jej zamknięciu"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reiniciar o app automaticamente após o encerramento"
           }
         },
         "ru": {
@@ -29331,6 +29541,12 @@
             "value": "Pomiń ekran zakończenia"
           }
         },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ignorar a tela de encerramento"
+          }
+        },
         "ru": {
           "stringUnit": {
             "state": "translated",
@@ -29400,6 +29616,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Zarządzanie pamięcią "
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gerenciamento de armazenamento"
           }
         },
         "ru": {
@@ -29964,6 +30186,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Brak dostępnego kontenera dla tej aplikacji."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhum contêiner está disponível para este app."
           }
         },
         "tr": {
@@ -31343,6 +31571,12 @@
             "value": "Sources recommandées"
           }
         },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fontes recomendadas"
+          }
+        },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
@@ -31370,6 +31604,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Aucune source recommandée disponible."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhuma fonte recomendada disponível."
           }
         },
         "zh-Hans": {
@@ -32096,6 +32336,12 @@
             "value": "W obecnym repozytorium znajduje się zbyt wiele aplikacji. Użyj wyszukiwania."
           }
         },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Há apps demais no repositório atual; use a busca."
+          }
+        },
         "ru": {
           "stringUnit": {
             "state": "translated",
@@ -32159,6 +32405,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Bundle de l'appilcation"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pacote do app"
           }
         },
         "ru": {
@@ -32227,6 +32479,12 @@
             "value": "Dane grupy aplikacji"
           }
         },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dados do App Group"
+          }
+        },
         "ru": {
           "stringUnit": {
             "state": "translated",
@@ -32291,6 +32549,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Obliczanie"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Calculando…"
           }
         },
         "ru": {
@@ -32358,6 +32622,12 @@
             "value": "Kontenery"
           }
         },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contêineres"
+          }
+        },
         "ru": {
           "stringUnit": {
             "state": "translated",
@@ -32423,6 +32693,12 @@
             "value": "Zainstalowane aplikację"
           }
         },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apps instalados"
+          }
+        },
         "ru": {
           "stringUnit": {
             "state": "translated",
@@ -32486,6 +32762,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Brak zapisanych danych aplikacji"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhum dado de armazenamento de apps"
           }
         },
         "ru": {
@@ -32554,6 +32836,12 @@
             "value": "Inne"
           }
         },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Outro"
+          }
+        },
         "ru": {
           "stringUnit": {
             "state": "translated",
@@ -32617,6 +32905,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pliki tymczasowe"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Arquivos temporários"
           }
         },
         "ru": {
@@ -32684,6 +32978,12 @@
             "value": "Pamięć całkowita"
           }
         },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Armazenamento total"
+          }
+        },
         "ru": {
           "stringUnit": {
             "state": "translated",
@@ -32744,6 +33044,12 @@
           }
         },
         "pl": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tweaks"
+          }
+        },
+        "pt-BR": {
           "stringUnit": {
             "state": "translated",
             "value": "Tweaks"
@@ -33932,6 +34238,12 @@
             "value": "Zainstaluj aplikację"
           }
         },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Instalar app"
+          }
+        },
         "ru": {
           "stringUnit": {
             "state": "translated",
@@ -34013,6 +34325,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ta witryna próbuje zainstalować aplikację. Czy chcesz kontynuować?"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esta página da web deseja instalar um app. Continuar?"
           }
         },
         "ru": {
@@ -38624,6 +38942,995 @@
           "stringUnit": {
             "state": "translated",
             "value": "Analógico"
+          }
+        }
+      }
+    },
+    "lc.bootstrap.error.jitlessRequiredSinceIOS26": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "JITLess mode is required since iOS 26. Please set it up in settings. \nPlease go to LiveContainer settings -> tap \"Import Certificate from SideStore\" / \"Import Certificate\""
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iOS 26 起必须使用免 JIT 模式，请先在设置中完成配置。\n请前往 GameCase 设置 -> 点按“从 SideStore 导入证书”/“导入证书”"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O modo JITLess é necessário a partir do iOS 26. Configure-o primeiro nos ajustes.\nVá para os ajustes do GameCase -> toque em \"Importar Certificado do SideStore\" / \"Importar Certificado\""
+          }
+        }
+      }
+    },
+    "lc.bootstrap.error.jitNotEnabled": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "JIT was not enabled. If you want to use LiveContainer without JIT, setup JITLess mode in settings."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "JIT 未启用。如果想在没有 JIT 的情况下使用 GameCase，请在设置中配置免 JIT 模式。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O JIT não foi ativado. Se quiser usar o GameCase sem JIT, configure o modo JITLess nos ajustes."
+          }
+        }
+      }
+    },
+    "lc.bootstrap.error.appBundleNotFound": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App bundle not found! Unable to read LCAppInfo.plist."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "找不到 App 包！无法读取 LCAppInfo.plist。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pacote do app não encontrado! Não foi possível ler o LCAppInfo.plist."
+          }
+        }
+      }
+    },
+    "lc.bootstrap.error.appNotFound": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App not found"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "找不到 App"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App não encontrado"
+          }
+        }
+      }
+    },
+    "lc.bootstrap.error.containerNotFound": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Container not found!"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "找不到容器！"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contêiner não encontrado!"
+          }
+        }
+      }
+    },
+    "lc.bootstrap.error.bookmarkResolutionTimeout": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bookmark resolution timed out. Is the data storage offline?"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "解析容器书签超时。数据存储是否处于离线状态？"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tempo esgotado ao resolver o marcador do contêiner. O armazenamento de dados está offline?"
+          }
+        }
+      }
+    },
+    "lc.bootstrap.error.bookmarkResolutionFailed %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bookmark resolution failed or unable to access the container. You might need to readd the data storage. %@"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "解析书签失败或无法访问容器。你可能需要重新添加数据存储。 %@"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Falha ao resolver o marcador ou não foi possível acessar o contêiner. Talvez seja necessário adicionar o armazenamento de dados novamente. %@"
+          }
+        }
+      }
+    },
+    "lc.bootstrap.error.executablePathNotFound": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App's executable path not found. Please try force re-signing or reinstalling this app."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "找不到 App 的可执行文件路径。请尝试强制重新签名或重新安装此 App。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Caminho do executável do app não encontrado. Tente forçar uma nova assinatura ou reinstalar o app."
+          }
+        }
+      }
+    },
+    "lc.bootstrap.error.jitRequiredFor32Bit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "JIT is required to run 32-bit apps."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "运行 32 位 App 需要 JIT。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O JIT é necessário para executar apps de 32 bits."
+          }
+        }
+      }
+    },
+    "lc.bootstrap.error.no32BitEmulatorSelected": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No 32-bit emulator selected"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "未选择 32 位模拟器"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhum emulador de 32 bits selecionado"
+          }
+        }
+      }
+    },
+    "lc.bootstrap.error.emulatorAppNotFound": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The specified 32-bit emulator app is not found"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "找不到指定的 32 位模拟器 App"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O app emulador de 32 bits especificado não foi encontrado"
+          }
+        }
+      }
+    },
+    "lc.bootstrap.error.dlopenUnknownError": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "dlopen: an unknown error occurred"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "dlopen：发生未知错误"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "dlopen: ocorreu um erro desconhecido"
+          }
+        }
+      }
+    },
+    "lc.bootstrap.error.mainEntryPointNotFound": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not find the main entry point"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "找不到主入口点"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Não foi possível encontrar o ponto de entrada principal"
+          }
+        }
+      }
+    },
+    "lc.bootstrap.error.appReturnedFromMain %d": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App returned from its main function with code %d."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App 已从其 main 函数返回，返回码为 %d。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O app retornou da sua função main com o código %d."
+          }
+        }
+      }
+    },
+    "lc.settings.developer.header": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Developer Settings"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "开发者设置"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configurações do desenvolvedor"
+          }
+        }
+      }
+    },
+    "lc.settings.developer.ignoreJITOnLaunch": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ignore JIT on Launching App"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "启动 App 时忽略 JIT"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ignorar o JIT ao iniciar o app"
+          }
+        }
+      }
+    },
+    "lc.settings.developer.keepSelectedWhenQuit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep Selected App when Quit"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "退出时保留所选 App"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Manter o app selecionado ao sair"
+          }
+        }
+      }
+    },
+    "lc.settings.developer.waitForDebugger": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wait For Debugger"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "等待调试器"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aguardar o depurador"
+          }
+        }
+      }
+    },
+    "lc.settings.developer.allowPrivateDataAccess": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allow Private Data access from LiveProcess"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "允许 LiveProcess 访问私有数据"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Permitir o acesso do LiveProcess a dados privados"
+          }
+        }
+      }
+    },
+    "lc.settings.developer.disableLiveProcessWatchdog": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Disable LiveProcess watchdog termination"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "禁用 LiveProcess 看门狗终止"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Desativar o encerramento pelo watchdog do LiveProcess"
+          }
+        }
+      }
+    },
+    "lc.settings.developer.exportCert": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export Cert"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "导出证书"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exportar certificado"
+          }
+        }
+      }
+    },
+    "lc.settings.developer.exportDyld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export Dyld"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "导出 Dyld"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exportar o Dyld"
+          }
+        }
+      }
+    },
+    "lc.settings.developer.nukeSideStore": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nuke SideStore"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "抹除 SideStore"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apagar o SideStore"
+          }
+        }
+      }
+    },
+    "lc.settings.developer.exportMainBundle": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export Main Bundle"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "导出主 App 包"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exportar o pacote principal do app"
+          }
+        }
+      }
+    },
+    "lc.settings.developer.resetSymbolOffsets": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reset Symbol Offsets"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "重置符号偏移"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Redefinir os deslocamentos de símbolos"
+          }
+        }
+      }
+    },
+    "lc.settings.developer.showFLEXOverlay": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show FLEX Overlay"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "显示 FLEX 浮层"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mostrar a sobreposição do FLEX"
+          }
+        }
+      }
+    },
+    "lc.jitlessDiag.gameCaseEntitlements": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GameCase Entitlements"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GameCase Entitlement 文件"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entitlements do GameCase"
+          }
+        }
+      }
+    },
+    "lc.jitlessDiag.liveProcessEntitlements": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "LiveProcess Entitlements"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "LiveProcess Entitlement 文件"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entitlements do LiveProcess"
+          }
+        }
+      }
+    },
+    "lc.jitlessDiag.entitlementNotLoaded": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Failed to Load Entitlement."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "未能加载 Entitlement。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Falha ao carregar o Entitlement."
+          }
+        }
+      }
+    },
+    "lc.jitlessDiag.entitlementLoadFailed": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Failed to load entitlement."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "加载 Entitlement 失败。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Falha ao carregar o entitlement."
+          }
+        }
+      }
+    },
+    "lc.jitlessDiag.liveProcessNotInstalled": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "LiveProcess is not installed."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "LiveProcess 未安装。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O LiveProcess não está instalado."
+          }
+        }
+      }
+    },
+    "lc.jitlessDiag.teamIdentifierReadFailed": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Failed to read com.apple.developer.team-identifier"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "读取 com.apple.developer.team-identifier 失败"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Falha ao ler com.apple.developer.team-identifier"
+          }
+        }
+      }
+    },
+    "lc.dataManagement.privateContainer": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Private Container"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "私有容器"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contêiner privado"
+          }
+        }
+      }
+    },
+    "lc.dataManagement.appGroupContainer": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App Group Container"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App Group 容器"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contêiner do App Group"
+          }
+        }
+      }
+    },
+    "lc.dataManagement.gameCaseBundle": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GameCase Bundle"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GameCase 本体"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pacote do GameCase"
+          }
+        }
+      }
+    },
+    "lc.appSettings.noFileSelected": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No file selected"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "未选择文件"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhum arquivo selecionado"
+          }
+        }
+      }
+    },
+    "lc.appSettings.externalStorageAccessFailed": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "unable to access directory, startAccessingSecurityScopedResource returns false"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法访问目录，startAccessingSecurityScopedResource 返回 false"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Não foi possível acessar o diretório; startAccessingSecurityScopedResource retornou false"
+          }
+        }
+      }
+    },
+    "lc.appSettings.externalContainerBookmarkFailed": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unable to generate a bookmark for the selected URL!"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法为所选 URL 生成书签！"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Não foi possível gerar um marcador para a URL selecionada!"
+          }
+        }
+      }
+    },
+    "lc.appSettings.preferenceLoadFailed": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Failed to load preference."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "加载偏好设置失败。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Falha ao carregar as preferências."
+          }
+        }
+      }
+    },
+    "lc.tabView.documentsBookmarkFailed": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Failed to create bookmark for Documents folder?"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法为 Documents 文件夹创建书签？"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Falha ao criar um marcador para a pasta Documents?"
+          }
+        }
+      }
+    },
+    "lc.download.invalidResponse": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Invalid response"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "响应无效"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resposta inválida"
+          }
+        }
+      }
+    },
+    "lc.settings.certDataDecodeFailed": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Failed to decode certificate data"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "解码证书数据失败"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Falha ao decodificar os dados do certificado"
+          }
+        }
+      }
+    },
+    "lc.settings.certImportURLInitFailed": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Failed to initialize certificate import URL."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "初始化证书导入 URL 失败。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Falha ao inicializar a URL de importação do certificado."
           }
         }
       }

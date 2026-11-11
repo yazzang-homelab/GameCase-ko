@@ -243,7 +243,7 @@ struct LCTabView: View {
         }
         
         guard let bookmark = LCUtils.bookmark(for: LCPath.docPath) else {
-            errorInfo = "Failed to create bookmark for Documents folder?"
+            errorInfo = "lc.tabView.documentsBookmarkFailed".loc
             errorShow = true
             return
         }

@@ -284,10 +284,24 @@ static const CGFloat LCQBBarHeight = 46;
 static const CGFloat LCQBBarGap = 12;
 static const NSTimeInterval LCQBAutoCollapseDelay = 3;
 
+// 宿主 App 包内查本地化文案：invokeAppMain 的报错在 mainBundle 已被
+// overwriteMainNSBundle 换成客体包之后仍要取宿主文案，故显式用启动时
+// 存下的 lcMainBundle 查 Localizable 表，不走 mainBundle 通道。
+static NSString *LCBootstrapLocalized(NSString *key) {
+    NSBundle *bundle = lcMainBundle ?: NSBundle.mainBundle;
+    return [bundle localizedStringForKey:key value:nil table:nil];
+}
+
+// 宿主进程的系统首选语言缓存（赋值点在 invokeAppMain 调 NUDGuestHooksInit
+// 之前）：LCQBLibraryTitle 在客体阶段才被调用，那时偏好 hooks 已把偏好域
+// 换成客体、且未设 LCSelectedLanguage 时会删掉 AppleLanguages，
+// preferredLanguages 退化成客体包的开发语言（恒 "en"），不能现读。
+static NSString *LCQBHostPreferredLanguage = nil;
+
 // 快捷栏「游戏库」文案：本代码跑在客体进程内，mainBundle 可能已指向客体，
 // 不能走 NSLocalizedString；按系统首选语言直接挑文案（zh / pt / 其余英文）。
 static NSString *LCQBLibraryTitle(void) {
-    NSString *lang = NSLocale.preferredLanguages.firstObject.lowercaseString ?: @"en";
+    NSString *lang = (LCQBHostPreferredLanguage ?: NSLocale.preferredLanguages.firstObject).lowercaseString ?: @"en";
     if ([lang hasPrefix:@"zh"]) return @"游戏库";
     if ([lang hasPrefix:@"pt"]) return @"Biblioteca";
     return @"Library";
@@ -1456,7 +1470,7 @@ static NSString* invokeAppMain(NSString *selectedApp, NSString *selectedContaine
     if (!LCSharedUtils.certificatePassword && !isSideStore) {
 #if !TARGET_OS_SIMULATOR
         if(@available(iOS 26.0 ,*))  {
-            return @"JITLess mode is required since iOS 26. Please set it up in settings. \nPlease go to LiveContainer settings -> tap \"Import Certificate from SideStore\" / \"Import Certificate\"";
+            return LCBootstrapLocalized(@"lc.bootstrap.error.jitlessRequiredSinceIOS26");
         }
 #endif
         // First of all, let's check if we have JIT
@@ -1464,7 +1478,7 @@ static NSString* invokeAppMain(NSString *selectedApp, NSString *selectedContaine
             usleep(1000*100);
         }
         if (!checkJITEnabled()) {
-            appError = @"JIT was not enabled. If you want to use LiveContainer without JIT, setup JITLess mode in settings.";
+            appError = LCBootstrapLocalized(@"lc.bootstrap.error.jitNotEnabled");
             return appError;
         }
     }
@@ -1496,7 +1510,7 @@ static NSString* invokeAppMain(NSString *selectedApp, NSString *selectedContaine
     }
     
     if(!guestAppInfo) {
-        return @"App bundle not found! Unable to read LCAppInfo.plist.";
+        return LCBootstrapLocalized(@"lc.bootstrap.error.appBundleNotFound");
     }
     
     if([guestAppInfo[@"doUseLCBundleId"] boolValue] ) {
@@ -1522,7 +1536,7 @@ static NSString* invokeAppMain(NSString *selectedApp, NSString *selectedContaine
     NSBundle *appBundle = [[NSBundle alloc] initWithPathForMainBundle:bundlePath];
     
     if(!appBundle) {
-        return @"App not found";
+        return LCBootstrapLocalized(@"lc.bootstrap.error.appNotFound");
     }
     
     // find container in Info.plist
@@ -1532,7 +1546,7 @@ static NSString* invokeAppMain(NSString *selectedApp, NSString *selectedContaine
     }
 
     if(dataUUID == nil) {
-        return @"Container not found!";
+        return LCBootstrapLocalized(@"lc.bootstrap.error.containerNotFound");
     }
     
     if(isLiveProcess && !isSideStore) {
@@ -1602,13 +1616,13 @@ static NSString* invokeAppMain(NSString *selectedApp, NSString *selectedContaine
                 NSData* bookmarkData = container[@"bookmarkData"];
                 if(bookmarkData && [bookmarkData isKindOfClass:NSData.class]) {
                     // we will be killed by watchdog before timedout, so we set this error beforehand.
-                    [lcUserDefaults setObject:@"Bookmark resolution timed out. Is the data storage offline?" forKey:@"error"];
+                    [lcUserDefaults setObject:LCBootstrapLocalized(@"lc.bootstrap.error.bookmarkResolutionTimeout") forKey:@"error"];
                     NSError* err = nil;
                     BOOL isStale = false;
                     bookmarkURL = [NSURL URLByResolvingBookmarkData:bookmarkData options:0 relativeToURL:nil bookmarkDataIsStale:&isStale error:&err];
                     bool access = [bookmarkURL startAccessingSecurityScopedResource];
                     if(!bookmarkURL || !access) {
-                        return [@"Bookmark resolution failed or unable to access the container. You might need to readd the data storage. %@" stringByAppendingString:err.localizedDescription];
+                        return [LCBootstrapLocalized(@"lc.bootstrap.error.bookmarkResolutionFailed %@") stringByAppendingString:err.localizedDescription];
                     }
                     [lcUserDefaults removeObjectForKey:@"error"];
                 }
@@ -1701,7 +1715,7 @@ static NSString* invokeAppMain(NSString *selectedApp, NSString *selectedContaine
 
     // Overwrite executable info
     if(!appBundle.executablePath) {
-        return @"App's executable path not found. Please try force re-signing or reinstalling this app.";
+        return LCBootstrapLocalized(@"lc.bootstrap.error.executablePathNotFound");
     }
 
     NSMutableArray<NSString *> *objcArgv = NSProcessInfo.processInfo.arguments.mutableCopy;
@@ -1716,6 +1730,10 @@ static NSString* invokeAppMain(NSString *selectedApp, NSString *selectedContaine
         method_setImplementation(class_getInstanceMethod(swiftNSProcessInfo, selector), class_getMethodImplementation(NSProcessInfo.class, selector));
     }
     
+    // 缓存宿主系统首选语言：下面的 NUDGuestHooksInit 会把偏好域换成客体
+    // 并可能删掉 AppleLanguages，之后 preferredLanguages 读不到系统语言
+    // （快捷栏 LCQBLibraryTitle 读这份缓存，见其上方注释）。
+    LCQBHostPreferredLanguage = NSLocale.preferredLanguages.firstObject;
     // hook NSUserDefault before running libraries' initializers
     NUDGuestHooksInit();
     if(!isSideStore) {
@@ -1746,13 +1764,13 @@ static NSString* invokeAppMain(NSString *selectedApp, NSString *selectedContaine
     if(is32bit) {
         [lcUserDefaults removeObjectForKey:@"LC32BitTranslationLayerLogFile"];
         if (!isJitEnabled) {
-            return @"JIT is required to run 32-bit apps.";
+            return LCBootstrapLocalized(@"lc.bootstrap.error.jitRequiredFor32Bit");
         }
         
         NSString *selected32BitLayer = guestAppInfo[@"selected32BitEmulator"] ?: [lcSharedDefaults stringForKey:@"LCSelected32BitEmulator"];
         if(selected32BitLayer.length == 0) {
-            appError = @"No 32-bit emulator selected";
-            NSLog(@"[LCBootstrap] %@", appError);
+            appError = LCBootstrapLocalized(@"lc.bootstrap.error.no32BitEmulatorSelected");
+            NSLog(@"[LCBootstrap] No 32-bit emulator selected");
             *path = oldPath;
             return appError;
         }
@@ -1761,8 +1779,8 @@ static NSString* invokeAppMain(NSString *selectedApp, NSString *selectedContaine
             selected32bitLayerBundle = [NSBundle bundleWithPath:[NSString stringWithFormat:@"%@/Applications/%@", appGroupFolder.path, selected32BitLayer]];
         }
         if(!selected32bitLayerBundle) {
-            appError = @"The specified 32-bit emulator app is not found";
-            NSLog(@"[LCBootstrap] %@", appError);
+            appError = LCBootstrapLocalized(@"lc.bootstrap.error.emulatorAppNotFound");
+            NSLog(@"[LCBootstrap] The specified 32-bit emulator app is not found");
             *path = oldPath;
             return appError;
         }
@@ -1793,12 +1811,17 @@ static NSString* invokeAppMain(NSString *selectedApp, NSString *selectedContaine
     const char *dlerr = dlerror();
     
     if (!appHandle || (uint64_t)appHandle > 0xf00000000000) {
+        // 日志保持英文原文：dlerr 分支记系统原文，未知错误分支记固定英文串；
+        // 上屏的 appError 单独取本地化版本（dlerr 系统原文不译）。
+        NSString *dlopenLogMessage;
         if (dlerr) {
-            appError = @(dlerr);
+            dlopenLogMessage = @(dlerr);
+            appError = dlopenLogMessage;
         } else {
-            appError = @"dlopen: an unknown error occurred";
+            dlopenLogMessage = @"dlopen: an unknown error occurred";
+            appError = LCBootstrapLocalized(@"lc.bootstrap.error.dlopenUnknownError");
         }
-        NSLog(@"[LCBootstrap] %@", appError);
+        NSLog(@"[LCBootstrap] %@", dlopenLogMessage);
         *path = oldPath;
         return appError;
     }
@@ -1840,8 +1863,8 @@ static NSString* invokeAppMain(NSString *selectedApp, NSString *selectedContaine
     // Find main()
     appMain = getAppEntryPoint(appHandle);
     if (!appMain) {
-        appError = @"Could not find the main entry point";
-        NSLog(@"[LCBootstrap] %@", appError);
+        appError = LCBootstrapLocalized(@"lc.bootstrap.error.mainEntryPointNotFound");
+        NSLog(@"[LCBootstrap] Could not find the main entry point");
         *path = oldPath;
         return appError;
     }
@@ -1867,7 +1890,7 @@ static NSString* invokeAppMain(NSString *selectedApp, NSString *selectedContaine
         char *argv32[] = {(char*)appExecPath, (char*)*path, NULL};
         ret = appMain(sizeof(argv32)/sizeof(*argv32) - 1, argv32, environ);
     }
-    return [NSString stringWithFormat:@"App returned from its main function with code %d.", ret];
+    return [NSString stringWithFormat:LCBootstrapLocalized(@"lc.bootstrap.error.appReturnedFromMain %d"), ret];
 }
 
 static void exceptionHandler(NSException *exception) {
