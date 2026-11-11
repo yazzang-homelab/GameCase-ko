@@ -185,7 +185,7 @@ struct LCCoverCropView: View {
                     .gesture(dragGesture(frameSize: frameRect.size))
                     .simultaneousGesture(magnifyGesture(frameSize: frameRect.size))
 
-                dimOverlay(frameRect: frameRect, canvasSize: geo.size)
+                dimOverlay(frameRect: frameRect, canvasSize: geo.size, insets: geo.safeAreaInsets)
                 gridOverlay(frameRect: frameRect)
 
                 topBar(safeTop: geo.safeAreaInsets.top)
@@ -218,14 +218,26 @@ struct LCCoverCropView: View {
             .allowsHitTesting(false)
     }
 
-    /// 框外压暗（eoFill 挖洞）：洞外仍是同一张图，只是压暗
-    private func dimOverlay(frameRect: CGRect, canvasSize: CGSize) -> some View {
-        Path { path in
-            path.addRect(CGRect(origin: .zero, size: canvasSize))
+    /// 框外压暗（eoFill 挖洞）：洞外仍是同一张图，只是压暗。
+    /// 洞口与画框边/网格共用同一个 frameRect、同一坐标系：本视图**不得**
+    /// ignoresSafeArea——忽略安全区会把 Path 的 frame 按 inset 外扩、绘制
+    /// 原点相对兄弟视图偏移 (−leading, −top)，洞口随之偏移，遮罩便从画框
+    /// 下游一侧漏入一条（竖屏底部 ≈ 顶 inset、横屏右侧 ≈ 左 inset，
+    /// 灵动岛机型实测约 59pt）。外圈则按 inset 把画布外扩一圈，保证本地
+    /// 画布若止于安全区内缘，图片伸进安全区的部分同样被压暗；洞口大小
+    /// 只由 frameRect 决定，外扩不影响洞口。
+    private func dimOverlay(frameRect: CGRect, canvasSize: CGSize, insets: EdgeInsets) -> some View {
+        let canvas = CGRect(
+            x: -insets.leading,
+            y: -insets.top,
+            width: canvasSize.width + insets.leading + insets.trailing,
+            height: canvasSize.height + insets.top + insets.bottom
+        )
+        return Path { path in
+            path.addRect(canvas)
             path.addRect(frameRect)
         }
         .fill(Color.black.opacity(Self.dimOpacity), style: FillStyle(eoFill: true))
-        .ignoresSafeArea()
         .allowsHitTesting(false)
     }
 
