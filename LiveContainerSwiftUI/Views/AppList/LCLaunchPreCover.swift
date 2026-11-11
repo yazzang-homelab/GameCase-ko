@@ -103,7 +103,7 @@ final class LCLaunchPreCover {
         win.isHidden = false
         window = win
         coverView = view
-        appendLog("预盖层已呈现：标题=\(app.appInfo.displayName()) 宿主 bounds=\(NSStringFromCGRect(bounds)) 朝向=\(portrait ? "竖屏（横屏画布+旋转 +π/2）" : "横屏（画布即 bounds）") 封面解析中")
+        appendLog("预盖层已呈现：标题=\(app.appInfo.displayName()) 宿主 bounds=\(Int(bounds.width))x\(Int(bounds.height)) 朝向=\(portrait ? "竖屏（横屏画布+旋转 +π/2）" : "横屏（画布即 bounds）") 封面解析中")
 
         // 封面解析不阻塞派发：后台走库侧同链，到后主线程换入
         let appInfo = app.appInfo
