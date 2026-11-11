@@ -390,6 +390,22 @@ class LCAppModel: ObservableObject, Hashable {
             LCPlayStats.beginSession(bundleId: bundleIdOverride ?? bundleIdentifier)
         }
 
+        // 宿主侧启动预盖层（仅游戏本体启动，override 启动不盖——与客体侧
+        // 不为 SideStore 装盖层同口径）：此处已越过全部早退分支（已运行 /
+        // 多任务窗口已存在 / 转交其他 LC 副本 / 终止多任务询问），再往下
+        // 只剩派发。present 同步在宿主当前窗口盖满与客体侧盖层同图同构
+        // 图的静态封面，成为宿主进程被 SIGKILL 前的最后一帧，掩盖进程
+        // 交棒区间系统 morph 的黑帧 / 卡片帧（定案见 LCLaunchPreCover
+        // .swift 头注）；标记经 UserDefaults 告知新进程，客体盖层据此跳
+        // 过入场淡入。封面解析在后台进行、不阻塞派发。派发抛错时下方
+        // catch 先撤层清标记再上抛，报错弹层不被罩住；派发成功即进程交
+        // 棒（标准路径 completion 无条件 SIGKILL），预盖层不撤、随进程
+        // 终止自然消失。
+        let preCoverPresented = bundleIdOverride == nil
+        if preCoverPresented {
+            LCLaunchPreCover.present(app: self, containerFolderName: currentDataFolder)
+        }
+
         var jitNeeded = appInfo.isJITNeeded || appInfo.is32bit
         if let forceJIT {
             jitNeeded = forceJIT
@@ -397,45 +413,53 @@ class LCAppModel: ObservableObject, Hashable {
 #if targetEnvironment(simulator)
         jitNeeded = false
 #endif
-        if jitNeeded {
-            if multitask, #available(iOS 17.4, *) {
-                try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
-                    LCUtils.launchMultitaskGuestApp(appInfo.displayName()) { pidNumber, error in
-                        if let error {
-                            continuation.resume(throwing: error)
-                            return
-                        }
-                        guard let pidNumber = pidNumber else {
-                            continuation.resume(throwing: "Failed to obtain PID from LiveProcess")
-                            return
-                        }
-                        Task {
-                            if let scriptData = self.jitLaunchScriptJs, !scriptData.isEmpty {
-                                await self.delegate?.jitLaunch(withPID: pidNumber.intValue, withScript: scriptData, appName: self.appInfo.displayName())
-                            } else {
-                                await self.delegate?.jitLaunch(withPID: pidNumber.intValue, withScript: nil, appName: self.appInfo.displayName())
+        do {
+            if jitNeeded {
+                if multitask, #available(iOS 17.4, *) {
+                    try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+                        LCUtils.launchMultitaskGuestApp(appInfo.displayName()) { pidNumber, error in
+                            if let error {
+                                continuation.resume(throwing: error)
+                                return
                             }
-                            continuation.resume()
+                            guard let pidNumber = pidNumber else {
+                                continuation.resume(throwing: "Failed to obtain PID from LiveProcess")
+                                return
+                            }
+                            Task {
+                                if let scriptData = self.jitLaunchScriptJs, !scriptData.isEmpty {
+                                    await self.delegate?.jitLaunch(withPID: pidNumber.intValue, withScript: scriptData, appName: self.appInfo.displayName())
+                                } else {
+                                    await self.delegate?.jitLaunch(withPID: pidNumber.intValue, withScript: nil, appName: self.appInfo.displayName())
+                                }
+                                continuation.resume()
+                            }
                         }
                     }
-                }
-            } else {
-                // Non-multitask JIT flow remains unchanged
-                if let scriptData = jitLaunchScriptJs, !scriptData.isEmpty {
-                    await delegate?.jitLaunch(withScript: scriptData, appName: self.appInfo.displayName(), classicMode: classicMode)
                 } else {
-                    await delegate?.jitLaunch(appName: self.appInfo.displayName(), classicMode: classicMode)
+                    // Non-multitask JIT flow remains unchanged
+                    if let scriptData = jitLaunchScriptJs, !scriptData.isEmpty {
+                        await delegate?.jitLaunch(withScript: scriptData, appName: self.appInfo.displayName(), classicMode: classicMode)
+                    } else {
+                        await delegate?.jitLaunch(appName: self.appInfo.displayName(), classicMode: classicMode)
+                    }
                 }
+            } else if multitask, #available(iOS 16.0, *) {
+                try await LCUtils.launchMultitaskGuestApp(appInfo.displayName())
+            } else {
+                if #available(iOS 26.0, *), FileManager.default.fileExists(atPath: "\(appInfo.bundlePath()!)/Frameworks/MetalANGLE.framework/MetalANGLE") {
+                    let fileContents = "\(appInfo.bundlePath()!)/Frameworks/MetalANGLE.framework/MetalANGLE".data(using: .utf8)
+                    let fileURL = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask)[0].appendingPathComponent("preloadLibraries.txt")
+                    try fileContents?.write(to: fileURL)
+                }
+                LCSharedUtils.launchToGuestApp(withClassicMode: classicMode)
             }
-        } else if multitask, #available(iOS 16.0, *) {
-            try await LCUtils.launchMultitaskGuestApp(appInfo.displayName())
-        } else {
-            if #available(iOS 26.0, *), FileManager.default.fileExists(atPath: "\(appInfo.bundlePath()!)/Frameworks/MetalANGLE.framework/MetalANGLE") {
-                let fileContents = "\(appInfo.bundlePath()!)/Frameworks/MetalANGLE.framework/MetalANGLE".data(using: .utf8)
-                let fileURL = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask)[0].appendingPathComponent("preloadLibraries.txt")
-                try fileContents?.write(to: fileURL)
+        } catch {
+            // 派发失败、宿主进程存活：先撤预盖层并清标记，报错才可达用户
+            if preCoverPresented {
+                LCLaunchPreCover.remove()
             }
-            LCSharedUtils.launchToGuestApp(withClassicMode: classicMode)
+            throw error
         }
         
         // Record the launch time
