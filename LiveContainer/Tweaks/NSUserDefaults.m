@@ -153,7 +153,9 @@ bool isAppleIdentifier(NSString* identifier) {
 
 @implementation CFPrefsPlistSource2
 -(id)hook_initWithDomain:(CFStringRef)domain user:(CFStringRef)user byHost:(bool)host containerPath:(CFStringRef)containerPath containingPreferences:(id)arg5 {
-    if(isAppleIdentifier((__bridge NSString*)domain)) {
+    // The global domain holds system-wide settings, AppleKeyboards among them. Moved into the guest's
+    // container it is empty, so the guest's keyboard has one input mode and no globe key.
+    if(isAppleIdentifier((__bridge NSString*)domain) || CFEqual(domain, kCFPreferencesAnyApplication)) {
         return [self hook_initWithDomain:domain user:user byHost:host containerPath:containerPath containingPreferences:arg5];
     }
     if(user == kCFPreferencesAnyUser) {
