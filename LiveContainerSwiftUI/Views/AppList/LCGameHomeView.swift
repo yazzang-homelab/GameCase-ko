@@ -1118,13 +1118,13 @@ struct LCGameHomeView: View {
     private func stateTextColor(_ state: LCGameState) -> Color {
         if colorScheme == .light {
             switch state {
-            case .playable: return Color(red: 10 / 255, green: 125 / 255, blue: 55 / 255)
+            case .playable, .notRequired: return Color(red: 10 / 255, green: 125 / 255, blue: 55 / 255)
             case .needsDatapack: return Color(red: 166 / 255, green: 96 / 255, blue: 0 / 255)
             case .broken: return LCGameTheme.brokenRed
             }
         }
         switch state {
-        case .playable: return Color(red: 196 / 255, green: 232 / 255, blue: 204 / 255)
+        case .playable, .notRequired: return Color(red: 196 / 255, green: 232 / 255, blue: 204 / 255)
         case .needsDatapack: return Color(red: 1.0, green: 196 / 255, blue: 110 / 255)
         case .broken: return LCGameTheme.brokenRed
         }
@@ -1135,7 +1135,7 @@ struct LCGameHomeView: View {
         switch state {
         case .needsDatapack: return Color(red: 24 / 255, green: 18 / 255, blue: 8 / 255).opacity(0.85)
         case .broken: return Color(red: 30 / 255, green: 12 / 255, blue: 10 / 255).opacity(0.85)
-        case .playable: return Color.clear
+        case .playable, .notRequired: return Color.clear
         }
     }
 

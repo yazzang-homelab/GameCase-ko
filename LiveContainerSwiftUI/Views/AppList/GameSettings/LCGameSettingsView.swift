@@ -935,10 +935,11 @@ struct LCGameSettingsView: View {
     // MARK: 游戏（LC 独有组：NX 无对应，按 NX 行语言适配）
 
     private var datapackReady: Bool {
-        // Phase 29：改读状态缓存。三态里只有 .needsDatapack 表示「没
-        // 探到任何数据包条目」，与旧二态（探到镜像条目或 romfs 文件
-        // 夹即 true）在全部分支上等价（无容器同为 false）；重算挂在
-        // body 的 .onChange(of: statusRefresh)，求值仍走共用入口
+        // Phase 29：改读状态缓存。「没探到任何数据包条目」对应
+        // .needsDatapack（玩家声明无需数据包时改判 .notRequired，同
+        // 样不算缺包）；与旧二态（探到镜像条目或 romfs 文件夹即
+        // true）在探针有条目的分支上等价（无容器同为 false）；重算
+        // 挂在 body 的 .onChange(of: statusRefresh)，求值仍走共用入口
         stateCache != .needsDatapack
     }
 
@@ -956,7 +957,7 @@ struct LCGameSettingsView: View {
 
     private var stateColor: Color {
         switch gameState {
-        case .playable: return LCNXColor.ready
+        case .playable, .notRequired: return LCNXColor.ready
         case .needsDatapack: return LCNXColor.attention
         case .broken: return LCNXColor.broken
         }
@@ -966,17 +967,19 @@ struct LCGameSettingsView: View {
     /// broken 形态直接显示短原因（全文在帮助卡里，头部限一行）
     private var stateHeadline: String {
         switch gameState {
-        case .playable: return "lc.gameSettings.readyToPlay".loc
+        case .playable, .notRequired: return "lc.gameSettings.readyToPlay".loc
         case .needsDatapack: return "lc.gameSettings.needsDatapack".loc
         case .broken(let reason, _, _): return reason
         }
     }
 
-    /// 数据包行右侧值（文字 + 色，与状态三态对应）
+    /// 数据包行右侧值（文字 + 色，与状态对应）：已声明无需数据包时
+    /// 显示中性的「无需」（灰点灰字），不冒充「已导入」的绿字
     private var datapackRowValue: (text: String, color: Color) {
         switch gameState {
         case .playable: return ("lc.gameSettings.datapackReady".loc, LCNXColor.ready)
         case .needsDatapack: return ("lc.gameSettings.datapackMissing".loc, LCNXColor.attention)
+        case .notRequired: return ("lc.gameSettings.datapackNotRequired".loc, Color.primary.opacity(0.5))
         case .broken: return ("lc.gameSettings.datapackBroken".loc, LCNXColor.broken)
         }
     }
