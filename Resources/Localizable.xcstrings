@@ -35588,6 +35588,52 @@
         }
       }
     },
+    "lc.gameSettings.cropHint": {
+      "extractionState": "manual",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "拖动调整位置 · 双指缩放填满画框"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Drag to adjust position · Pinch to zoom to fill the frame"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Arraste para ajustar a posição · Use dois dedos para preencher o quadro"
+          }
+        }
+      }
+    },
+    "lc.gameSettings.cropReset": {
+      "extractionState": "manual",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "还原"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reset"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restaurar"
+          }
+        }
+      }
+    },
     "lc.gameSettings.useThis": {
       "extractionState": "manual",
       "localizations": {
